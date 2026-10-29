@@ -1,46 +1,32 @@
 import { connection } from "next/server";
-import { Users, Download, MessageCircle, Phone, Mail, Database } from "lucide-react";
-import { getServiceClient, isSupabaseConfigured } from "@/lib/supabase";
-import { FORMAT_NGN, WHATSAPP_URL } from "@/lib/constants";
+import { Users, Download, MessageCircle, Phone, Mail, Wallet, ExternalLink } from "lucide-react";
+import { isSheetsConfigured, listCustomers, spreadsheetUrl, type SheetCustomer } from "@/lib/sheets";
+import { FORMAT_NGN } from "@/lib/constants";
 
 export const instant = false;
 
-interface CustomerRow {
-  id: string;
-  full_name: string;
-  phone: string;
-  email: string | null;
-  state: string | null;
-  city: string | null;
-  marketing_consent: boolean;
-  total_orders: number;
-  total_spent: number;
-  last_order_at: string | null;
-  created_at: string;
-}
-
-async function loadCustomers(): Promise<CustomerRow[]> {
-  const supabase = getServiceClient();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from("customers")
-    .select("id, full_name, phone, email, state, city, marketing_consent, total_orders, total_spent, last_order_at, created_at")
-    .order("created_at", { ascending: false })
-    .limit(500);
-
-  if (error) {
-    console.error("Failed to load customers:", error);
-    return [];
-  }
-  return data ?? [];
-}
+/** 0803… → 234803…, so wa.me opens the right chat. */
+const waLink = (phone: string) =>
+  `https://wa.me/${phone.replace(/\D/g, "").replace(/^0/, "234")}`;
 
 export default async function CustomersPage() {
   await connection();
-  const configured = isSupabaseConfigured();
-  const customers = await loadCustomers();
-  const consented = customers.filter((c) => c.marketing_consent);
+
+  const configured = isSheetsConfigured();
+  let customers: SheetCustomer[] = [];
+  let loadError: string | null = null;
+
+  if (configured) {
+    try {
+      customers = await listCustomers();
+    } catch (err) {
+      console.error("Failed to load customers:", err);
+      loadError = "Could not read the order sheet. Check that it is shared with the service account.";
+    }
+  }
+
+  const consented = customers.filter((c) => c.consent);
+  const lifetime = customers.reduce((s, c) => s + c.spent, 0);
 
   return (
     <div className="p-5 lg:p-7 max-w-[1700px]">
@@ -55,33 +41,42 @@ export default async function CustomersPage() {
           </p>
         </div>
 
-        {customers.length > 0 && (
-          <a href="/api/admin/customers/export"
-            className="inline-flex items-center gap-2 h-10 px-4 bg-white border border-[#E9E4D6] rounded-lg text-[12.5px] font-medium text-[#252B23] hover:border-[#175C3D] transition-colors"
-            style={{ fontFamily: "var(--font-body)" }}>
-            <Download size={14} /> Export CSV
-          </a>
-        )}
+        <div className="flex gap-2.5">
+          {configured && (
+            <a href={spreadsheetUrl()} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 h-10 px-4 bg-[#123D2B] text-white rounded-lg text-[12.5px] font-medium hover:bg-[#175C3D] transition-colors"
+              style={{ fontFamily: "var(--font-body)" }}>
+              <ExternalLink size={14} /> Open Google Sheet
+            </a>
+          )}
+          {customers.length > 0 && (
+            <a href="/api/admin/customers/export"
+              className="inline-flex items-center gap-2 h-10 px-4 bg-white border border-[#E9E4D6] rounded-lg text-[12.5px] font-medium text-[#252B23] hover:border-[#175C3D] transition-colors"
+              style={{ fontFamily: "var(--font-body)" }}>
+              <Download size={14} /> Export CSV
+            </a>
+          )}
+        </div>
       </div>
 
-      {/* Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
         <Stat label="Total customers" value={String(customers.length)} icon={Users} tint="#E8F0EA" color="#175C3D" />
         <Stat label="Opted in to updates" value={String(consented.length)} icon={MessageCircle} tint="#E7EEF6" color="#2563EB" />
-        <Stat label="Lifetime value" value={FORMAT_NGN(customers.reduce((s, c) => s + Number(c.total_spent ?? 0), 0))}
-          icon={Database} tint="#FBF0DE" color="#B5713A" />
+        <Stat label="Lifetime value" value={FORMAT_NGN(lifetime)} icon={Wallet} tint="#FBF0DE" color="#B5713A" />
       </div>
 
       <section className="bg-white rounded-xl border border-[#E9E4D6] p-4">
         {!configured ? (
           <Empty
-            title="Customer storage is not connected yet"
-            body="Run supabase/schema.sql in your Supabase project and set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY. Until then, checkout still works and every order arrives on WhatsApp, but buyer details are not saved here."
+            title="The order sheet is not connected yet"
+            body="Create a Google Sheet, share it with the service account, and set GOOGLE_SHEETS_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY. Setup steps are in the README. Until then checkout still works and every order arrives on WhatsApp, but buyer details are not saved."
           />
+        ) : loadError ? (
+          <Empty title="Could not read the sheet" body={loadError} />
         ) : customers.length === 0 ? (
           <Empty
             title="No customers yet"
-            body="As soon as someone checks out, their name, phone number and delivery details appear here."
+            body="As soon as someone checks out, their name, phone number and delivery details are written to the Google Sheet and appear here."
           />
         ) : (
           <div className="overflow-x-auto">
@@ -99,12 +94,12 @@ export default async function CustomersPage() {
               </thead>
               <tbody>
                 {customers.map((c) => (
-                  <tr key={c.id} className="border-b border-[#F4F0E4] last:border-0 text-[12.5px]">
+                  <tr key={c.phone} className="border-b border-[#F4F0E4] last:border-0 text-[12.5px]">
                     <td className="py-3">
-                      <p className="font-medium text-[#252B23]">{c.full_name}</p>
-                      <p className="text-[11px] text-[#A8B99C]">
-                        Joined {new Date(c.created_at).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}
-                      </p>
+                      <p className="font-medium text-[#252B23]">{c.name}</p>
+                      {c.firstOrder && (
+                        <p className="text-[11px] text-[#A8B99C]">First order {c.firstOrder}</p>
+                      )}
                     </td>
                     <td className="py-3">
                       <a href={`tel:${c.phone}`} className="flex items-center gap-1.5 text-[#175C3D] hover:underline">
@@ -119,12 +114,12 @@ export default async function CustomersPage() {
                     <td className="py-3 text-[#6b7265]">
                       {[c.city, c.state].filter(Boolean).join(", ") || "—"}
                     </td>
-                    <td className="py-3 text-right tabular-nums text-[#252B23]">{c.total_orders}</td>
+                    <td className="py-3 text-right tabular-nums text-[#252B23]">{c.orders}</td>
                     <td className="py-3 text-right tabular-nums font-semibold text-[#123D2B]">
-                      {FORMAT_NGN(Number(c.total_spent ?? 0))}
+                      {FORMAT_NGN(c.spent)}
                     </td>
                     <td className="py-3">
-                      {c.marketing_consent ? (
+                      {c.consent ? (
                         <span className="px-2 py-0.5 rounded-full bg-[#D1FAE5] text-[#065F46] text-[10.5px] font-semibold">
                           Opted in
                         </span>
@@ -135,8 +130,7 @@ export default async function CustomersPage() {
                       )}
                     </td>
                     <td className="py-3 text-right">
-                      <a href={`${WHATSAPP_URL.replace("2349062104172", c.phone.replace(/\D/g, "").replace(/^0/, "234"))}`}
-                        target="_blank" rel="noopener noreferrer"
+                      <a href={waLink(c.phone)} target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#E8F0EA] text-[#175C3D] text-[11.5px] font-medium hover:bg-[#d8e6dd] transition-colors">
                         <MessageCircle size={12} /> WhatsApp
                       </a>

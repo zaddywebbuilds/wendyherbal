@@ -42,6 +42,69 @@ at checkout by design — they are the same details printed on the price list.
 The way bill (delivery) is **not** included in listed prices and is agreed on
 WhatsApp, matching the note on Wendy's price list.
 
+## Where buyer contacts go
+
+Checkout writes every order to a **Google Sheet** — chosen over a database
+because Wendy is not technical. She opens the sheet on her phone, taps a number
+to call or WhatsApp, and can add her own columns (the app never writes past
+column J, so anything she adds to the right is untouched).
+
+Two tabs are created automatically on the first order:
+
+- **Orders** — one row per order: number, date, buyer, items, total, delivery
+  address, notes, and a Status column she can edit as she fulfils.
+- **Customers** — one row per person, matched on phone number so repeat buyers
+  accumulate rather than duplicate. Tracks order count, lifetime spend and
+  whether they opted in to updates.
+
+The admin **Customers** page reads the same sheet, with WhatsApp links and CSV
+export. One source of truth, two ways in.
+
+### One-time setup
+
+**All Wendy gives you is her Gmail address.** She does none of the steps below.
+
+1. In **her** Google account, create a blank sheet (`sheets.new`) so the file
+   lives in her Drive and she owns it. Copy the ID from the URL:
+   `https://docs.google.com/spreadsheets/d/<ID>/edit`
+2. In [Google Cloud Console](https://console.cloud.google.com), create a project
+   and enable the **Google Sheets API**.
+3. Create a **service account**, then add a **JSON key** and download it.
+4. Share the sheet with the service account's `client_email` as **Editor**.
+   This step is the one people miss — without it every write returns 403.
+5. Put `GOOGLE_SHEETS_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL` and
+   `GOOGLE_PRIVATE_KEY` in `.env.local` (see `.env.example` for the exact
+   formatting of the key).
+6. Confirm it works before handing it over:
+
+   ```bash
+   npm run check:sheet
+   ```
+
+   It names the exact problem if the key is malformed or step 4 was skipped.
+
+Wendy never touches any of the above — the sheet is simply already in her Drive.
+
+### Why not a "Connect your Google account" button?
+
+An OAuth flow is possible — `drive.file` is a non-sensitive scope, so it would
+not need Google's restricted-scope security review. It was not used because the
+refresh token needs somewhere persistent to live (Vercel KV, Redis or a
+database), and the OAuth app must be published to production or its tokens
+expire after seven days. That is three moving parts to reach the same place:
+one spreadsheet in Wendy's Drive. Worth revisiting if the app ever serves more
+than one shop owner.
+
+Without these variables the site still works: checkout completes and the order
+still reaches WhatsApp in full. The API just reports honestly that nothing was
+saved rather than claiming a success.
+
+### Consent
+
+Placing an order is not consent to marketing. The opt-in is a separate,
+never-pre-ticked checkbox at checkout and lands in the "Updates OK?" column.
+Only message people marked `Yes` about products and offers.
+
 ## Catalogue
 
 `src/lib/products.ts` holds 81 herbal/body-care products transcribed from Wendy's
@@ -71,10 +134,15 @@ on the matching product.
 
 ## Not yet built
 
-Supabase schema and auth, customer accounts, order persistence, the remaining admin
-CRUD screens (products, orders, customers, content), shipping zones, blog, and the
-About/Contact/FAQ/legal pages. Navigation links to these routes exist and will 404
-until the pages land.
+Admin authentication, customer accounts, the remaining admin CRUD screens
+(products, orders, content), shipping zones, blog, and the About/Contact/FAQ/legal
+pages. Navigation links to these routes exist and will 404 until the pages land.
+
+`supabase/schema.sql` is kept for later: if the shop outgrows a spreadsheet, or
+needs customer logins, that schema is the migration path.
+
+**`/admin` is currently unauthenticated.** Add auth before deploying anywhere
+public.
 
 Newsletter signup validates input but only stores addresses once Supabase
 credentials are set; without them it says so rather than pretending to save.

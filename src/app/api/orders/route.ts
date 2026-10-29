@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getServiceClient } from "@/lib/supabase";
 import { PRODUCTS } from "@/lib/products";
+import { isSheetsConfigured, recordOrder } from "@/lib/sheets";
 
 interface IncomingItem { sku: string; quantity: number; size?: string }
 
@@ -57,83 +57,43 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    priced.push({
-      product_sku: product.sku,
-      product_name: product.name,
-      quantity: qty,
-      unit_price: product.price,
-      size: str(raw?.size, 40) || null,
-    });
+    priced.push({ name: product.name, qty, unitPrice: product.price, size: str(raw?.size, 40) });
   }
 
-  const subtotal = priced.reduce((s, i) => s + i.unit_price * i.quantity, 0);
-  const consent = body.marketingConsent === true;
+  const subtotal = priced.reduce((s, i) => s + i.unitPrice * i.qty, 0);
 
-  const supabase = getServiceClient();
-  if (!supabase) {
-    // Be honest rather than returning a fake success: the WhatsApp handoff still
-    // carries the order, but nothing was saved for later outreach.
+  if (!isSheetsConfigured()) {
+    // Be honest rather than reporting a save that did not happen. The WhatsApp
+    // handoff still carries the full order.
     return NextResponse.json(
       {
         saved: false,
         orderNumber,
         subtotal,
-        message: "Order details were not saved — the database is not configured yet.",
+        message: "Order details were not saved — the order sheet is not connected yet.",
       },
       { status: 200 }
     );
   }
 
   try {
-    // Upsert the buyer on phone so repeat customers accumulate rather than duplicate.
-    const { data: customer, error: custErr } = await supabase
-      .from("customers")
-      .upsert(
-        {
-          full_name: fullName,
-          phone,
-          email: str(c?.email, 160) || null,
-          state: str(c?.state, 80) || null,
-          city: str(c?.city, 80) || null,
-          ...(consent ? { marketing_consent: true, marketing_consent_at: new Date().toISOString() } : {}),
-        },
-        { onConflict: "phone" }
-      )
-      .select("id")
-      .single();
-
-    if (custErr) throw custErr;
-
-    const { data: order, error: orderErr } = await supabase
-      .from("orders")
-      .insert({
-        order_number: orderNumber,
-        customer_id: customer.id,
-        customer_name: fullName,
-        customer_phone: phone,
-        customer_email: str(c?.email, 160) || null,
-        subtotal,
-        shipping_fee: 0,
-        total: subtotal,
-        status: "pending",
-        payment_method: "bank_transfer",
-        payment_status: "awaiting_payment",
-        delivery_state: str(c?.state, 80) || null,
-        delivery_city: str(c?.city, 80) || null,
-        delivery_street: str(c?.street, 240) || null,
-        delivery_landmark: str(c?.landmark, 160) || null,
-        notes: str(body.notes, 800) || null,
-      })
-      .select("id")
-      .single();
-
-    if (orderErr) throw orderErr;
-
-    const { error: itemsErr } = await supabase
-      .from("order_items")
-      .insert(priced.map((i) => ({ ...i, order_id: order.id })));
-
-    if (itemsErr) throw itemsErr;
+    await recordOrder({
+      orderNumber,
+      name: fullName,
+      phone,
+      email: str(c?.email, 160),
+      itemsSummary: priced
+        .map((i) => `${i.name}${i.size ? ` (${i.size})` : ""} x${i.qty}`)
+        .join("; "),
+      total: subtotal,
+      deliverTo: [str(c?.street, 240), str(c?.city, 80), str(c?.state, 80)]
+        .filter(Boolean)
+        .join(", ") + (str(c?.landmark, 160) ? ` (near ${str(c?.landmark, 160)})` : ""),
+      notes: str(body.notes, 800),
+      marketingConsent: body.marketingConsent === true,
+      city: str(c?.city, 80),
+      state: str(c?.state, 80),
+    });
 
     return NextResponse.json({ saved: true, orderNumber, subtotal }, { status: 201 });
   } catch (err) {

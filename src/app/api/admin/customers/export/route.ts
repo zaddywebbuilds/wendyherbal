@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServiceClient } from "@/lib/supabase";
+import { isSheetsConfigured, listCustomers } from "@/lib/sheets";
 
 /** Escapes a CSV cell, including the leading-character guard against formula injection. */
 function cell(value: unknown): string {
@@ -9,37 +9,32 @@ function cell(value: unknown): string {
 }
 
 export async function GET() {
-  const supabase = getServiceClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Customer storage is not configured." }, { status: 503 });
+  if (!isSheetsConfigured()) {
+    return NextResponse.json({ error: "The order sheet is not connected." }, { status: 503 });
   }
 
-  const { data, error } = await supabase
-    .from("customers")
-    .select("full_name, phone, email, city, state, marketing_consent, total_orders, total_spent, last_order_at, created_at")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Customer export failed:", error);
-    return NextResponse.json({ error: "Could not export customers." }, { status: 500 });
+  let customers;
+  try {
+    customers = await listCustomers();
+  } catch (err) {
+    console.error("Customer export failed:", err);
+    return NextResponse.json({ error: "Could not read the order sheet." }, { status: 500 });
   }
 
   const header = [
     "Name", "Phone", "Email", "City", "State",
-    "Marketing consent", "Orders", "Total spent (NGN)", "Last order", "Joined",
+    "Marketing consent", "Orders", "Total spent (NGN)", "First order", "Last order",
   ];
 
-  const rows = (data ?? []).map((c) => [
-    c.full_name, c.phone, c.email, c.city, c.state,
-    c.marketing_consent ? "Yes" : "No",
-    c.total_orders, c.total_spent,
-    c.last_order_at ? new Date(c.last_order_at).toISOString().slice(0, 10) : "",
-    new Date(c.created_at).toISOString().slice(0, 10),
+  const rows = customers.map((c) => [
+    c.name, c.phone, c.email, c.city, c.state,
+    c.consent ? "Yes" : "No", c.orders, c.spent, c.firstOrder, c.lastOrder,
   ]);
 
   const csv = [header, ...rows].map((r) => r.map(cell).join(",")).join("\r\n");
   const stamp = new Date().toISOString().slice(0, 10);
 
+  // BOM so Excel opens UTF-8 names correctly.
   return new NextResponse("﻿" + csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
