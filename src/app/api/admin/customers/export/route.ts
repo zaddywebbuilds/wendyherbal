@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isSheetsConfigured, listCustomers } from "@/lib/sheets";
+import { isSheetsReady, listCustomers } from "@/lib/sheets";
 
 /** Escapes a CSV cell, including the leading-character guard against formula injection. */
 function cell(value: unknown): string {
@@ -9,7 +9,7 @@ function cell(value: unknown): string {
 }
 
 export async function GET() {
-  if (!isSheetsConfigured()) {
+  if (!(await isSheetsReady())) {
     return NextResponse.json({ error: "The order sheet is not connected." }, { status: 503 });
   }
 

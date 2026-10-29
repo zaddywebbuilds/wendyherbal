@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 import { Users, Download, MessageCircle, Phone, Mail, Wallet, ExternalLink } from "lucide-react";
-import { isSheetsConfigured, listCustomers, spreadsheetUrl, type SheetCustomer } from "@/lib/sheets";
+import { isSheetsReady, listCustomers, activeSpreadsheetUrl, type SheetCustomer } from "@/lib/sheets";
 import { FORMAT_NGN } from "@/lib/constants";
 
 export const instant = false;
@@ -12,7 +12,8 @@ const waLink = (phone: string) =>
 export default async function CustomersPage() {
   await connection();
 
-  const configured = isSheetsConfigured();
+  const configured = await isSheetsReady();
+  const sheetUrl = await activeSpreadsheetUrl();
   let customers: SheetCustomer[] = [];
   let loadError: string | null = null;
 
@@ -21,7 +22,7 @@ export default async function CustomersPage() {
       customers = await listCustomers();
     } catch (err) {
       console.error("Failed to load customers:", err);
-      loadError = "Could not read the order sheet. Check that it is shared with the service account.";
+      loadError = "Could not read the order sheet. Try reconnecting from Settings.";
     }
   }
 
@@ -42,8 +43,8 @@ export default async function CustomersPage() {
         </div>
 
         <div className="flex gap-2.5">
-          {configured && (
-            <a href={spreadsheetUrl()} target="_blank" rel="noopener noreferrer"
+          {sheetUrl && (
+            <a href={sheetUrl} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 h-10 px-4 bg-[#123D2B] text-white rounded-lg text-[12.5px] font-medium hover:bg-[#175C3D] transition-colors"
               style={{ fontFamily: "var(--font-body)" }}>
               <ExternalLink size={14} /> Open Google Sheet
@@ -68,8 +69,8 @@ export default async function CustomersPage() {
       <section className="bg-white rounded-xl border border-[#E9E4D6] p-4">
         {!configured ? (
           <Empty
-            title="The order sheet is not connected yet"
-            body="Create a Google Sheet, share it with the service account, and set GOOGLE_SHEETS_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY. Setup steps are in the README. Until then checkout still works and every order arrives on WhatsApp, but buyer details are not saved."
+            title="The order book is not connected yet"
+            body="Go to Settings and connect your Google account. Until then checkout still works and every order arrives on WhatsApp, but buyer details are not saved here."
           />
         ) : loadError ? (
           <Empty title="Could not read the sheet" body={loadError} />

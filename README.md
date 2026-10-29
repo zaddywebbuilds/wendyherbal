@@ -60,40 +60,61 @@ Two tabs are created automatically on the first order:
 The admin **Customers** page reads the same sheet, with WhatsApp links and CSV
 export. One source of truth, two ways in.
 
-### One-time setup
+### How Wendy connects it
 
-**All Wendy gives you is her Gmail address.** She does none of the steps below.
+She signs in to `/admin`, opens **Settings**, and clicks **Connect my Google
+account**. Google asks her to allow access, and the app creates the spreadsheet
+in her Drive. That is the whole of her involvement — she gives you nothing, not
+even her Gmail address.
 
-1. In **her** Google account, create a blank sheet (`sheets.new`) so the file
-   lives in her Drive and she owns it. Copy the ID from the URL:
-   `https://docs.google.com/spreadsheets/d/<ID>/edit`
-2. In [Google Cloud Console](https://console.cloud.google.com), create a project
+The scope is `drive.file` only: access to the one file this app creates, and
+nothing else in her Drive. Google classifies it non-sensitive, so it needs no
+restricted-scope security review, and the consent screen says plainly that the
+app cannot see her other files.
+
+### Developer setup (once)
+
+1. In [Google Cloud Console](https://console.cloud.google.com), create a project
    and enable the **Google Sheets API**.
-3. Create a **service account**, then add a **JSON key** and download it.
-4. Share the sheet with the service account's `client_email` as **Editor**.
-   This step is the one people miss — without it every write returns 403.
-5. Put `GOOGLE_SHEETS_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL` and
-   `GOOGLE_PRIVATE_KEY` in `.env.local` (see `.env.example` for the exact
-   formatting of the key).
-6. Confirm it works before handing it over:
+2. **Credentials → Create credentials → OAuth client ID → Web application.**
+   Add the authorised redirect URI, matching the deployment exactly:
+   - `http://localhost:3000/api/google/callback`
+   - `https://your-domain.com/api/google/callback`
+3. Put `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env.local`.
+4. Set `ADMIN_PASSWORD` and `ADMIN_SECRET` (see below) — the dashboard stays
+   locked without them.
+5. On **OAuth consent screen**, set publishing status to **In production**.
+   Left in "Testing", refresh tokens expire after seven days and her orders
+   silently stop saving. With one user, the unverified-app notice is a one-time
+   *Advanced → Go to app* click.
 
-   ```bash
-   npm run check:sheet
-   ```
+**On Vercel, also add a KV store.** The refresh token must outlive a restart,
+and Vercel's filesystem is read-only. Add Vercel KV / Upstash Redis and set
+`KV_REST_API_URL` and `KV_REST_API_TOKEN`. Settings shows a warning when the
+deployment has nowhere durable to keep the connection. Locally the token goes
+to `.data/` (gitignored) automatically, encrypted with `ADMIN_SECRET`.
 
-   It names the exact problem if the key is malformed or step 4 was skipped.
+### Admin sign-in
 
-Wendy never touches any of the above — the sheet is simply already in her Drive.
+`/admin` is gated by `ADMIN_PASSWORD` behind a signed, HTTP-only session cookie.
+The gate fails closed: with no password set, the dashboard is unreachable rather
+than open. This is not optional decoration — without it anyone could hit
+Settings and point the shop's order book at their own Google account.
 
-### Why not a "Connect your Google account" button?
+`ADMIN_SECRET` signs the session and encrypts the stored Google token. Changing
+it logs everyone out and drops the connection.
 
-An OAuth flow is possible — `drive.file` is a non-sensitive scope, so it would
-not need Google's restricted-scope security review. It was not used because the
-refresh token needs somewhere persistent to live (Vercel KV, Redis or a
-database), and the OAuth app must be published to production or its tokens
-expire after seven days. That is three moving parts to reach the same place:
-one spreadsheet in Wendy's Drive. Worth revisiting if the app ever serves more
-than one shop owner.
+### Alternative: a service account
+
+If you would rather wire a shared sheet by hand than use the button, set
+`GOOGLE_SHEETS_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL` and `GOOGLE_PRIVATE_KEY`
+instead, share the sheet with the service account as Editor, and verify with:
+
+```bash
+npm run check:sheet
+```
+
+An OAuth connection takes precedence when both are present.
 
 Without these variables the site still works: checkout completes and the order
 still reaches WhatsApp in full. The API just reports honestly that nothing was
@@ -134,15 +155,17 @@ on the matching product.
 
 ## Not yet built
 
-Admin authentication, customer accounts, the remaining admin CRUD screens
-(products, orders, content), shipping zones, blog, and the About/Contact/FAQ/legal
-pages. Navigation links to these routes exist and will 404 until the pages land.
+Customer accounts, the remaining admin CRUD screens (products, orders, content),
+shipping zones, blog, and the About/Contact/FAQ/legal pages. Navigation links to
+these routes exist and will 404 until the pages land.
 
 `supabase/schema.sql` is kept for later: if the shop outgrows a spreadsheet, or
 needs customer logins, that schema is the migration path.
 
-**`/admin` is currently unauthenticated.** Add auth before deploying anywhere
-public.
+Admin sign-in is a single shared password, which suits one owner. Give each
+person their own login before more than one person uses the dashboard — the
+login throttle is also in-memory, so it resets on restart and does not span
+multiple instances.
 
 Newsletter signup validates input but only stores addresses once Supabase
 credentials are set; without them it says so rather than pretending to save.

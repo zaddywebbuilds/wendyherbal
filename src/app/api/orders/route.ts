@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PRODUCTS } from "@/lib/products";
-import { isSheetsConfigured, recordOrder } from "@/lib/sheets";
+import { isSheetsReady, recordOrder } from "@/lib/sheets";
 
 interface IncomingItem { sku: string; quantity: number; size?: string }
 
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
 
   const subtotal = priced.reduce((s, i) => s + i.unitPrice * i.qty, 0);
 
-  if (!isSheetsConfigured()) {
+  if (!(await isSheetsReady())) {
     // Be honest rather than reporting a save that did not happen. The WhatsApp
     // handoff still carries the full order.
     return NextResponse.json(

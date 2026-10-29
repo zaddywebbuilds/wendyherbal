@@ -1,51 +1,44 @@
 import { createSign } from "node:crypto";
+import { loadConnection } from "./token-store";
+import { getConnectedAccessToken } from "./google-oauth";
+import {
+  ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER, normalisePhone,
+} from "./sheet-schema";
+
+export { ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER };
 
 /**
- * Minimal Google Sheets client.
+ * Reads and writes the order book.
  *
- * Hand-rolled JWT rather than the `googleapis` package: that dependency is tens
- * of megabytes and this needs three REST calls, which matters for serverless
- * cold starts.
+ * Two ways in, checked in this order:
+ *   1. An OAuth connection the owner made herself — the sheet lives in her
+ *      own Drive and she owns it.
+ *   2. A service account with a sheet shared to it, for setups wired by hand.
  *
- * The spreadsheet is the owner's working copy — she opens it on her phone,
- * taps a number to call or WhatsApp, and can add her own columns. Nothing here
- * writes past column J, so anything she adds to the right is left alone.
+ * The JWT is hand-rolled rather than pulling in `googleapis`: that package is
+ * tens of megabytes for what amounts to a few REST calls, which matters for
+ * serverless cold starts.
  */
 
-const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const API = "https://sheets.googleapis.com/v4/spreadsheets";
 
-export const ORDERS_TAB = "Orders";
-export const CUSTOMERS_TAB = "Customers";
-
-export const ORDERS_HEADER = [
-  "Order #", "Date", "Name", "Phone", "Email",
-  "Items", "Total (NGN)", "Deliver to", "Notes", "Status",
-];
-
-export const CUSTOMERS_HEADER = [
-  "Name", "Phone", "Email", "City", "State",
-  "Updates OK?", "Orders", "Total spent (NGN)", "First order", "Last order",
-];
-
-export const isSheetsConfigured = () =>
+export const isServiceAccountConfigured = () =>
   Boolean(
     process.env.GOOGLE_SHEETS_ID &&
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
     process.env.GOOGLE_PRIVATE_KEY
   );
 
-/* ------------------------------------------------------------------ auth */
+/* --------------------------------------------------- service-account auth */
 
-let cachedToken: { value: string; expiresAt: number } | null = null;
+let cachedSaToken: { value: string; expiresAt: number } | null = null;
 
 const b64url = (input: Buffer | string) =>
   Buffer.from(input).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
-async function getAccessToken(): Promise<string> {
-  // Re-use until a minute before expiry.
-  if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) return cachedToken.value;
+async function serviceAccountToken(): Promise<string> {
+  if (cachedSaToken && Date.now() < cachedSaToken.expiresAt - 60_000) return cachedSaToken.value;
 
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!;
   // Env vars carry the key with literal \n sequences; restore real newlines.
@@ -54,7 +47,11 @@ async function getAccessToken(): Promise<string> {
   const iat = Math.floor(Date.now() / 1000);
   const header = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
   const claims = b64url(JSON.stringify({
-    iss: email, scope: SCOPE, aud: TOKEN_URL, iat, exp: iat + 3600,
+    iss: email,
+    scope: "https://www.googleapis.com/auth/spreadsheets",
+    aud: TOKEN_URL,
+    iat,
+    exp: iat + 3600,
   }));
 
   const signer = createSign("RSA-SHA256");
@@ -69,72 +66,97 @@ async function getAccessToken(): Promise<string> {
       assertion: jwt,
     }),
   });
-
-  if (!res.ok) {
-    throw new Error(`Google token request failed (${res.status}): ${await res.text()}`);
-  }
+  if (!res.ok) throw new Error(`Google token request failed (${res.status}): ${await res.text()}`);
 
   const data = (await res.json()) as { access_token: string; expires_in: number };
-  cachedToken = { value: data.access_token, expiresAt: Date.now() + data.expires_in * 1000 };
-  return cachedToken.value;
+  cachedSaToken = { value: data.access_token, expiresAt: Date.now() + data.expires_in * 1000 };
+  return cachedSaToken.value;
 }
 
-async function sheetsFetch(path: string, init?: RequestInit) {
-  const token = await getAccessToken();
-  const res = await fetch(`${API}/${process.env.GOOGLE_SHEETS_ID}${path}`, {
+/* ------------------------------------------------------------- resolution */
+
+interface Target { token: string; spreadsheetId: string }
+
+/** Picks the OAuth connection when present, else the service account. */
+async function resolveTarget(): Promise<Target | null> {
+  const conn = await loadConnection();
+  if (conn) {
+    const token = await getConnectedAccessToken();
+    if (token) return { token, spreadsheetId: conn.spreadsheetId };
+  }
+  if (isServiceAccountConfigured()) {
+    return { token: await serviceAccountToken(), spreadsheetId: process.env.GOOGLE_SHEETS_ID! };
+  }
+  return null;
+}
+
+export async function isSheetsReady(): Promise<boolean> {
+  if (isServiceAccountConfigured()) return true;
+  return Boolean(await loadConnection());
+}
+
+export async function activeSpreadsheetUrl(): Promise<string | null> {
+  const conn = await loadConnection();
+  if (conn) return conn.spreadsheetUrl;
+  if (process.env.GOOGLE_SHEETS_ID) {
+    return `https://docs.google.com/spreadsheets/d/${process.env.GOOGLE_SHEETS_ID}/edit`;
+  }
+  return null;
+}
+
+async function sheetsFetch(target: Target, path: string, init?: RequestInit) {
+  const res = await fetch(`${API}/${target.spreadsheetId}${path}`, {
     ...init,
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${target.token}`,
       "Content-Type": "application/json",
       ...(init?.headers ?? {}),
     },
     cache: "no-store",
   });
-
   if (!res.ok) {
     throw new Error(`Google Sheets ${init?.method ?? "GET"} ${path} failed (${res.status}): ${await res.text()}`);
   }
   return res.json();
 }
 
-/* ----------------------------------------------------------------- reads */
+/* ------------------------------------------------------------ primitives */
 
-export async function readRows(tab: string, range = "A1:J"): Promise<string[][]> {
-  const data = (await sheetsFetch(
-    `/values/${encodeURIComponent(`${tab}!${range}`)}`
-  )) as { values?: string[][] };
+async function readRows(t: Target, tab: string, range = "A1:J"): Promise<string[][]> {
+  const data = (await sheetsFetch(t, `/values/${encodeURIComponent(`${tab}!${range}`)}`)) as {
+    values?: string[][];
+  };
   return data.values ?? [];
 }
 
-/* ---------------------------------------------------------------- writes */
-
-async function appendRow(tab: string, row: (string | number)[]) {
+async function appendRow(t: Target, tab: string, row: (string | number)[]) {
   await sheetsFetch(
+    t,
     `/values/${encodeURIComponent(`${tab}!A1`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
     { method: "POST", body: JSON.stringify({ values: [row] }) }
   );
 }
 
-async function updateRow(tab: string, rowNumber: number, row: (string | number)[]) {
+async function updateRow(t: Target, tab: string, rowNumber: number, row: (string | number)[]) {
   await sheetsFetch(
+    t,
     `/values/${encodeURIComponent(`${tab}!A${rowNumber}`)}?valueInputOption=USER_ENTERED`,
     { method: "PUT", body: JSON.stringify({ values: [row] }) }
   );
 }
 
-/** Creates the tab and its header row if they are not there yet. */
-async function ensureTab(tab: string, header: string[]) {
+/** Adds the tab and header row when they are not there yet. */
+async function ensureTab(t: Target, tab: string, header: string[]) {
   try {
-    const rows = await readRows(tab, "A1:J1");
-    if (rows.length === 0) await updateRow(tab, 1, header);
+    const rows = await readRows(t, tab, "A1:J1");
+    if (rows.length === 0) await updateRow(t, tab, 1, header);
     return;
   } catch {
-    // Range failing usually means the tab itself is missing — add it, then header.
-    await sheetsFetch(":batchUpdate", {
+    await sheetsFetch(t, ":batchUpdate", {
       method: "POST",
       body: JSON.stringify({ requests: [{ addSheet: { properties: { title: tab } } }] }),
     });
-    await updateRow(tab, 1, header);
+    await updateRow(t, tab, 1, header);
   }
 }
 
@@ -157,26 +179,31 @@ export interface SheetOrder {
 const today = () => new Date().toISOString().slice(0, 10);
 
 /**
- * Appends the order and folds the buyer into the Customers tab, matching on
+ * Appends the order and folds the buyer into the Customers tab, matched on
  * phone number so repeat buyers accumulate instead of duplicating.
+ *
+ * Nothing here writes past column J, so any column the owner adds to the right
+ * of the sheet survives every future order.
  */
 export async function recordOrder(o: SheetOrder): Promise<void> {
-  await ensureTab(ORDERS_TAB, ORDERS_HEADER);
-  await appendRow(ORDERS_TAB, [
+  const t = await resolveTarget();
+  if (!t) throw new Error("No Google Sheets connection is configured.");
+
+  await ensureTab(t, ORDERS_TAB, ORDERS_HEADER);
+  await appendRow(t, ORDERS_TAB, [
     o.orderNumber, today(), o.name, o.phone, o.email,
     o.itemsSummary, o.total, o.deliverTo, o.notes, "Awaiting payment",
   ]);
 
-  await ensureTab(CUSTOMERS_TAB, CUSTOMERS_HEADER);
-  const rows = await readRows(CUSTOMERS_TAB);
+  await ensureTab(t, CUSTOMERS_TAB, CUSTOMERS_HEADER);
+  const rows = await readRows(t, CUSTOMERS_TAB);
 
-  const digits = (s: string) => s.replace(/\D/g, "").replace(/^0/, "234");
-  const target = digits(o.phone);
+  const target = normalisePhone(o.phone);
   // Row 1 is the header, so a match at index i lives on sheet row i + 1.
-  const idx = rows.findIndex((r, i) => i > 0 && digits(r[1] ?? "") === target);
+  const idx = rows.findIndex((r, i) => i > 0 && normalisePhone(r[1] ?? "") === target);
 
   if (idx === -1) {
-    await appendRow(CUSTOMERS_TAB, [
+    await appendRow(t, CUSTOMERS_TAB, [
       o.name, o.phone, o.email, o.city, o.state,
       o.marketingConsent ? "Yes" : "No", 1, o.total, today(), today(),
     ]);
@@ -187,7 +214,7 @@ export async function recordOrder(o: SheetOrder): Promise<void> {
   const prevOrders = Number(prev[6]) || 0;
   const prevSpent = Number(String(prev[7] ?? "").replace(/[^\d.]/g, "")) || 0;
 
-  await updateRow(CUSTOMERS_TAB, idx + 1, [
+  await updateRow(t, CUSTOMERS_TAB, idx + 1, [
     o.name || prev[0], o.phone, o.email || prev[2] || "", o.city || prev[3] || "", o.state || prev[4] || "",
     // Consent is only ever upgraded here; withdrawing it is done in the sheet.
     o.marketingConsent ? "Yes" : (prev[5] || "No"),
@@ -204,7 +231,10 @@ export interface SheetCustomer {
 }
 
 export async function listCustomers(): Promise<SheetCustomer[]> {
-  const rows = await readRows(CUSTOMERS_TAB);
+  const t = await resolveTarget();
+  if (!t) return [];
+
+  const rows = await readRows(t, CUSTOMERS_TAB);
   return rows.slice(1)
     .filter((r) => (r[1] ?? "").trim())
     .map((r) => ({
@@ -221,6 +251,3 @@ export async function listCustomers(): Promise<SheetCustomer[]> {
     }))
     .reverse();
 }
-
-export const spreadsheetUrl = () =>
-  `https://docs.google.com/spreadsheets/d/${process.env.GOOGLE_SHEETS_ID}/edit`;
