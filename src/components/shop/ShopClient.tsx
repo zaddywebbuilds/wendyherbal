@@ -3,7 +3,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SlidersHorizontal, X, Search as SearchIcon, PackageX } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
-import { PRODUCTS, CATEGORY_LABELS } from "@/lib/products";
+import { CATEGORY_LABELS } from "@/lib/products";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/lib/types";
 
@@ -19,7 +19,7 @@ const SORTS: { value: Sort; label: string }[] = [
 
 const PAGE_SIZE = 12;
 
-export function ShopClient() {
+export function ShopClient({ products: PRODUCTS }: { products: Product[] }) {
   const params = useSearchParams();
   const router = useRouter();
 

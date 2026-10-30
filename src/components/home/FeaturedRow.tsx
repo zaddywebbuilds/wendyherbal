@@ -3,14 +3,13 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
-import { getFeatured } from "@/lib/products";
+import type { Product } from "@/lib/types";
 
 const BADGES: Record<number, "New" | "Bestseller" | null> = {
   0: "New", 1: "Bestseller", 2: "New", 3: "Bestseller", 4: null,
 };
 
-export function FeaturedRow() {
-  const products = getFeatured(5);
+export function FeaturedRow({ products }: { products: Product[] }) {
 
   return (
     // relative + overflow-hidden: the promo card carries a decorative blur

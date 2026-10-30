@@ -2,8 +2,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search as SearchIcon, ExternalLink, ImageOff, Tag } from "lucide-react";
-import { PRODUCTS, CATEGORY_LABELS } from "@/lib/products";
+import { Search as SearchIcon, ExternalLink, ImageOff, Tag, Pencil } from "lucide-react";
+import { CATEGORY_LABELS } from "@/lib/products";
 import { FORMAT_NGN } from "@/lib/constants";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/lib/types";
@@ -23,7 +23,7 @@ const NAFDAC_TONE: Record<string, { bg: string; fg: string; label: string }> = {
   not_applicable: { bg: "#F3F4F6", fg: "#6B7280", label: "Not applicable" },
 };
 
-export function ProductsClient() {
+export function ProductsClient({ products }: { products: Product[] }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [gap, setGap] = useState<Gap>("all");
@@ -31,7 +31,7 @@ export function ProductsClient() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const gapTest = GAPS.find((g) => g.value === gap)!.test;
-    return PRODUCTS.filter((p) => {
+    return products.filter((p) => {
       if (category !== "all" && p.category !== category) return false;
       if (!gapTest(p)) return false;
       if (!q) return true;
@@ -62,7 +62,7 @@ export function ProductsClient() {
 
         <div className="flex flex-wrap gap-1.5">
           {GAPS.map((g) => {
-            const count = PRODUCTS.filter(g.test).length;
+            const count = products.filter(g.test).length;
             return (
               <button key={g.value} onClick={() => setGap(g.value)}
                 className={cn(
@@ -80,7 +80,7 @@ export function ProductsClient() {
       </div>
 
       <p className="text-[12px] text-[#6b7265] mb-3" style={{ fontFamily: "var(--font-body)" }}>
-        Showing {filtered.length} of {PRODUCTS.length}
+        Showing {filtered.length} of {products.length}
       </p>
 
       {filtered.length === 0 ? (
@@ -99,7 +99,7 @@ export function ProductsClient() {
                   <th className="pb-2.5 font-semibold text-right">Price</th>
                   <th className="pb-2.5 font-semibold">Photo</th>
                   <th className="pb-2.5 font-semibold">NAFDAC</th>
-                  <th className="pb-2.5 font-semibold text-right">View</th>
+                  <th className="pb-2.5 font-semibold text-right">Edit</th>
                 </tr>
               </thead>
               <tbody>
@@ -181,10 +181,14 @@ function Row({ product }: { product: Product }) {
         )}
       </td>
       <td className="py-2.5"><Nafdac product={product} /></td>
-      <td className="py-2.5 text-right">
-        <Link href={`/product/${product.slug}`} target="_blank"
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#E8F0EA] text-[#175C3D] text-[11.5px] font-medium hover:bg-[#d8e6dd] transition-colors">
-          <ExternalLink size={12} /> Open
+      <td className="py-2.5 text-right whitespace-nowrap">
+        <Link href={`/admin/products/${product.sku}`}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#123D2B] text-white text-[11.5px] font-medium hover:bg-[#175C3D] transition-colors">
+          <Pencil size={12} /> Edit
+        </Link>
+        <Link href={`/product/${product.slug}`} target="_blank" aria-label={`View ${product.name} on the website`}
+          className="ml-1.5 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#E8F0EA] text-[#175C3D] hover:bg-[#d8e6dd] transition-colors">
+          <ExternalLink size={12} />
         </Link>
       </td>
     </tr>
@@ -211,11 +215,17 @@ function Card({ product }: { product: Product }) {
             )}
           </div>
         </div>
-        <Link href={`/product/${product.slug}`} target="_blank"
-          aria-label={`Open ${product.name} on the website`}
-          className="shrink-0 w-9 h-9 rounded-md bg-[#E8F0EA] text-[#175C3D] flex items-center justify-center">
-          <ExternalLink size={14} />
-        </Link>
+        <div className="shrink-0 flex flex-col gap-1.5">
+          <Link href={`/admin/products/${product.sku}`} aria-label={`Edit ${product.name}`}
+            className="w-9 h-9 rounded-md bg-[#123D2B] text-white flex items-center justify-center">
+            <Pencil size={14} />
+          </Link>
+          <Link href={`/product/${product.slug}`} target="_blank"
+            aria-label={`Open ${product.name} on the website`}
+            className="w-9 h-9 rounded-md bg-[#E8F0EA] text-[#175C3D] flex items-center justify-center">
+            <ExternalLink size={14} />
+          </Link>
+        </div>
       </div>
     </li>
   );

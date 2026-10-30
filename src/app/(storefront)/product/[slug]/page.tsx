@@ -1,15 +1,21 @@
+import { connection } from "next/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/product/ProductDetail";
-import { PRODUCTS, getProduct, CATEGORY_LABELS } from "@/lib/products";
+import { PRODUCTS, CATEGORY_LABELS } from "@/lib/products";
+import { getCatalogue, findProduct } from "@/lib/catalogue";
 
+/**
+ * Only the coded products are prebuilt. Anything added in admin is rendered
+ * on first request and then cached like the rest.
+ */
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await findProduct(slug);
   if (!product) return { title: "Product not found" };
 
   return {
@@ -24,12 +30,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+export const instant = false;
+
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await findProduct(slug);
   if (!product) notFound();
 
-  const related = PRODUCTS
+  const related = (await getCatalogue())
     .filter((p) => p.category === product.category && p.id !== product.id && p.is_published)
     .slice(0, 5);
 

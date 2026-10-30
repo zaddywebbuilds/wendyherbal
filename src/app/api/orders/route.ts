@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PRODUCTS } from "@/lib/products";
+import { getCatalogueFresh } from "@/lib/catalogue";
 import { isSheetsReady, recordOrder } from "@/lib/sheets";
 
 interface IncomingItem { sku: string; quantity: number; size?: string }
@@ -43,10 +43,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Your order has no items." }, { status: 400 });
   }
 
-  // Price server-side from the catalogue — never trust amounts sent by the browser.
+  // Price server-side from the catalogue, never from amounts sent by the
+  // browser, and uncached so an admin price change applies immediately.
+  const catalogue = await getCatalogueFresh();
   const priced = [];
   for (const raw of body.items) {
-    const product = PRODUCTS.find((p) => p.sku === str(raw?.sku, 40));
+    const product = catalogue.find((p) => p.sku === str(raw?.sku, 40));
     const qty = Number(raw?.quantity);
     if (!product || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       return NextResponse.json({ error: "One of the items in your order is not valid." }, { status: 400 });

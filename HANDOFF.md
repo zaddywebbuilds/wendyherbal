@@ -86,7 +86,7 @@ section originally anticipated, and two questions are still open with her.
 | Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |
 | Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
 | Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
-| Admin Products | ✅ Done, read-only. Catalogue plus the gap worklist |
+| Admin Products | ✅ Editable. Add, edit, hide, delete, from a phone |
 | Admin CRUD screens | ◐ 16 sidebar links still 404 |
 | Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
@@ -358,6 +358,57 @@ The Medical Disclaimer leads with the warning rather than brand furniture, and
 is linked from About, FAQ, Terms and every product page. It states plainly that
 a product name is not a claim, which is the thing most likely to matter if the
 catalogue is ever challenged.
+
+## The editable catalogue
+
+The owner edits products from the admin screens on a phone or a computer.
+Nothing goes through the spreadsheet, and nothing needs the developer.
+
+**How it fits together.** Products still ship in code (`products.ts`), which
+is fast and costs nothing to serve. The editable part is a small overlay
+document in `catalogue-store.ts`:
+
+| Piece | What it holds |
+| --- | --- |
+| `patches` | changes to coded products, keyed by SKU |
+| `created` | products added in admin, which exist only here |
+| `removed` | SKUs of created products she deleted |
+
+`catalogue.ts` merges the two and is the only thing the site reads.
+A coded product is **never deleted**, only hidden, so any edit can be undone
+with "Undo my edits", which drops the patch and restores exactly what the code
+says. Fields absent from a patch keep the coded value, which is what makes
+that undo possible.
+
+**Storage is the same KV-or-file pair the Google token already uses.** No new
+service. On Vercel this means **Upstash Redis is now required for editing**,
+not just for the Google connection: without it `catalogueStorageIsDurable()`
+is false, the API refuses writes with an explanation, and the admin screens
+say editing is switched off rather than letting her type changes that vanish.
+
+### The caching mistake worth not repeating
+
+Two caching attempts were made and both were removed:
+
+1. `unstable_cache` with a tag, purged by `revalidateTag`.
+2. The `"use cache"` directive with `cacheTag`, purged by `revalidateTag`
+   plus `revalidatePath`.
+
+In both, a saved price change reached `/api/orders` (which reads fresh) but
+**not** the product page, which went on serving the old price. The shop would
+have shown one price and charged another. Neither purge mechanism reliably
+cleared the entry from a route handler in this Next version.
+
+`getCatalogue()` is therefore uncached, and the three pages that call it
+declare `instant = false`. That costs one small KV read per render against a
+catalogue of a few kilobytes. **If you re-add a cache, prove the invalidation
+against a deployed build before trusting it, not in dev.**
+
+### What is not built
+
+Uploading a photograph from the phone. The form offers the pictures already in
+`public/media/`, and says so. Real upload needs blob storage (Vercel Blob is
+the obvious choice) and is the natural next step.
 
 ## Brand media, and what must never be published
 

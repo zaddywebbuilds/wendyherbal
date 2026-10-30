@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { PRODUCTS, CATEGORY_LABELS } from "@/lib/products";
+import { CATEGORY_LABELS } from "@/lib/products";
+import { getCatalogue } from "@/lib/catalogue";
 
 /** Written pages. Low churn, so they sit at a yearly change frequency. */
 const CONTENT_PAGES = [
@@ -13,7 +14,7 @@ const CONTENT_PAGES = [
   "/disclaimer",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
   if (!base) return [];
 
@@ -33,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     })),
 
-    ...PRODUCTS.filter((p) => p.is_published).map((p) => ({
+    ...(await getCatalogue()).filter((p) => p.is_published).map((p) => ({
       url: `${base}/product/${p.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.7,
