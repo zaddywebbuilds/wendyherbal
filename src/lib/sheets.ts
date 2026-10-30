@@ -230,6 +230,57 @@ export async function recordOrder(o: SheetOrder): Promise<void> {
   ]);
 }
 
+export interface SheetOrderRow {
+  /**
+   * 1-based row number in the sheet. Carried so a future status update can
+   * target the right row without re-matching on the order number, and so the
+   * UI has a stable key even if two orders share a number.
+   */
+  row: number;
+  orderNumber: string;
+  date: string;
+  name: string;
+  phone: string;
+  email: string;
+  items: string;
+  total: number;
+  deliverTo: string;
+  notes: string;
+  status: string;
+}
+
+/**
+ * Reads the Orders tab, newest first.
+ *
+ * The owner edits the Status column by hand, so whatever she typed is passed
+ * through untouched rather than being coerced into a fixed set. Rows without
+ * an order number are skipped: those are blank rows or notes she has added.
+ */
+export async function listOrders(): Promise<SheetOrderRow[]> {
+  const t = await resolveTarget();
+  if (!t) return [];
+
+  const rows = await readRows(t, ORDERS_TAB);
+  return rows
+    .map((r, i) => ({ r, row: i + 1 }))
+    .slice(1)
+    .filter(({ r }) => (r[0] ?? "").trim())
+    .map(({ r, row }) => ({
+      row,
+      orderNumber: r[0] ?? "",
+      date: r[1] ?? "",
+      name: r[2] ?? "",
+      phone: r[3] ?? "",
+      email: r[4] ?? "",
+      items: r[5] ?? "",
+      total: Number(String(r[6] ?? "").replace(/[^d.]/g, "")) || 0,
+      deliverTo: r[7] ?? "",
+      notes: r[8] ?? "",
+      status: (r[9] ?? "").trim(),
+    }))
+    .reverse();
+}
+
 export interface SheetCustomer {
   name: string; phone: string; email: string; city: string; state: string;
   consent: boolean; orders: number; spent: number; firstOrder: string; lastOrder: string;

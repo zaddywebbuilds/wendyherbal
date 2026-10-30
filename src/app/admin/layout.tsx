@@ -8,8 +8,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/**
+ * The sidebar badge is deliberately not wired to the order sheet.
+ *
+ * This layout wraps every admin route including the login screen, so reading
+ * the sheet here would mean a Google API call on each admin page load, one of
+ * them unauthenticated, and it stops /admin/login from prerendering. The
+ * awaiting-payment count lives on the Orders page, which reads the sheet once
+ * for that purpose. A zero here renders no badge rather than a false one.
+ */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  // Live counts only — a zero count renders no badge.
   const badges = {
     orders: ORDERS.filter((o) => o.status === "pending").length,
     messages: 0,

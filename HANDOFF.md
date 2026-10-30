@@ -85,7 +85,8 @@ section originally anticipated, and two questions are still open with her.
 | Product photos | ◐ 69 of 93 wired. Client renders, not photos. Read Task 2 |
 | Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |
 | Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
-| Admin CRUD screens | ❌ Not built — sidebar links 404 |
+| Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
+| Admin CRUD screens | ◐ 17 sidebar links still 404 |
 | Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
 Build is green. `npm run build` passes, 114 routes. Working tree clean and in
@@ -271,7 +272,20 @@ Roughly in priority order.
 
 1. **Deployment.** In progress — see START HERE at the top and
    [DEPLOY.md](DEPLOY.md).
-2. **Admin CRUD.** Sidebar links to Orders, Products, Categories, Inventory,
+2. **Admin CRUD.** Orders is built: `/admin/orders` reads the Orders tab via
+   `listOrders()` in `sheets.ts`, with a table on desktop, cards on a phone,
+   an awaiting-payment count and a CSV export at
+   `/api/admin/orders/export`. It is **read-only on purpose**: the owner edits
+   the Status column in the spreadsheet, and a writer here would fight her for
+   the same cell. Giving admin a write path means deciding what wins, which is
+   a conversation, not a commit.
+
+   The sidebar badge is **not** wired to the sheet. The admin layout wraps
+   every route including login, so a read there costs a Google call per page
+   load, one of them unauthenticated, and it stops `/admin/login`
+   prerendering. The count lives on the Orders page instead.
+
+   Still 404: Sidebar links to Products, Categories, Inventory,
    Reviews, Blog, Promotions, Shipping, Reports — all 404. The sidebar was
    built to match the client's approved dashboard mockup; the screens behind it
    were not.
