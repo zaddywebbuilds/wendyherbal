@@ -10,6 +10,60 @@ relitigated.
 
 ---
 
+## ▶ START HERE — resume at deployment
+
+Last session stopped mid-deploy. Everything is committed and pushed; the build
+is green (114 routes). Nothing is half-finished in the code.
+
+**What blocked it:** the Vercel CLI (v63.1.0) is installed but **not
+authenticated** — `vercel whoami` returns `Not authorized`, and there is no auth
+file on disk. The Vercel MCP connector also needs authorising via `/mcp`. Both
+are sign-ins only the account holder can perform.
+
+**To resume, in order:**
+
+```bash
+vercel login          # the blocker — only a human can do this
+vercel                # preview deploy, NOT --prod
+```
+
+Then follow [DEPLOY.md](DEPLOY.md) for environment variables. Two of them are
+traps worth reading about before Wendy ever connects her account:
+
+- **A KV store is not optional on Vercel.** Without Upstash Redis attached, she
+  connects Google, sees it succeed, and is silently disconnected on the next
+  cold start — orders then stop saving with no error anywhere.
+- **The OAuth consent screen must be "In production".** Left in "Testing",
+  Google expires refresh tokens after 7 days. Same silent failure, slower fuse.
+
+**Admin credentials:** generate fresh ones and set them in Vercel's env vars.
+Never commit them — this repo is public.
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+`ADMIN_PASSWORD` is what Wendy types to sign in, so make it dictatable over the
+phone (word-based beats random characters here). `ADMIN_SECRET` signs sessions
+and encrypts her stored Google token — changing it later logs everyone out and
+drops the connection.
+
+**Deliberate choice already made:** search engines are blocked
+(`src/app/robots.ts` returns `Disallow: /`, verified). Do not lift it for a
+preview. The gate is the pre-launch checklist in DEPLOY.md — legal pages,
+photography, NAFDAC review. Flip `NEXT_PUBLIC_ALLOW_INDEXING=true` only when
+those are genuinely done.
+
+**Decide deliberately before deploying:** the repo is public and Wendy's bank
+details are in `src/lib/constants.ts`. They are already on the price list she
+distributes, so this is not a leak — but make it a choice, not a discovery. If
+the client objects, make the repo private; do not strip the details, checkout
+needs them.
+
+After deployment, the next task is **product photography** — see below.
+
+---
+
 ## Status at a glance
 
 | Area | State |
@@ -24,12 +78,14 @@ relitigated.
 | Admin dashboard | ✅ Shell + live KPIs. Reads real data; shows zeros honestly |
 | Admin Customers | ✅ Done — list, WhatsApp links, CSV export |
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
-| **Product photos** | ❌ **Next task.** Placeholders in place |
+| SEO | ✅ robots (blocking) + sitemap, 100 URLs |
+| **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
+| Product photos | ❌ Task 2. Placeholders in place |
 | Admin CRUD screens | ❌ Not built — sidebar links 404 |
 | Content pages | ❌ Not built — About/Contact/FAQ/legal 404 |
-| Deployment | ❌ Never deployed |
 
-Build is green. `npm run build` passes, 105 routes.
+Build is green. `npm run build` passes, 114 routes. Working tree clean and in
+sync with `origin/main`.
 
 ---
 
@@ -138,9 +194,9 @@ later, authoritative source.
 
 ---
 
-## NEXT TASK: product photography
+## TASK 2: product photography
 
-This is where to start.
+Do this after the deployment above is live.
 
 ### The situation
 
@@ -191,11 +247,8 @@ used anywhere on the site yet.
 
 Roughly in priority order.
 
-1. **Deployment.** Never deployed. Full runbook in [DEPLOY.md](DEPLOY.md) —
-   env vars, the KV requirement, and the pre-launch checklist. Search engines
-   are blocked by default via `src/app/robots.ts` until the legal pages exist
-   and the catalogue has had a NAFDAC review; flip
-   `NEXT_PUBLIC_ALLOW_INDEXING=true` when genuinely ready.
+1. **Deployment.** In progress — see START HERE at the top and
+   [DEPLOY.md](DEPLOY.md).
 2. **Admin CRUD.** Sidebar links to Orders, Products, Categories, Inventory,
    Reviews, Blog, Promotions, Shipping, Reports — all 404. The sidebar was
    built to match the client's approved dashboard mockup; the screens behind it
