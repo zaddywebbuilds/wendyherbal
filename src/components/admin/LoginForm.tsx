@@ -96,7 +96,7 @@ export function LoginForm() {
               <input
                 id="password" type="password" required autoFocus autoComplete="current-password"
                 value={password} onChange={(e) => { setPassword(e.target.value); setError(null); }}
-                className="w-full h-11 pl-9 pr-3 bg-white border border-[#E7E0CF] rounded-md text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
+                className="w-full h-11 pl-9 pr-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
                 style={{ fontFamily: "var(--font-body)" }}
               />
             </div>

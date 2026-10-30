@@ -52,7 +52,7 @@ export function Newsletter() {
                 <input
                   type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setState("idle"); }}
                   placeholder="Enter your email address" aria-label="Email address"
-                  className="w-full h-11 pl-9 pr-3 text-[13px] bg-white rounded-l-md text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:ring-1 focus:ring-[#C6A667]"
+                  className="w-full h-11 pl-9 pr-3 text-[16px] sm:text-[13px] bg-white rounded-l-md text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:ring-1 focus:ring-[#C6A667]"
                   style={{ fontFamily: "var(--font-body)" }}
                 />
               </div>

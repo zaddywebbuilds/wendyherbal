@@ -141,7 +141,7 @@ export function CheckoutClient() {
                       State <span className="text-[#C06014]">*</span>
                     </label>
                     <select required value={address.state} onChange={set("state")}
-                      className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
+                      className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
                       style={{ fontFamily: "var(--font-body)" }}>
                       <option value="">Select state</option>
                       {NIGERIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -162,7 +162,7 @@ export function CheckoutClient() {
                       style={{ fontFamily: "var(--font-body)" }}>Order notes (optional)</label>
                     <textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)}
                       placeholder="Anything Wendy should know about your order or delivery"
-                      className="w-full px-3 py-2.5 bg-white border border-[#E7E0CF] rounded-md text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D] resize-y"
+                      className="w-full px-3 py-2.5 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D] resize-y"
                       style={{ fontFamily: "var(--font-body)" }} />
                   </div>
                 </div>
@@ -351,7 +351,7 @@ function Field({ label, required, ...props }: {
         {label} {required && <span className="text-[#C06014]">*</span>}
       </label>
       <input required={required} {...props}
-        className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D]"
+        className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D]"
         style={{ fontFamily: "var(--font-body)" }} />
     </div>
   );

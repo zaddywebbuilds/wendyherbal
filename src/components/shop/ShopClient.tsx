@@ -94,7 +94,7 @@ export function ShopClient() {
             return (
               <li key={val}>
                 <button onClick={() => { setCategory(val); setFiltersOpen(false); }}
-                  className={cn("w-full flex items-center justify-between py-1.5 text-[13px] transition-colors",
+                  className={cn("w-full flex items-center justify-between py-2.5 sm:py-1.5 text-[13px] transition-colors",
                     category === val ? "text-[#123D2B] font-semibold" : "text-[#6b7265] hover:text-[#123D2B]")}
                   style={{ fontFamily: "var(--font-body)" }}>
                   <span>{label}</span>
@@ -152,23 +152,23 @@ export function ShopClient() {
 
           <div>
             {/* Toolbar */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-4">
               <button onClick={() => setFiltersOpen(true)}
-                className="lg:hidden inline-flex items-center gap-1.5 px-3.5 h-9 border border-[#E7E0CF] bg-white rounded-md text-[12.5px] text-[#252B23]"
+                className="lg:hidden inline-flex items-center gap-1.5 px-3.5 h-11 sm:h-9 border border-[#E7E0CF] bg-white rounded-md text-[12.5px] text-[#252B23]"
                 style={{ fontFamily: "var(--font-body)" }}>
                 <SlidersHorizontal size={14} /> Filters
               </button>
 
-              <div className="relative flex-1 max-w-xs">
+              <div className="relative order-last w-full sm:order-none sm:w-auto sm:flex-1 sm:max-w-xs">
                 <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A8B99C] pointer-events-none" />
                 <input value={query} onChange={(e) => setQuery(e.target.value)} type="search"
                   placeholder="Search products..." aria-label="Filter products"
-                  className="w-full h-9 pl-8.5 pr-3 text-[12.5px] bg-white border border-[#E7E0CF] rounded-md focus:outline-none focus:border-[#175C3D]"
+                  className="w-full h-11 sm:h-9 pl-8.5 pr-3 text-[16px] sm:text-[12.5px] bg-white border border-[#E7E0CF] rounded-md focus:outline-none focus:border-[#175C3D]"
                   style={{ fontFamily: "var(--font-body)", paddingLeft: "2.1rem" }} />
               </div>
 
               <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort products"
-                className="ml-auto h-9 px-3 text-[12.5px] bg-white border border-[#E7E0CF] rounded-md text-[#252B23] focus:outline-none focus:border-[#175C3D] cursor-pointer"
+                className="ml-auto h-11 sm:h-9 px-3 text-[16px] sm:text-[12.5px] bg-white border border-[#E7E0CF] rounded-md text-[#252B23] focus:outline-none focus:border-[#175C3D] cursor-pointer"
                 style={{ fontFamily: "var(--font-body)" }}>
                 {SORTS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
@@ -250,7 +250,7 @@ export function ShopClient() {
           filtersOpen ? "translate-y-0" : "translate-y-full")}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[1.2rem] text-[#123D2B]" style={{ fontFamily: "var(--font-heading)" }}>Filters</h2>
-            <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" className="p-1.5 text-[#252B23]">
+            <button onClick={() => setFiltersOpen(false)} aria-label="Close filters" className="-m-2 p-2 text-[#252B23]">
               <X size={18} />
             </button>
           </div>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { BRAND_IMAGES, BRAND_CLIPS } from "@/lib/media";
+import { WorkshopTile } from "./WorkshopTile";
 
 /**
  * Photographs and short silent loops of the preparation work, captioned with
@@ -30,29 +31,8 @@ export function WorkshopBand() {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
-          {BRAND_CLIPS.map((clip) => (
-            <figure key={clip.src}
-              className="group relative rounded-lg overflow-hidden aspect-[4/5] bg-[#EFE9DD]">
-              {/* muted + playsInline so it loops quietly on mobile too */}
-              <video
-                className="absolute inset-0 w-full h-full object-cover"
-                src={clip.src}
-                poster={clip.poster}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                aria-label={clip.alt}
-              />
-              <div aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-[#09231a]/80 via-[#09231a]/10 to-transparent" />
-              <figcaption
-                className="absolute bottom-0 left-0 right-0 p-3.5 text-[11.5px] leading-snug text-white/90"
-                style={{ fontFamily: "var(--font-body)" }}>
-                {clip.caption}
-              </figcaption>
-            </figure>
+          {BRAND_CLIPS.map((clip, i) => (
+            <WorkshopTile key={clip.src} clip={clip} priority={i === 0} />
           ))}
 
           <figure className="group relative rounded-lg overflow-hidden aspect-[4/5] bg-[#EFE9DD]">

@@ -20,7 +20,7 @@ export function AdminTopBar({ notifications = 0 }: { notifications?: number }) {
       <div className="relative flex-1 max-w-md">
         <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A8B99C] pointer-events-none" />
         <input type="search" placeholder="Search products, orders, customers..." aria-label="Search admin"
-          className="w-full h-10 pl-10 pr-4 bg-[#F7F4E9] border border-transparent rounded-lg text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D] focus:bg-white transition-colors"
+          className="w-full h-10 pl-10 pr-4 bg-[#F7F4E9] border border-transparent rounded-lg text-[16px] sm:text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D] focus:bg-white transition-colors"
           style={{ fontFamily: "var(--font-body)" }} />
       </div>
 

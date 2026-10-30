@@ -49,13 +49,13 @@ export function ProductDetail({ product, related }: { product: Product; related:
 
         <div className="grid lg:grid-cols-[55fr_45fr] gap-8 lg:gap-11">
           {/* ---------- Gallery ---------- */}
-          <div>
+          <div className="min-w-0">
             <div className="group rounded-xl overflow-hidden bg-white border border-[#EFE9DD]">
               <ProductImage src={product.images[activeImg]} alt={product.name} category={product.category}
                 className="aspect-square" sizes="(max-width:1024px) 100vw, 55vw" priority />
             </div>
             {product.images.length > 1 && (
-              <div className="flex gap-2 mt-3">
+              <div className="flex flex-wrap gap-2 mt-3">
                 {product.images.map((img, i) => (
                   <button key={img} onClick={() => setActiveImg(i)}
                     aria-label={`View image ${i + 1}`}
@@ -69,7 +69,9 @@ export function ProductDetail({ product, related }: { product: Product; related:
           </div>
 
           {/* ---------- Info ---------- */}
-          <div>
+          {/* min-w-0: the tab row is nowrap, and without this the grid track
+              grows to its min-content width and the page scrolls sideways. */}
+          <div className="min-w-0">
             <p className="text-[10.5px] uppercase tracking-[0.14em] text-[#A8B99C] font-medium mb-2"
               style={{ fontFamily: "var(--font-body)" }}>
               {CATEGORY_LABELS[product.category]} &middot; {product.sku}
@@ -92,7 +94,11 @@ export function ProductDetail({ product, related }: { product: Product; related:
               )}
               <p className={cn("text-[12.5px] mt-1", product.in_stock ? "text-[#175C3D]" : "text-[#C06014]")}
                 style={{ fontFamily: "var(--font-body)" }}>
-                {product.in_stock ? `In stock — ${product.stock_count} available` : "Currently out of stock"}
+                {product.in_stock
+                  ? product.stock_count > 0
+                    ? `In stock, ${product.stock_count} available`
+                    : "In stock"
+                  : "Currently out of stock"}
               </p>
             </div>
 

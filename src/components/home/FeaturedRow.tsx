@@ -13,7 +13,10 @@ export function FeaturedRow() {
   const products = getFeatured(5);
 
   return (
-    <section className="bg-[#F7F4E9] py-14 lg:py-16">
+    // relative + overflow-hidden: the promo card carries a decorative blur
+    // circle offset past its own right edge, which otherwise widens the page
+    // on narrow screens.
+    <section className="relative overflow-hidden bg-[#F7F4E9] py-14 lg:py-16">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_440px] gap-6 lg:gap-7">
 
