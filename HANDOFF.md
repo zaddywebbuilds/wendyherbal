@@ -60,7 +60,9 @@ distributes, so this is not a leak — but make it a choice, not a discovery. If
 the client objects, make the repo private; do not strip the details, checkout
 needs them.
 
-After deployment, the next task is **product photography** — see below.
+Product photography is now **partly done**: 69 of 93 products carry an image.
+Read Task 2 before touching it: what the client supplied is not what that
+section originally anticipated, and two questions are still open with her.
 
 ---
 
@@ -80,7 +82,7 @@ After deployment, the next task is **product photography** — see below.
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
-| Product photos | ❌ Task 2. Placeholders in place |
+| Product photos | ◐ 69 of 93 wired. Client renders, not photos. Read Task 2 |
 | Admin CRUD screens | ❌ Not built — sidebar links 404 |
 | Content pages | ❌ Not built — About/Contact/FAQ/legal 404 |
 
@@ -196,43 +198,61 @@ later, authoritative source.
 
 ## TASK 2: product photography
 
-Do this after the deployment above is live.
+### What is wired now
 
-### The situation
+**69 of 93 products carry an image.** Files live in `public/media/products/`
+(20MB) and are mapped in `src/lib/products.ts` by `HERBAL_PHOTOS` (keyed by
+source S/N) and `SPICE_PHOTOS` (keyed by exact product name). The other 24 keep
+the branded placeholder from `src/components/ui/ProductImage.tsx`.
 
-`public/media/images/` holds **67 vetted images** pulled from her Facebook page,
-plus `catalog.json` describing each. These are **lifestyle, testimonial and
-treatment photos — not per-product packshots.** There is no image that is "the
-Ginger Powder photo".
+**Know what these images are.** They are AI-rendered label mockups the client
+supplied on 30 Oct 2026, not photographs of stock on hand. The artwork is not
+the site's own and carries things the site itself refuses to say:
 
-So every product currently shows a branded placeholder
-(`src/components/ui/ProductImage.tsx`), tinted per category, labelled "photo
-pending". The hero uses a CSS-composed bottle arrangement for the same reason.
+- a brand line, "Natural Solutions. Lasting Wellness.", which is not hers
+  (hers is "We Treat, God Heals.")
+- claims the site deliberately avoids: "100% Natural", "No Additives",
+  "Premium Quality"
+- a **®** symbol on the spice jars, which asserts a registered trademark
+- on WH-037, the phrase "Natural-Based Sympathies", which is not English
 
-The founder portrait **is** real: `public/founder/wendy-portrait.jpg`, cropped
-from her own photo, used in the story band.
+Wiring them in was the owner's explicit decision, made after the conflict with
+Principles 1, 3 and 4 was put to them. It is settled; do not quietly revert it.
 
-### What to do when packshots arrive
+**Two things still need the client:** confirm these labels match what actually
+ships, and resolve the ® and the on-label claims before NAFDAC review.
 
-1. Drop files in `public/media/products/`.
-2. Set `images: ["/media/products/<file>.jpg"]` on the matching product in
-   `src/lib/products.ts`.
-3. `ProductImage` picks them up automatically — no component changes needed.
+### Still without an image (24)
 
-Match on SKU or exact product name. **Do not** assign an image to a product
-unless it is genuinely that product; the placeholder is the better outcome.
+Herbal S/N 14, 19, 21, 22, 23, 25, 27, 28, 30, 32, 34, 44, 47, 48, 53, 59, 61,
+63, 75. Three of those (Fibroid 21, Ovarian Cyst 23, PCOS 25) sit in
+`getFeatured()`, so the homepage row runs two photos to three placeholders.
 
-### Priority order
-
-The client's brief was specific about the spice photography:
+Spices: Banga (Ofe Akwu), Ginger, Turmeric, Garlic, Black Pepper. Those are
+exactly the four the client's brief singled out, plus one. Her brief was
+specific about how they must look:
 
 - **Banga (Ofe Akwu)** — must show ripe reddish-orange oil palm fruits
 - **Ginger Powder** — ginger roots visible
 - **Turmeric Powder** — turmeric roots and powder
 - **Garlic Powder** — garlic bulbs and cloves
 
-Then the five featured products (`getFeatured()` in `products.ts`), then the
-rest. Hero last — it needs a composed arrangement, not a single packshot.
+### Adding more
+
+1. Drop files in `public/media/products/`.
+2. Add an entry to `HERBAL_PHOTOS` (by S/N) or `SPICE_PHOTOS` (by exact name).
+3. `ProductImage` picks them up automatically; no component changes needed.
+
+**Do not** assign an image to a product unless it is genuinely that product; the
+placeholder is the better outcome. Hero last: it needs a composed arrangement
+rather than a single packshot, and still uses CSS-composed bottles.
+
+The founder portrait **is** real: `public/founder/wendy-portrait.jpg`, cropped
+from her own photo, used in the story band.
+
+`public/media/images/` still holds **67 lifestyle and testimonial images** from
+her Facebook page plus `catalog.json`. They are not packshots and are not used
+anywhere on the site.
 
 ### Videos
 

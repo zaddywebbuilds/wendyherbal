@@ -137,6 +137,95 @@ const SPICE_STORAGE =
 /** Plain commodities — no medical condition in the name. */
 const COMMODITY_SNS = new Set([1, 2, 4, 5, 6, 18, 68, 80]);
 
+/**
+ * Product photography, keyed by source S/N for the herbal rows and by exact
+ * name for the spices, which carry no S/N.
+ *
+ * These are rendered pack mockups supplied by the client (30 Oct 2026), not
+ * photographs of stock on hand: they show label artwork, and some carry claims
+ * and a trademark symbol the site itself does not make. Wiring them in was the
+ * owner's decision. Replace with real packshots when they exist.
+ *
+ * A product absent from these maps keeps the branded placeholder. An image is
+ * never reused across products; see Principle 3 in HANDOFF.md.
+ */
+const HERBAL_PHOTOS: Record<number, string> = {
+  1: "01-infection-soap.jpg",
+  2: "02-infection-cream.jpg",
+  3: "03-gallstones-herbs.jpg",
+  4: "04-sheabutter.jpg",
+  5: "05-palm-kernel-oil.jpg",
+  6: "06-sea-salt.jpg",
+  7: "07-ehi-afor-herbs.jpg",
+  8: "08-hyper-ovulation-booster-herbs.jpg",
+  9: "09-blood-booster-herbs.jpg",
+  10: "10-scanty-period-herbs.jpg",
+  11: "11-high-prolactin-herbs.jpg",
+  12: "12-progesterone-herbs.jpg",
+  13: "13-slimming-herbs.jpg",
+  15: "15-bronchitis-herbs.jpg",
+  16: "16-vaginal-steaming-herbs.jpg",
+  17: "17-prostate-enlargement-herbs.jpg",
+  18: "18-feminine-herbal-wash.jpg",
+  20: "20-ceased-period-herbs.jpg",
+  24: "24-hormonal-imbalance-herbs.jpg",
+  26: "26-endometriosis-with-balm.jpg",
+  29: "29-yeast-infection-herbs.jpg",
+  31: "31-candidiasis-infection-herbs.jpg",
+  33: "33-uti-infection-herbs.jpg",
+  35: "35-manpower-with-infection-herbs.jpg",
+  36: "36-sperm-motility-herbs.jpg",
+  37: "37-sperm-booster-herbs.jpg",
+  38: "38-ovulation-herbs.jpg",
+  39: "39-lh-hormone-herbs.jpg",
+  40: "40-amh-hormone-herbs.jpg",
+  41: "41-sperm-pap-herbs.jpg",
+  42: "42-sperm-morphology-herbs.jpg",
+  43: "43-estrogen-hormone-herbs.jpg",
+  45: "45-zero-sperm-herbs.jpg",
+  46: "46-egg-booster-herbs.jpg",
+  49: "49-warts-herbs-with-infection-cream.jpg",
+  50: "50-tummy-and-fat-blast-herbs.jpg",
+  51: "51-sex-sweetener-herbs.jpg",
+  52: "52-ulcer-herbs.jpg",
+  54: "54-h-pylori-herbs.jpg",
+  55: "55-infertility-flusher-herbs.jpg",
+  56: "56-toothache-herbs.jpg",
+  57: "57-hydrosalpinx-herbs-with-balm.jpg",
+  58: "58-vaginal-tightener-herbs.jpg",
+  60: "60-kidney-stones-herbs.jpg",
+  62: "62-pile-herbs-with-balm.jpg",
+  64: "64-arthritis-and-massage-balm.jpg",
+  65: "65-rheumatism-and-massage-cream.jpg",
+  66: "66-brain-booster-herbs-big.jpg",
+  67: "67-brain-booster-herbs-small.jpg",
+  68: "68-original-honey.jpg",
+  69: "69-man-power-herbs-soaked-with-hot-drink.jpg",
+  70: "70-weak-erection-herbs.jpg",
+  71: "71-adhesion-herbs.jpg",
+  72: "72-weight-gain-herbs.jpg",
+  73: "73-ajumbaise.jpg",
+  74: "74-ajumbaise-with-some-infection-herbs.jpg",
+  76: "76-butt-enlargement-herbs.jpg",
+  77: "77-boobs-enlargement-herbs.jpg",
+  78: "78-hair-growth-herbs.jpg",
+  79: "79-dandruff-herbs.jpg",
+  80: "80-herbal-palm-kernel-oil.jpg",
+  81: "81-body-pains-herbs-and-massage-cream.jpg",
+};
+
+const SPICE_PHOTOS: Record<string, string> = {
+  "Jollof Rice Spice": "85-jollof-rice-spice.jpg",
+  "Stew Spice": "82-stew-spice.jpg",
+  "Soup Mixed Spices": "84-soup-mixed-spices.jpg",
+  "Meat Seasoning": "86-meat-seasoning.jpg",
+  "Chicken Seasoning": "87-chicken-seasoning.jpg",
+  "Sauce Spices": "88-sauce-spices.jpg",
+  "Paprika": "93-paprika.jpg",
+};
+
+const photo = (file?: string) => (file ? [`/media/products/${file}`] : []);
+
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[()&]/g, " ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -149,7 +238,7 @@ function buildHerbal(): Product[] {
     category,
     description: `${name} from the Wendy Herbals range.`,
     price,
-    images: [],
+    images: photo(HERBAL_PHOTOS[sn]),
     in_stock: true,
     stock_count: 0,
     includes_balm: BALM_RE.test(name),
@@ -169,7 +258,7 @@ function buildSpices(): Product[] {
     category: "food-spices" as const,
     description: `${name} from the Wendy Herbals natural food spice range.`,
     price: null,
-    images: [],
+    images: photo(SPICE_PHOTOS[name]),
     in_stock: true,
     stock_count: 0,
     includes_balm: false,
