@@ -14,10 +14,18 @@ import { encrypt, decrypt } from "./crypto";
 
 export interface GoogleConnection {
   refreshToken: string;
-  spreadsheetId: string;
-  spreadsheetUrl: string;
   connectedEmail: string;
   connectedAt: string;
+
+  /**
+   * The one sheet every order is written to. Null between connecting and
+   * choosing, so leads can never land in a file she did not pick.
+   */
+  spreadsheetId: string | null;
+  spreadsheetUrl: string | null;
+  spreadsheetName: string | null;
+  /** Whether the app made this file or she chose an existing one. */
+  spreadsheetOrigin: "created" | "picked" | null;
 }
 
 const KEY = "wendy-herbals:google-connection";

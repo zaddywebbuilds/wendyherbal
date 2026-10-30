@@ -104,13 +104,60 @@ export async function fetchUserEmail(accessToken: string): Promise<string> {
 
 /* ----------------------------------------------------- spreadsheet create */
 
-/** Creates the order book in her Drive, with both tabs and headers ready. */
-export async function createSpreadsheet(accessToken: string): Promise<{ id: string; url: string }> {
+/** Adds the Orders and Customers tabs, leaving any other tab untouched. */
+async function ensureOrderBookTabs(accessToken: string, spreadsheetId: string) {
+  const auth = { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" };
+
+  const meta = await fetch(`${SHEETS_API}/${spreadsheetId}?fields=sheets.properties.title`, {
+    headers: auth,
+  });
+  if (!meta.ok) throw new Error(`Could not open that spreadsheet (${meta.status}).`);
+
+  const { sheets = [] } = (await meta.json()) as {
+    sheets?: { properties: { title: string } }[];
+  };
+  const existing = sheets.map((s) => s.properties.title);
+
+  const toAdd = [ORDERS_TAB, CUSTOMERS_TAB].filter((t) => !existing.includes(t));
+  if (toAdd.length) {
+    await fetch(`${SHEETS_API}/${spreadsheetId}:batchUpdate`, {
+      method: "POST",
+      headers: auth,
+      body: JSON.stringify({
+        requests: toAdd.map((title) => ({
+          addSheet: { properties: { title, gridProperties: { frozenRowCount: 1 } } },
+        })),
+      }),
+    });
+  }
+
+  // Only write headers onto tabs this app just added, so an existing sheet
+  // with her own data in those tabs is never overwritten.
+  if (toAdd.length) {
+    await fetch(`${SHEETS_API}/${spreadsheetId}/values:batchUpdate`, {
+      method: "POST",
+      headers: auth,
+      body: JSON.stringify({
+        valueInputOption: "USER_ENTERED",
+        data: toAdd.map((title) => ({
+          range: `${title}!A1`,
+          values: [title === ORDERS_TAB ? ORDERS_HEADER : CUSTOMERS_HEADER],
+        })),
+      }),
+    });
+  }
+}
+
+/** Creates a fresh order book in her Drive. */
+export async function createSpreadsheet(
+  accessToken: string
+): Promise<{ id: string; url: string; name: string }> {
+  const name = "Wendy Herbals — Orders & Customers";
   const res = await fetch(SHEETS_API, {
     method: "POST",
     headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      properties: { title: "Wendy Herbals — Orders & Customers" },
+      properties: { title: name },
       sheets: [
         { properties: { title: ORDERS_TAB, gridProperties: { frozenRowCount: 1 } } },
         { properties: { title: CUSTOMERS_TAB, gridProperties: { frozenRowCount: 1 } } },
@@ -121,24 +168,47 @@ export async function createSpreadsheet(accessToken: string): Promise<{ id: stri
 
   const data = (await res.json()) as { spreadsheetId: string; spreadsheetUrl: string };
 
-  await fetch(
-    `${SHEETS_API}/${data.spreadsheetId}/values:batchUpdate`,
-    {
-      method: "POST",
-      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        valueInputOption: "USER_ENTERED",
-        data: [
-          { range: `${ORDERS_TAB}!A1`, values: [ORDERS_HEADER] },
-          { range: `${CUSTOMERS_TAB}!A1`, values: [CUSTOMERS_HEADER] },
-        ],
-      }),
-    }
-  );
+  await fetch(`${SHEETS_API}/${data.spreadsheetId}/values:batchUpdate`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      valueInputOption: "USER_ENTERED",
+      data: [
+        { range: `${ORDERS_TAB}!A1`, values: [ORDERS_HEADER] },
+        { range: `${CUSTOMERS_TAB}!A1`, values: [CUSTOMERS_HEADER] },
+      ],
+    }),
+  });
 
-  return { id: data.spreadsheetId, url: data.spreadsheetUrl };
+  return { id: data.spreadsheetId, url: data.spreadsheetUrl, name };
 }
 
+/**
+ * Links a sheet she already keeps. drive.file only grants access to files the
+ * app created or she explicitly chose in the Picker, so reaching this point
+ * means she selected this exact file.
+ */
+export async function linkExistingSpreadsheet(
+  accessToken: string,
+  spreadsheetId: string
+): Promise<{ id: string; url: string; name: string }> {
+  await ensureOrderBookTabs(accessToken, spreadsheetId);
+
+  const meta = await fetch(
+    `${SHEETS_API}/${spreadsheetId}?fields=properties.title,spreadsheetUrl`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (!meta.ok) throw new Error(`Could not open that spreadsheet (${meta.status}).`);
+
+  const data = (await meta.json()) as {
+    properties: { title: string };
+    spreadsheetUrl: string;
+  };
+
+  return { id: spreadsheetId, url: data.spreadsheetUrl, name: data.properties.title };
+}
+
+/** Stores the account only. The sheet is chosen in a separate, explicit step. */
 export async function completeConnection(code: string, origin: string): Promise<GoogleConnection> {
   const tokens = await exchangeCode(code, origin);
   if (!tokens.refresh_token) {
@@ -147,15 +217,14 @@ export async function completeConnection(code: string, origin: string): Promise<
     );
   }
 
-  const email = await fetchUserEmail(tokens.access_token);
-  const sheet = await createSpreadsheet(tokens.access_token);
-
   const conn: GoogleConnection = {
     refreshToken: tokens.refresh_token,
-    spreadsheetId: sheet.id,
-    spreadsheetUrl: sheet.url,
-    connectedEmail: email,
+    connectedEmail: await fetchUserEmail(tokens.access_token),
     connectedAt: new Date().toISOString(),
+    spreadsheetId: null,
+    spreadsheetUrl: null,
+    spreadsheetName: null,
+    spreadsheetOrigin: null,
   };
 
   await saveConnection(conn);

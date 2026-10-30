@@ -6,6 +6,7 @@ import { loadConnection } from "@/lib/token-store";
 import { storageKind, storageIsDurable } from "@/lib/token-store";
 import { isOAuthConfigured } from "@/lib/google-oauth";
 import { isServiceAccountConfigured } from "@/lib/sheets";
+import { SheetChooser } from "@/components/admin/SheetChooser";
 import { BANK_DETAILS, WHATSAPP_NUMBER } from "@/lib/constants";
 
 export const instant = false;
@@ -23,6 +24,7 @@ export default async function SettingsPage({
   const serviceAccount = isServiceAccountConfigured();
   const durable = storageIsDurable();
   const kind = storageKind();
+  const pickerEnabled = Boolean(process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
 
   return (
     <div className="p-5 lg:p-7 max-w-[900px]">
@@ -40,7 +42,7 @@ export default async function SettingsPage({
       {params.connected && (
         <Banner tone="ok" icon={CheckCircle2}
           title="Google account connected"
-          body={`Your order book has been created${params.connected !== "1" ? ` in ${params.connected}` : ""}. New orders will appear in it straight away.`} />
+          body={`${params.connected !== "1" ? `Signed in as ${params.connected}. ` : ""}Now choose where your orders should be saved.`} />
       )}
       {params.disconnected && (
         <Banner tone="info" icon={Info}
@@ -77,21 +79,50 @@ export default async function SettingsPage({
                   Connected{conn.connectedEmail ? ` as ${conn.connectedEmail}` : ""}
                 </div>
 
-                <div className="flex flex-wrap gap-2.5 mt-3.5">
-                  <a href={conn.spreadsheetUrl} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 h-10 px-4 bg-[#123D2B] text-white rounded-lg text-[12.5px] font-medium hover:bg-[#175C3D] transition-colors"
-                    style={{ fontFamily: "var(--font-body)" }}>
-                    <ExternalLink size={14} /> Open my order book
-                  </a>
+                {conn.spreadsheetId ? (
+                  <>
+                    <div className="mt-3.5 flex items-center gap-2.5 p-3 bg-[#F7F4E9] rounded-lg">
+                      <Table2 size={15} className="text-[#175C3D] shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[12.5px] font-medium text-[#252B23] truncate"
+                          style={{ fontFamily: "var(--font-body)" }}>
+                          {conn.spreadsheetName ?? "Your order book"}
+                        </p>
+                        <p className="text-[11px] text-[#6b7265]" style={{ fontFamily: "var(--font-body)" }}>
+                          {conn.spreadsheetOrigin === "picked"
+                            ? "Your own sheet — orders are added to it"
+                            : "Created for you"}
+                        </p>
+                      </div>
+                    </div>
 
-                  <form action="/api/google/disconnect" method="post">
-                    <button type="submit"
-                      className="h-10 px-4 bg-white border border-[#E9E4D6] rounded-lg text-[12.5px] font-medium text-[#6b7265] hover:border-[#C06014] hover:text-[#C06014] transition-colors"
-                      style={{ fontFamily: "var(--font-body)" }}>
-                      Disconnect
-                    </button>
-                  </form>
-                </div>
+                    <div className="flex flex-wrap gap-2.5 mt-3">
+                      <a href={conn.spreadsheetUrl ?? "#"} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 h-10 px-4 bg-[#123D2B] text-white rounded-lg text-[12.5px] font-medium hover:bg-[#175C3D] transition-colors"
+                        style={{ fontFamily: "var(--font-body)" }}>
+                        <ExternalLink size={14} /> Open my order book
+                      </a>
+
+                      <form action="/api/google/disconnect" method="post">
+                        <button type="submit"
+                          className="h-10 px-4 bg-white border border-[#E9E4D6] rounded-lg text-[12.5px] font-medium text-[#6b7265] hover:border-[#C06014] hover:text-[#C06014] transition-colors"
+                          style={{ fontFamily: "var(--font-body)" }}>
+                          Disconnect
+                        </button>
+                      </form>
+                    </div>
+
+                    <details className="mt-3">
+                      <summary className="text-[11.5px] text-[#6b7265] cursor-pointer hover:text-[#123D2B]"
+                        style={{ fontFamily: "var(--font-body)" }}>
+                        Use a different sheet
+                      </summary>
+                      <SheetChooser pickerEnabled={pickerEnabled} />
+                    </details>
+                  </>
+                ) : (
+                  <SheetChooser pickerEnabled={pickerEnabled} />
+                )}
 
                 <p className="mt-3 text-[11px] text-[#A8B99C]" style={{ fontFamily: "var(--font-body)" }}>
                   Connected {new Date(conn.connectedAt).toLocaleDateString("en-NG", {

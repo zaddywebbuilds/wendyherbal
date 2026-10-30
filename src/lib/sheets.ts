@@ -77,10 +77,14 @@ async function serviceAccountToken(): Promise<string> {
 
 interface Target { token: string; spreadsheetId: string }
 
-/** Picks the OAuth connection when present, else the service account. */
+/**
+ * Picks the OAuth connection when one is linked to a sheet, else the service
+ * account. A connection without a chosen sheet is not a target: orders must
+ * never land somewhere she did not pick.
+ */
 async function resolveTarget(): Promise<Target | null> {
   const conn = await loadConnection();
-  if (conn) {
+  if (conn?.spreadsheetId) {
     const token = await getConnectedAccessToken();
     if (token) return { token, spreadsheetId: conn.spreadsheetId };
   }
@@ -92,12 +96,13 @@ async function resolveTarget(): Promise<Target | null> {
 
 export async function isSheetsReady(): Promise<boolean> {
   if (isServiceAccountConfigured()) return true;
-  return Boolean(await loadConnection());
+  const conn = await loadConnection();
+  return Boolean(conn?.spreadsheetId);
 }
 
 export async function activeSpreadsheetUrl(): Promise<string | null> {
   const conn = await loadConnection();
-  if (conn) return conn.spreadsheetUrl;
+  if (conn?.spreadsheetUrl) return conn.spreadsheetUrl;
   if (process.env.GOOGLE_SHEETS_ID) {
     return `https://docs.google.com/spreadsheets/d/${process.env.GOOGLE_SHEETS_ID}/edit`;
   }

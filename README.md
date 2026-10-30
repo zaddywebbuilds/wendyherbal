@@ -62,15 +62,27 @@ export. One source of truth, two ways in.
 
 ### How Wendy connects it
 
-She signs in to `/admin`, opens **Settings**, and clicks **Connect my Google
-account**. Google asks her to allow access, and the app creates the spreadsheet
-in her Drive. That is the whole of her involvement — she gives you nothing, not
-even her Gmail address.
+1. She signs in to `/admin` and opens **Settings**.
+2. **Connect my Google account** → Google asks her to allow access.
+3. She chooses where orders go:
+   - **Make me a new one** — a fresh order book is created in her Drive, or
+   - **Use a sheet I already have** — the Google Picker opens and she selects
+     the list she already keeps. Her existing rows are left alone; only the
+     `Orders` and `Customers` tabs are added if missing.
 
-The scope is `drive.file` only: access to the one file this app creates, and
-nothing else in her Drive. Google classifies it non-sensitive, so it needs no
-restricted-scope security review, and the consent screen says plainly that the
-app cannot see her other files.
+That is the whole of her involvement. She gives you nothing — not a key, not a
+file, not even her Gmail address.
+
+**Every order goes to that one sheet and nowhere else.** Until she picks one,
+nothing is saved and checkout says so plainly rather than writing somewhere she
+did not choose. She can switch sheets later from the same screen.
+
+The scope is `drive.file` only: access to files this app creates plus any file
+she explicitly picks, and nothing else in her Drive. Google classifies it
+non-sensitive, so it needs no restricted-scope security review, and the consent
+screen says plainly that the app cannot see her other files. Picking an existing
+file is exactly how `drive.file` grants access to something the app did not
+create — which is why this uses the Picker rather than a pasted link.
 
 ### Developer setup (once)
 
@@ -81,6 +93,12 @@ app cannot see her other files.
    - `http://localhost:3000/api/google/callback`
    - `https://your-domain.com/api/google/callback`
 3. Put `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env.local`.
+   These belong to the app, not to Wendy. You create them once, in your own
+   Google account, and they serve every client you build. She never opens Cloud
+   Console or sees a key.
+   For the "use a sheet I already have" option, also enable the **Google Picker
+   API**, create an **API key**, and set `NEXT_PUBLIC_GOOGLE_API_KEY`. Without
+   it that button is disabled and only "make me a new one" is offered.
 4. Set `ADMIN_PASSWORD` and `ADMIN_SECRET` (see below) — the dashboard stays
    locked without them.
 5. On **OAuth consent screen**, set publishing status to **In production**.
