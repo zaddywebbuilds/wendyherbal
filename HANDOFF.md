@@ -86,7 +86,8 @@ section originally anticipated, and two questions are still open with her.
 | Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |
 | Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
 | Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
-| Admin CRUD screens | ◐ 17 sidebar links still 404 |
+| Admin Products | ✅ Done, read-only. Catalogue plus the gap worklist |
+| Admin CRUD screens | ◐ 16 sidebar links still 404 |
 | Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
 Build is green. `npm run build` passes, 114 routes. Working tree clean and in
@@ -285,7 +286,22 @@ Roughly in priority order.
    load, one of them unauthenticated, and it stops `/admin/login`
    prerendering. The count lives on the Orders page instead.
 
-   Still 404: Sidebar links to Products, Categories, Inventory,
+   Products is built: `/admin/products` lists the whole catalogue with search,
+   a category filter and gap filters for the three things that need the client
+   (24 without a photo, 12 without a price, 73 with NAFDAC pending), plus a
+   catalogue CSV at `/api/admin/products/export` so prices can be worked
+   through offline.
+
+   It does **not** edit, and the screen explains why in the owner's own terms.
+   The catalogue is a TypeScript module, and the hosting filesystem is
+   read-only, so a web page cannot write to it. Making it editable means
+   moving the catalogue somewhere writable: a Products tab in the same Google
+   Sheet that holds the orders, which keeps her in one familiar place, or a
+   real database, which scales better. That is a client conversation, and
+   `supabase/schema.sql` is still the migration path if the answer is the
+   database. Do not quietly pick one.
+
+   Still 404: Sidebar links to Categories, Inventory,
    Reviews, Blog, Promotions, Shipping, Reports — all 404. The sidebar was
    built to match the client's approved dashboard mockup; the screens behind it
    were not.

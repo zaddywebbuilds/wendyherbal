@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import { isSheetsReady, listOrders, activeSpreadsheetUrl, type SheetOrderRow } from "@/lib/sheets";
 import { FORMAT_NGN } from "@/lib/constants";
+import { Stat } from "@/components/admin/Stat";
 
 export const instant = false;
 
@@ -218,23 +219,6 @@ export default async function OrdersPage() {
           </>
         )}
       </section>
-    </div>
-  );
-}
-
-function Stat({ label, value, icon: Icon, tint, color }: {
-  label: string; value: string; icon: typeof Receipt; tint: string; color: string;
-}) {
-  return (
-    <div className="bg-white rounded-xl border border-[#E9E4D6] p-4 flex items-center gap-3.5">
-      <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: tint }}>
-        <Icon size={19} style={{ color }} strokeWidth={1.8} />
-      </span>
-      <div className="min-w-0">
-        <p className="text-[12px] text-[#6b7265]" style={{ fontFamily: "var(--font-body)" }}>{label}</p>
-        <p className="text-[1.35rem] font-bold text-[#123D2B] leading-tight tabular-nums truncate"
-          style={{ fontFamily: "var(--font-body)" }}>{value}</p>
-      </div>
     </div>
   );
 }
