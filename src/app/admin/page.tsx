@@ -5,10 +5,7 @@ import {
   LayoutGrid, ImagePlus, BarChart3, PenLine, PackageX, Inbox,
 } from "lucide-react";
 import { TrendChart, StatusDonut, CategoryBars } from "@/components/admin/Charts";
-import {
-  getDashboardStats, getOrderStatusCounts, getTopSelling, getRecentOrders,
-  getSalesByCategory, getSalesSeries, getLowStockProducts,
-} from "@/lib/admin-data";
+import { getDashboardData, percentChange } from "@/lib/dashboard-data";
 import { FORMAT_NGN } from "@/lib/constants";
 import { CATEGORY_LABELS } from "@/lib/products";
 
@@ -18,19 +15,34 @@ export const instant = false;
 export default async function AdminDashboard() {
   await connection();
   const now = new Date();
-  const stats = getDashboardStats();
-  const statusCounts = getOrderStatusCounts();
-  const topSelling = getTopSelling();
-  const recentOrders = getRecentOrders();
-  const salesByCategory = getSalesByCategory();
-  const salesSeries = getSalesSeries(now.getFullYear(), now.getMonth());
-  const lowStock = getLowStockProducts();
+  const data = await getDashboardData(now);
+  const {
+    topSelling, recent: recentOrders, byCategory: salesByCategory,
+    series: salesSeries, lowStock, itemsReadable,
+  } = data;
+
+  // The donut takes a plain record; buckets with no orders are already gone.
+  const statusCounts = Object.fromEntries(data.statusCounts.map((s) => [s.label, s.count]));
 
   const KPIS = [
-    { label: "Total Sales", value: FORMAT_NGN(stats.total_sales), icon: ShoppingCart, tint: "#E8F0EA", color: "#175C3D", delta: stats.sales_vs_last_month },
-    { label: "Total Orders", value: String(stats.total_orders), icon: ClipboardList, tint: "#E7EEF6", color: "#2563EB", delta: stats.orders_vs_last_month },
-    { label: "Total Customers", value: String(stats.total_customers), icon: Users, tint: "#F1EAF8", color: "#7C3AED", delta: stats.customers_vs_last_month },
-    { label: "Products in Stock", value: String(stats.products_in_stock), icon: Boxes, tint: "#FBF0DE", color: "#B5713A", lowStock: stats.low_stock_count },
+    {
+      label: "Order value", value: FORMAT_NGN(data.recordedValue),
+      icon: ShoppingCart, tint: "#E8F0EA", color: "#175C3D",
+      delta: percentChange(data.valueThisMonth, data.valueLastMonth),
+    },
+    {
+      label: "Total Orders", value: String(data.orderCount),
+      icon: ClipboardList, tint: "#E7EEF6", color: "#2563EB",
+      delta: percentChange(data.ordersThisMonth, data.ordersLastMonth),
+    },
+    {
+      label: "Total Customers", value: String(data.customerCount),
+      icon: Users, tint: "#F1EAF8", color: "#7C3AED", delta: null,
+    },
+    {
+      label: "Products in Stock", value: String(data.productsInStock),
+      icon: Boxes, tint: "#FBF0DE", color: "#B5713A", lowStock: lowStock.length,
+    },
   ];
 
   const QUICK = [
@@ -59,6 +71,23 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
+      {!data.configured && (
+        <div className="mb-5 rounded-xl border-l-[3px] border-[#92400E] bg-[#FEF3C7] p-4 text-[12.5px] leading-relaxed text-[#92400E]"
+          style={{ fontFamily: "var(--font-body)" }}>
+          <p className="font-semibold">The order book is not connected yet</p>
+          <p>
+            Connect your Google account in Settings. Until then checkout still works and every
+            order reaches you on WhatsApp, but these figures have nothing to read.
+          </p>
+        </div>
+      )}
+      {data.error && (
+        <div className="mb-5 rounded-xl border-l-[3px] border-[#991B1B] bg-[#FEE2E2] p-4 text-[12.5px] leading-relaxed text-[#991B1B]"
+          style={{ fontFamily: "var(--font-body)" }}>
+          {data.error}
+        </div>
+      )}
+
       {/* KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
         {KPIS.map((k) => {
@@ -84,7 +113,7 @@ export default async function AdminDashboard() {
                       All stock healthy
                     </p>
                   )
-                ) : k.delta !== 0 ? (
+                ) : typeof k.delta === "number" && k.delta !== 0 ? (
                   <p className="text-[11px] flex items-center gap-0.5 mt-0.5 text-[#175C3D]"
                     style={{ fontFamily: "var(--font-body)" }}>
                     <ArrowUpRight size={12} /> {k.delta > 0 ? "+" : ""}{k.delta}% vs last month
@@ -106,10 +135,10 @@ export default async function AdminDashboard() {
         <Card title="Sales Overview">
           <p className="text-[1.4rem] font-bold text-[#123D2B] tabular-nums leading-none"
             style={{ fontFamily: "var(--font-body)" }}>
-            {FORMAT_NGN(stats.total_sales)}
+            {FORMAT_NGN(data.valueThisMonth)}
           </p>
           <p className="text-[11.5px] text-[#6b7265] mt-1 mb-4" style={{ fontFamily: "var(--font-body)" }}>
-            {now.toLocaleDateString("en-NG", { month: "long", year: "numeric" })} &middot; paid orders only
+            {now.toLocaleDateString("en-NG", { month: "long", year: "numeric" })} &middot; excludes cancelled and refunded
           </p>
           <TrendChart series={salesSeries} />
           <div className="flex justify-between mt-2 pl-12 text-[9px] text-[#A8B99C]"
@@ -120,12 +149,15 @@ export default async function AdminDashboard() {
 
         {/* Top selling */}
         <Card title="Top Selling Products" action={{ label: "View all", href: "/admin/products" }}>
-          {topSelling.length === 0 ? (
-            <Empty icon={PackageX} text="No sales recorded yet" sub="Top sellers appear once orders are paid." />
+          {!itemsReadable ? (
+            <Empty icon={PackageX} text="No sales recorded yet"
+              sub="Top sellers are worked out from the items column of each order." />
+          ) : topSelling.length === 0 ? (
+            <Empty icon={PackageX} text="Nothing to rank yet" sub="No order items matched the catalogue." />
           ) : (
             <ol className="space-y-2.5">
               {topSelling.map((p, i) => (
-                <li key={p.id} className="flex items-center gap-2.5">
+                <li key={p.name} className="flex items-center gap-2.5">
                   <span className="w-5 text-[12px] font-semibold text-[#A8B99C] tabular-nums shrink-0"
                     style={{ fontFamily: "var(--font-body)" }}>{i + 1}</span>
                   <span className="w-9 h-9 rounded-md bg-[#EFE9DD] shrink-0" />
@@ -137,7 +169,9 @@ export default async function AdminDashboard() {
                     </p>
                   </div>
                   <span className="text-[12.5px] font-semibold text-[#123D2B] tabular-nums shrink-0"
-                    style={{ fontFamily: "var(--font-body)" }}>{FORMAT_NGN(p.revenue)}</span>
+                    style={{ fontFamily: "var(--font-body)" }}>
+                    {p.revenue > 0 ? FORMAT_NGN(p.revenue) : "On enquiry"}
+                  </span>
                 </li>
               ))}
             </ol>
@@ -171,19 +205,19 @@ export default async function AdminDashboard() {
                 </thead>
                 <tbody>
                   {recentOrders.map((o) => (
-                    <tr key={o.id} className="border-b border-[#F4F0E4] last:border-0 text-[12.5px]">
+                    <tr key={o.row} className="border-b border-[#F4F0E4] last:border-0 text-[12.5px]">
                       <td className="py-2.5">
-                        <Link href={`/admin/orders/${o.id}`} className="font-medium text-[#175C3D] hover:underline">
-                          {o.order_number}
+                        <Link href="/admin/orders" className="font-medium text-[#175C3D] hover:underline">
+                          {o.orderNumber}
                         </Link>
                       </td>
-                      <td className="py-2.5 text-[#252B23]">{o.customer_name}</td>
-                      <td className="py-2.5 text-[#6b7265]">{o.items.length}</td>
-                      <td className="py-2.5 font-semibold text-[#123D2B] tabular-nums">{FORMAT_NGN(o.total)}</td>
-                      <td className="py-2.5"><StatusPill status={o.status} /></td>
-                      <td className="py-2.5 text-[#6b7265] whitespace-nowrap">
-                        {new Date(o.created_at).toLocaleDateString("en-NG", { month: "short", day: "numeric" })}
+                      <td className="py-2.5 text-[#252B23]">{o.name}</td>
+                      <td className="py-2.5 text-[#6b7265] max-w-[18ch]">
+                        <span className="line-clamp-1">{o.items || "Not recorded"}</span>
                       </td>
+                      <td className="py-2.5 font-semibold text-[#123D2B] tabular-nums">{FORMAT_NGN(o.total)}</td>
+                      <td className="py-2.5"><StatusPill status={o.status || "no status"} /></td>
+                      <td className="py-2.5 text-[#6b7265] whitespace-nowrap">{o.date}</td>
                     </tr>
                   ))}
                 </tbody>

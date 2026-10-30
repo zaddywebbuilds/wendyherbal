@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { AdminSidebar } from "@/components/admin/Sidebar";
 import { AdminTopBar } from "@/components/admin/AdminTopBar";
-import { ORDERS } from "@/lib/admin-data";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -18,11 +17,7 @@ export const metadata: Metadata = {
  * for that purpose. A zero here renders no badge rather than a false one.
  */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const badges = {
-    orders: ORDERS.filter((o) => o.status === "pending").length,
-    messages: 0,
-    contact: 0,
-  };
+  const badges = { orders: 0, messages: 0, contact: 0 };
   const notifications = badges.orders + badges.messages + badges.contact;
 
   return (

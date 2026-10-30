@@ -77,7 +77,7 @@ section originally anticipated, and two questions are still open with her.
 | Checkout | ✅ Done — bank transfer → WhatsApp receipt |
 | Buyer capture | ✅ Done — writes to her Google Sheet |
 | Admin login | ✅ Done — password gate |
-| Admin dashboard | ✅ Shell + live KPIs. Reads real data; shows zeros honestly |
+| Admin dashboard | ✅ Reads the order sheet. Real figures, honest zeros |
 | Admin Customers | ✅ Done — list, WhatsApp links, CSV export |
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
@@ -358,6 +358,45 @@ The Medical Disclaimer leads with the warning rather than brand furniture, and
 is linked from About, FAQ, Terms and every product page. It states plainly that
 a product name is not a claim, which is the thing most likely to matter if the
 catalogue is ever challenged.
+
+## The dashboard
+
+Everything on `/admin` is derived in `dashboard-data.ts` from the order
+sheet, the customer tab and the merged catalogue. Nothing is illustrative.
+
+The approved mockup is not a specification for the numbers. It showed
+₦1,248,500 in sales, 186 orders, 142 customers, "+18% vs last month", "42
+sold" and sidebar badges of 12, 5 and 3. **All of it was invented**, and it
+priced Ovarian Cyst Herbs at ₦420,000 against ₦17,000 on the client's own
+price list. The layout was approved; the figures were never real.
+
+What is derived, and from what:
+
+| Widget | Source |
+| --- | --- |
+| Order value, Total orders | sheet rows, excluding cancelled and refunded |
+| Month-on-month change | the Date column, this month against last |
+| Total customers | the Customers tab |
+| Products in stock, Low stock | the merged catalogue, so admin edits count |
+| Order status donut | the free-text Status column, bucketed loosely |
+| Recent orders | the five newest rows |
+| Top sellers, Sales by category | the Items column, parsed |
+
+**The Items column is text**, written by `/api/orders` as
+`Name (size) xQty; Name xQty`. `parseItems` keeps the label whole,
+brackets included, because real product names contain them: "Brain Booster
+Herbs (Big)", "Banga Spices (Ofe Akwu)". An earlier version stripped a
+trailing bracket to drop the size, which merged the two Brain Booster pack
+sizes into one row and matched neither against the catalogue. The size is
+stripped only as a fallback when an exact match fails.
+
+When no order's items can be read, the top sellers and category widgets show
+an empty state rather than zeros, because a zero there would read as "nothing
+sold" instead of "cannot be worked out".
+
+`admin-data.ts` is gone. It held a hardcoded empty `ORDERS` array that
+every dashboard figure was computed from, which is why the screen showed zeros
+no matter what the sheet contained.
 
 ## The editable catalogue
 
