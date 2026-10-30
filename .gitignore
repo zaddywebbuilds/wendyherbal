@@ -48,3 +48,6 @@ next-env.d.ts
 
 # Local Google connection store (encrypted, but still a credential)
 /.data/
+
+# Photographs uploaded in local development; production uses Vercel Blob
+/public/media/uploads/

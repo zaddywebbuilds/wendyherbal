@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Save, Trash2, Loader2, AlertTriangle, ImagePlus, X } from "lucide-react";
+import { Save, Trash2, Loader2, AlertTriangle, ImagePlus, X, Camera } from "lucide-react";
 import { CATEGORY_LABELS } from "@/lib/products";
 import type { Product } from "@/lib/types";
 
@@ -36,6 +36,8 @@ export function ProductForm({ product, availableImages, durable, deletable }: Pr
   const [ingredients, setIngredients] = useState(product?.ingredients ?? "");
   const [storage, setStorage] = useState(product?.storage_info ?? "");
   const [picking, setPicking] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [status, setStatus] = useState<Status>({ kind: "idle" });
 
@@ -70,6 +72,32 @@ export function ProductForm({ product, availableImages, durable, deletable }: Pr
 
     router.push("/admin/products");
     router.refresh();
+  }
+
+  /** Takes a photograph straight from the phone camera or the gallery. */
+  async function upload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/admin/products/images", { method: "POST", body });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.url) {
+        setUploadError(data.error ?? "Could not upload that photograph.");
+        return;
+      }
+      setImages((current) => (current.includes(data.url) ? current : [...current, data.url]));
+    } catch {
+      setUploadError("Could not upload that photograph. Check your connection and try again.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function remove() {
@@ -137,12 +165,24 @@ export function ProductForm({ product, availableImages, durable, deletable }: Pr
               </button>
             </span>
           ))}
+          <label className="w-20 h-20 rounded-lg border border-dashed border-[#175C3D] text-[#175C3D] flex flex-col items-center justify-center gap-1 text-[10.5px] cursor-pointer">
+            {uploading ? <Loader2 size={17} className="animate-spin" /> : <Camera size={17} />}
+            {uploading ? "Sending" : "Upload"}
+            {/* capture tells a phone to offer the camera as well as the gallery */}
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif"
+              capture="environment" onChange={upload} disabled={uploading} className="sr-only" />
+          </label>
+
           <button type="button" onClick={() => setPicking((v) => !v)}
             className="w-20 h-20 rounded-lg border border-dashed border-[#C6A667] text-[#175C3D] flex flex-col items-center justify-center gap-1 text-[10.5px]">
             <ImagePlus size={17} />
-            {picking ? "Close" : "Add"}
+            {picking ? "Close" : "Choose"}
           </button>
         </div>
+
+        {uploadError && (
+          <p className="mt-2 text-[12px] text-[#991B1B] leading-relaxed">{uploadError}</p>
+        )}
 
         {picking && (
           <div className="mt-3 max-h-64 overflow-y-auto rounded-lg border border-[#E9E4D6] p-2 grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -156,8 +196,8 @@ export function ProductForm({ product, availableImages, durable, deletable }: Pr
           </div>
         )}
         <p className="mt-2 text-[11.5px] text-[#A8B99C] leading-relaxed">
-          Uploading a new photograph from your phone is not built yet. Send new pictures to the
-          developer and they appear in this list.
+          Upload takes a picture straight from your phone, up to 10MB. Choose picks one already
+          on the site.
         </p>
       </Field>
 

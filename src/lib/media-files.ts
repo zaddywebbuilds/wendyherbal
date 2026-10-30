@@ -10,7 +10,7 @@ import path from "node:path";
  * next.config and would let anyone with the admin password load third-party
  * content onto the shop.
  */
-const FOLDERS = ["products", "brand"] as const;
+const FOLDERS = ["products", "brand", "uploads"] as const;
 
 export async function listSiteImages(): Promise<string[]> {
   const out: string[] = [];

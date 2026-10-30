@@ -30,10 +30,21 @@ export const slugify = (s: string) =>
   s.toLowerCase().replace(/[()&]/g, " ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 /**
- * Image paths must stay inside the site's own media folders. A remote URL
- * would need the host allow-listed in next.config and would let an attacker
- * point the shop at anything, so it is refused with an explanation.
+ * An image is either a path inside the site's own media folders, or a file
+ * uploaded to this project's Vercel Blob store. Any other remote URL is
+ * refused: it would need the host allow-listed in next.config, and it would
+ * let anyone holding the admin password point the shop at arbitrary content.
  */
+const BLOB_HOST = /\.public\.blob\.vercel-storage\.com$/;
+
+function isUploadedImage(s: string): boolean {
+  if (!s.startsWith("https://")) return false;
+  try {
+    return BLOB_HOST.test(new URL(s).hostname);
+  } catch {
+    return false;
+  }
+}
 function parseImages(raw: unknown): string[] | undefined | { error: string } {
   if (raw === undefined) return undefined;
   if (!Array.isArray(raw)) return { error: "Images must be a list." };
@@ -42,10 +53,16 @@ function parseImages(raw: unknown): string[] | undefined | { error: string } {
   for (const item of raw.slice(0, 8)) {
     const s = typeof item === "string" ? item.trim() : "";
     if (!s) continue;
-    if (!s.startsWith("/media/")) {
-      return { error: `Image paths must start with /media/. Received "${s.slice(0, 40)}".` };
+    if (!s.startsWith("/media/") && !isUploadedImage(s)) {
+      return {
+        error:
+          "Images must either live in this site's media folder or be uploaded here. " +
+          `Received "${s.slice(0, 40)}".`,
+      };
     }
-    if (s.includes("..")) return { error: "Image paths cannot contain '..'." };
+    if (s.startsWith("/media/") && s.includes("..")) {
+      return { error: "Image paths cannot contain '..'." };
+    }
     out.push(s);
   }
   return out;
