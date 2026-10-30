@@ -3,10 +3,12 @@ import type { MetadataRoute } from "next";
 /**
  * Search engines are blocked until the site is actually ready to launch.
  *
- * Right now About, Contact, FAQ and — most importantly — the Medical
- * Disclaimer all 404, products have no photography, and the catalogue has had
- * no NAFDAC review. Letting Google index herbal products named after medical
- * conditions in that state is a real risk, and de-indexing afterwards is slow.
+ * The written pages now exist, the Medical Disclaimer among them, and 69 of 93
+ * products carry an image. Still outstanding: the catalogue has had no NAFDAC
+ * review, several policy details on those pages are marked as unsettled, and
+ * the product images are the client's rendered mockups rather than photographs.
+ * Letting Google index herbal products named after medical conditions in that
+ * state is a real risk, and de-indexing afterwards is slow.
  *
  * Flip NEXT_PUBLIC_ALLOW_INDEXING=true when those are done.
  */

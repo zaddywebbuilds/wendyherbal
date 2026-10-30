@@ -84,7 +84,7 @@ section originally anticipated, and two questions are still open with her.
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
 | Product photos | ◐ 69 of 93 wired. Client renders, not photos. Read Task 2 |
 | Admin CRUD screens | ❌ Not built — sidebar links 404 |
-| Content pages | ❌ Not built — About/Contact/FAQ/legal 404 |
+| Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
 Build is green. `npm run build` passes, 114 routes. Working tree clean and in
 sync with `origin/main`.
@@ -273,9 +273,9 @@ Roughly in priority order.
    Reviews, Blog, Promotions, Shipping, Reports — all 404. The sidebar was
    built to match the client's approved dashboard mockup; the screens behind it
    were not.
-3. **Content pages.** About, Contact, FAQ, Delivery, Returns, Privacy, Terms,
-   Medical Disclaimer. All linked from the footer, all 404. The Medical
-   Disclaimer matters most given the product names.
+3. **Blog.** Linked from the footer until now; the link was removed because
+   there is no blog and no post store behind it. Restore the footer entry when
+   one is built.
 4. **Customer accounts.** Guest checkout only. Order history, tracking, saved
    addresses, wishlist persistence beyond localStorage.
 5. **Shipping zones.** Way bill is currently agreed on WhatsApp, matching her
@@ -286,6 +286,46 @@ Roughly in priority order.
    Admin cannot yet update order state.
 
 ---
+
+## The written pages
+
+About, Contact, FAQ, Delivery, Returns, Privacy, Terms and Medical Disclaimer
+all exist under `src/app/(storefront)/`, sharing the primitives in
+`src/components/content/ContentPage.tsx` (PageHero, Section, List, Callout,
+ContactStrip, Related). Those primitives are deliberate: eight pages use them.
+A one-off page should still follow the inline Tailwind convention.
+
+**Every fact on them is sourced from the repo**, not from a template. Prices,
+bank details, the way bill note and the data-collection list are read from
+`constants.ts`, the checkout form and the Sheets schema, so they cannot drift
+from what the site does. The product and category counts on About are computed
+from the catalogue at build time.
+
+**Where a policy does not exist yet, the page says so.** A `Callout` with
+`tone="pending"` marks each one, visibly, in the customer's own words. These
+are the open questions, and each one needs the client, not a developer:
+
+| Page | Needs from the client |
+| --- | --- |
+| Contact | Whether to publish an email address, shop address, opening hours |
+| Delivery | Timeframes, a price per state, which couriers |
+| Returns | A returns window, conditions, refund turnaround |
+| Privacy | How long order records are kept; registered name and address as data controller |
+| Terms | Legal entity name, RC number, registered address, jurisdiction for disputes |
+| FAQ | Carries the delivery and returns gaps; resolves when those do |
+
+Do **not** fill these in by inventing a reasonable-sounding figure. A 7-day
+returns window the owner never agreed to is a promise she has to honour.
+
+**Two footer links were removed** because nothing exists behind them: Blog and
+Order Tracking. Both are one line to restore in `Footer.tsx`, which carries a
+comment saying so. Every remaining footer link resolves; `/wishlist` and
+`/account` in the **header** still 404 and belong to customer accounts.
+
+The Medical Disclaimer leads with the warning rather than brand furniture, and
+is linked from About, FAQ, Terms and every product page. It states plainly that
+a product name is not a claim, which is the thing most likely to matter if the
+catalogue is ever challenged.
 
 ## Gotchas that cost real time
 

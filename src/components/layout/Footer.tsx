@@ -3,11 +3,15 @@ import { Facebook, MessageCircle, Mail } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { FACEBOOK_URL, WHATSAPP_URL, BRAND_PHRASE } from "@/lib/constants";
 
+/**
+ * Blog and Order Tracking were removed from these columns: neither has a page
+ * behind it, and a footer link to a 404 is worse than no link. Restore them
+ * when the blog and customer accounts are built.
+ */
 const footerLinks = {
   Company: [
     { label: "About Wendy Herbals", href: "/about" },
     { label: "Contact", href: "/contact" },
-    { label: "Blog", href: "/blog" },
   ],
   Shop: [
     { label: "All Products", href: "/shop" },
@@ -20,7 +24,6 @@ const footerLinks = {
     { label: "Delivery Information", href: "/delivery" },
     { label: "Returns & Refunds", href: "/returns" },
     { label: "FAQs", href: "/faq" },
-    { label: "Order Tracking", href: "/account/orders" },
   ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
