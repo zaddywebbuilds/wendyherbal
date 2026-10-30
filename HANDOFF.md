@@ -191,7 +191,11 @@ used anywhere on the site yet.
 
 Roughly in priority order.
 
-1. **Deployment.** Never deployed. See the Vercel checklist below.
+1. **Deployment.** Never deployed. Full runbook in [DEPLOY.md](DEPLOY.md) —
+   env vars, the KV requirement, and the pre-launch checklist. Search engines
+   are blocked by default via `src/app/robots.ts` until the legal pages exist
+   and the catalogue has had a NAFDAC review; flip
+   `NEXT_PUBLIC_ALLOW_INDEXING=true` when genuinely ready.
 2. **Admin CRUD.** Sidebar links to Orders, Products, Categories, Inventory,
    Reviews, Blog, Promotions, Shipping, Reports — all 404. The sidebar was
    built to match the client's approved dashboard mockup; the screens behind it
