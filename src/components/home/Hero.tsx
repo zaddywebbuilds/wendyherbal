@@ -1,6 +1,8 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { BRAND_IMAGES } from "@/lib/media";
 import { ArrowRight, Play, Leaf, Award, ShieldCheck, Truck, HeartHandshake } from "lucide-react";
 
 const TRUST = [
@@ -18,6 +20,8 @@ const fade = {
     transition: { duration: 0.6, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
+
+const HERO_IMAGE = BRAND_IMAGES.driedHerbs;
 
 export function Hero() {
   return (
@@ -103,50 +107,12 @@ export function Hero() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="relative">
             <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-[#EFE9DD] to-[#DDD4BC] aspect-[4/3] shadow-[0_18px_60px_-20px_rgba(18,61,43,0.35)]">
-              {/* Placeholder composition until Wendy's product photography is imported */}
-              <div className="absolute inset-0 flex items-end justify-center gap-3 sm:gap-5 px-6 pb-10">
-                {[
-                  { h: "58%", w: "15%", label: "Ginger" },
-                  { h: "66%", w: "15%", label: "Pepper" },
-                  { h: "84%", w: "19%", label: "Liquid Herbs" },
-                  { h: "54%", w: "17%", label: "Soap" },
-                  { h: "46%", w: "15%", label: "Cream" },
-                ].map((b, i) => (
-                  <motion.div key={b.label}
-                    initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, delay: 0.35 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative rounded-t-md rounded-b-sm flex flex-col items-center justify-end pb-2"
-                    style={{
-                      height: b.h, width: b.w,
-                      background: "linear-gradient(170deg,#1d5338 0%,#123D2B 55%,#0d2d20 100%)",
-                      boxShadow: "0 10px 26px -8px rgba(18,61,43,0.5)",
-                    }}>
-                    {/* cap */}
-                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-[68%] h-2.5 rounded-sm bg-[#C6A667]" />
-                    {/* label band */}
-                    <span className="absolute top-[22%] left-[8%] right-[8%] h-[46%] rounded-[3px] bg-[#F7F4E9]/92 flex flex-col items-center justify-center gap-1 px-1">
-                      <svg width="13" height="15" viewBox="0 0 32 36" className="shrink-0">
-                        <path d="M16 4C16 4 5 11 5 23C5 30.2 9.9 36 16 36C22.1 36 27 30.2 27 23C27 11 16 4 16 4Z" fill="#175C3D" opacity="0.85" />
-                      </svg>
-                      <span className="text-[6px] sm:text-[7px] font-bold tracking-tight text-[#123D2B] text-center leading-none"
-                        style={{ fontFamily: "var(--font-body)" }}>
-                        WENDY<br />HERBALS
-                      </span>
-                      <span className="text-[5px] sm:text-[6px] text-[#6b7265] text-center leading-none truncate w-full"
-                        style={{ fontFamily: "var(--font-body)" }}>
-                        {b.label}
-                      </span>
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* mortar + botanical hint */}
-              <div aria-hidden className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#C9BFA3]/70 to-transparent" />
-
-              <p className="absolute bottom-2.5 left-0 right-0 text-center text-[9px] uppercase tracking-[0.18em] text-[#6b7265]"
+              <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill priority
+                sizes="(max-width:1024px) 100vw, 52vw" className="object-cover" />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0b241a]/55 via-[#0b241a]/10 to-transparent" />
+              <p className="absolute bottom-3 left-4 right-4 text-[10px] uppercase tracking-[0.18em] text-white/85"
                 style={{ fontFamily: "var(--font-body)" }}>
-                Product photography pending import
+                {HERO_IMAGE.caption}
               </p>
             </div>
 

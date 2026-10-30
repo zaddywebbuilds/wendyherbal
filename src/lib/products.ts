@@ -226,6 +226,83 @@ const SPICE_PHOTOS: Record<string, string> = {
 
 const photo = (file?: string) => (file ? [`/media/products/${file}`] : []);
 
+/**
+ * Product copy.
+ *
+ * Built from what the catalogue actually records: the preparation's form (read
+ * from its name), its collection, whether a balm or cream ships with it, and
+ * whether it carries a published price. Nothing here describes an effect, a
+ * benefit or a use, because the business has supplied no ingredient lists,
+ * dosages or indications, and inventing them would be both a medical claim and
+ * a fabrication. See Principles 1 and 4 in HANDOFF.md.
+ *
+ * When Wendy supplies real ingredient and usage detail, extend `ingredients`
+ * and `safety_info` on the product rather than loosening the wording here.
+ */
+
+type Form = {
+  /** Noun used for the item itself. */ noun: string;
+  /** Sentence describing presentation. */ presented: string;
+};
+
+const FORMS: [RegExp, Form][] = [
+  [/wash/i, { noun: "herbal wash", presented: "Supplied as a liquid for external use." }],
+  [/steaming/i, { noun: "herbal steaming preparation", presented: "Used externally as directed on the pack." }],
+  [/soap/i, { noun: "herbal soap", presented: "Supplied as a bar for external use." }],
+  [/honey/i, { noun: "honey", presented: "Supplied in a jar." }],
+  [/salt/i, { noun: "natural salt", presented: "Supplied loose in a pack." }],
+  [/sheabutter|shea butter/i, { noun: "shea butter", presented: "Supplied in a jar for external use." }],
+  [/oil/i, { noun: "natural oil", presented: "Supplied in a bottle for external use." }],
+  [/powder|spice|seasoning|paprika/i, { noun: "ground preparation", presented: "Supplied as a dry powder." }],
+  [/herb/i, { noun: "herbal preparation", presented: "Supplied as a prepared herbal mixture." }],
+  [/cream/i, { noun: "herbal cream", presented: "Supplied in a jar for external use." }],
+  [/balm/i, { noun: "herbal balm", presented: "Supplied in a container for external use." }],
+];
+
+const DEFAULT_FORM: Form = { noun: "herbal preparation", presented: "Supplied as prepared by Wendy Herbals." };
+
+const COLLECTION_LINE: Record<string, string> = {
+  "womens-wellness": "Part of the Women's Wellness collection.",
+  "mens-wellness": "Part of the Men's Wellness collection.",
+  "herbal-collections": "Part of the Herbal Collections range.",
+  "body-care": "Part of the Natural Body Care range.",
+  "food-spices": "Part of the Food Spices range, blended for Nigerian cooking.",
+};
+
+/** Names that are not self-explanatory to someone outside the shop. */
+const NAME_NOTES: Record<string, string> = {
+  "Ehi Afor Herbs (Infertility Worm)": "Known locally as Ehi Afor.",
+  "Ajumbaise": "A traditional mixed preparation known by this name.",
+  "Ajumbaise with Some Infection Herbs": "The Ajumbaise preparation supplied together with infection herbs.",
+  "Banga Spices (Ofe Akwu)": "The spice blend used for banga, also known as ofe akwu.",
+  "Brain Booster Herbs (Big)": "The larger of the two pack sizes.",
+  "Brain Booster Herbs (Small)": "The smaller of the two pack sizes.",
+  "Man Power Herbs Soaked with Hot Drink": "Supplied already soaked in a spirit, as the name describes.",
+  "Zero Sperm (Azoospermia) Herbs": "Named for azoospermia, the clinical term used on the price list.",
+};
+
+function describe(name: string, category: string, includesBalm: boolean, priced: boolean): string {
+  const form = FORMS.find(([re]) => re.test(name))?.[1] ?? DEFAULT_FORM;
+  // honey, salt and shea butter are uncountable; the rest take an article.
+  const article = /^(honey|natural salt|shea butter)$/.test(form.noun) ? "" : "a ";
+  const parts = [`${name} is ${article}${form.noun} from Wendy Herbals.`];
+
+  const note = NAME_NOTES[name];
+  if (note) parts.push(note);
+
+  parts.push(COLLECTION_LINE[category] ?? "");
+  parts.push(form.presented);
+
+  if (includesBalm) parts.push("This item ships with its matching balm or cream.");
+  if (!priced) parts.push("Price is confirmed on enquiry rather than listed.");
+
+  parts.push(
+    "Product names describe what a preparation is traditionally associated with and are not claims of treatment; see our medical disclaimer."
+  );
+
+  return parts.filter(Boolean).join(" ");
+}
+
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[()&]/g, " ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -236,7 +313,7 @@ function buildHerbal(): Product[] {
     name,
     slug: slugify(name) + (sn === 63 ? "-63" : ""), // keep the duplicate row addressable
     category,
-    description: `${name} from the Wendy Herbals range.`,
+    description: describe(name, category, BALM_RE.test(name), price !== null),
     price,
     images: photo(HERBAL_PHOTOS[sn]),
     in_stock: true,
@@ -256,7 +333,7 @@ function buildSpices(): Product[] {
     name,
     slug: slugify(name),
     category: "food-spices" as const,
-    description: `${name} from the Wendy Herbals natural food spice range.`,
+    description: describe(name, "food-spices", false, false),
     price: null,
     images: photo(SPICE_PHOTOS[name]),
     in_stock: true,

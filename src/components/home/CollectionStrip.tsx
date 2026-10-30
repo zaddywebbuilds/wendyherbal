@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Flower2, User, Leaf, Droplets, UtensilsCrossed } from "lucide-react";
+import { CATEGORY_IMAGE } from "@/lib/media";
 
 const CARDS = [
   { id: "womens-wellness", title: "Women's\nWellness", icon: Flower2, grad: "linear-gradient(150deg,#2d5a42 0%,#17402c 100%)" },
@@ -36,6 +38,7 @@ export function CollectionStrip() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
           {CARDS.map((c, i) => {
             const Icon = c.icon;
+            const img = CATEGORY_IMAGE[c.id];
             return (
               <motion.div key={c.id}
                 initial={{ opacity: 0, y: 26 }}
@@ -47,8 +50,14 @@ export function CollectionStrip() {
                 <Link href={`/shop?category=${c.id}`}
                   className="group relative block rounded-lg overflow-hidden aspect-[4/3] lg:aspect-[3/2.4]"
                   style={{ background: c.grad }}>
+                  <Image src={img.src} alt={img.alt} fill sizes="(max-width:768px) 50vw, 20vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  {/* scrim: keeps the white heading legible over any photograph */}
+                  <div aria-hidden className="absolute inset-0"
+                    style={{ background: "linear-gradient(to top, rgba(9,28,19,0.88) 0%, rgba(9,28,19,0.42) 48%, rgba(9,28,19,0.12) 100%)" }} />
+
                   {/* botanical texture */}
-                  <div aria-hidden className="absolute inset-0 opacity-[0.13]">
+                  <div aria-hidden className="absolute inset-0 opacity-[0.07]">
                     <svg width="100%" height="100%">
                       <defs>
                         <pattern id={`p-${c.id}`} width="54" height="54" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">

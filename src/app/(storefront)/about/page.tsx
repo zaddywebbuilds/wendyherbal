@@ -3,16 +3,31 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageHero, PageBody, Section, List, Callout, ContactStrip, Related } from "@/components/content/ContentPage";
 import { PRODUCTS, CATEGORY_LABELS, getByCategory } from "@/lib/products";
+import { BRAND_IMAGES } from "@/lib/media";
 import { BRAND_PHRASE } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
     "Wendy Herbals brings together herbal preparations, natural body care and authentic Nigerian kitchen spices. Read what we make and how we work.",
+  openGraph: {
+    title: "About Wendy Herbals",
+    description: "What we make, who makes it, and how we talk about our products.",
+    images: [{ url: BRAND_IMAGES.measuring.src, alt: BRAND_IMAGES.measuring.alt }],
+  },
 };
 
 // Counted from the catalogue at build time rather than written in by hand, so
 // the figures cannot drift away from what the shop actually lists.
+const GALLERY = [
+  BRAND_IMAGES.driedHerbs,
+  BRAND_IMAGES.herbPowders,
+  BRAND_IMAGES.scentLeaf,
+  BRAND_IMAGES.productionDrums,
+  BRAND_IMAGES.measuring,
+  BRAND_IMAGES.spicedDish,
+];
+
 const COUNTS = Object.keys(CATEGORY_LABELS).map((key) => ({
   label: CATEGORY_LABELS[key],
   count: getByCategory(key).length,
@@ -54,6 +69,25 @@ export default function AboutPage() {
           </ul>
         </Section>
 
+
+        <Section title="In the workshop">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {GALLERY.map((frame) => (
+              <figure key={frame.src} className="relative rounded-lg overflow-hidden aspect-[4/5] bg-[#EFE9DD]">
+                <Image src={frame.src} alt={frame.alt} fill sizes="(max-width:1024px) 50vw, 30vw"
+                  className="object-cover" />
+                {frame.caption && (
+                  <>
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#09231a]/80 via-transparent to-transparent" />
+                    <figcaption className="absolute bottom-0 left-0 right-0 p-3 text-[11px] leading-snug text-white/90">
+                      {frame.caption}
+                    </figcaption>
+                  </>
+                )}
+              </figure>
+            ))}
+          </div>
+        </Section>
         <Section title="The founder">
           <div className="sm:flex sm:gap-7 sm:items-start">
             <div className="relative w-[128px] h-[128px] shrink-0 mb-5 sm:mb-0">

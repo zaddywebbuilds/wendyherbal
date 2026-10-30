@@ -83,6 +83,8 @@ section originally anticipated, and two questions are still open with her.
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
 | Product photos | ◐ 69 of 93 wired. Client renders, not photos. Read Task 2 |
+| Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |
+| Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
 | Admin CRUD screens | ❌ Not built — sidebar links 404 |
 | Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
@@ -326,6 +328,48 @@ The Medical Disclaimer leads with the warning rather than brand furniture, and
 is linked from About, FAQ, Terms and every product page. It states plainly that
 a product name is not a claim, which is the thing most likely to matter if the
 catalogue is ever challenged.
+
+## Brand media, and what must never be published
+
+`src/lib/media.ts` is the registry: nine photographs under
+`public/media/brand/` and three silent clips under `public/media/clips/`,
+each with alt text written from the picture itself. They feed the hero, the
+five collection cards, the homepage "How it is made" band, the About gallery
+and the Open Graph tags.
+
+The clips are cut to 12 seconds, re-encoded to 960px and **stripped of audio**,
+because the source reels carry licensed music from a social editing app that
+the shop has no commercial licence for. A CapCut watermark and a song-credit
+sticker are burned into some frames; replacing them needs new footage.
+
+### The rest of the library is not publishable
+
+Of 67 images in `public/media/images/`, only nine were cleared. Every image
+was reviewed. The rest fall into four groups, and each is a separate reason:
+
+1. **Third-party medical records.** `photo_10_xray.jpg` and
+   `photo_12_xray_text.jpg` photograph a hospital radiology report from St
+   Patrick Hospital, Mile Four, Abakaliki, showing a named patient, her age,
+   sex and a clinical history of secondary infertility. Others show patients'
+   bare abdomens mid-treatment, customers' babies, and WhatsApp threads with
+   names and phone numbers. This is sensitive personal data belonging to people
+   who have not consented to a commercial website. Publishing it would breach
+   the NDPA and the Privacy Policy this site already serves.
+2. **A poster claiming to treat HIV and Hepatitis C.**
+   `cover_banner_prophetess_wendy.jpg` lists both, among others, under
+   "Prophetess Wendy, Spiritual and Herbal Treatment".
+3. **Testimonials naming conditions**, including hepatitis B, hormonal
+   imbalance and sperm count. The Medical Disclaimer states the site publishes
+   none.
+4. **Personal photographs** of the founder's family, home and dog.
+
+The same applies to the videos: of 19, eight are testimonial, treatment or
+consultation footage. Only `herbal_production` and `brand` were considered,
+and three of those were used.
+
+**Do not "finish the job" by wiring the rest in.** The owner approved the
+cleared set specifically, after the contents were described to her. Anything
+more needs her informed decision, and the patient material needs the patients'.
 
 ## Gotchas that cost real time
 
