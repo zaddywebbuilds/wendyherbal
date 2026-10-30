@@ -5,6 +5,10 @@ body care and Nigerian kitchen spices.
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion
 
+> **Picking this up fresh? Read [HANDOFF.md](HANDOFF.md) first.** It covers what
+> is built, what is not, the decisions already settled and why, and the gotchas
+> that cost time. This README is setup only.
+
 ## Running locally
 
 ```bash
