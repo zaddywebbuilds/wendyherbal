@@ -87,7 +87,8 @@ section originally anticipated, and two questions are still open with her.
 | Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
 | Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
 | Admin Products | ✅ Editable. Add, edit, hide, delete, from a phone |
-| Admin CRUD screens | ◐ 16 sidebar links still 404 |
+| Admin Inventory | ✅ Stock view, built on the editable catalogue |
+| Admin CRUD screens | ✅ No dead links. 13 unbuilt screens retired from the nav |
 | Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
 Build is green. `npm run build` passes, 114 routes. Working tree clean and in

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import {
   ShoppingCart, ClipboardList, Users, Boxes, ArrowUpRight, Plus,
-  LayoutGrid, ImagePlus, BarChart3, PenLine, PackageX, Inbox,
+  LayoutGrid, Settings, PackageX, Inbox,
 } from "lucide-react";
 import { TrendChart, StatusDonut, CategoryBars } from "@/components/admin/Charts";
 import { getDashboardData, percentChange } from "@/lib/dashboard-data";
@@ -45,13 +45,16 @@ export default async function AdminDashboard() {
     },
   ];
 
+  // Every one of these goes somewhere. Add Category, Upload Images, View
+  // Reports and Edit Homepage were removed: none of those screens exists.
+  // Photographs are uploaded from the product form itself now.
   const QUICK = [
     { label: "Add Product", href: "/admin/products/new", icon: Plus, tint: "#E8F0EA", color: "#175C3D" },
     { label: "Manage Orders", href: "/admin/orders", icon: ShoppingCart, tint: "#FBF0DE", color: "#B5713A" },
-    { label: "Add Category", href: "/admin/categories", icon: LayoutGrid, tint: "#E7EEF6", color: "#2563EB" },
-    { label: "Upload Images", href: "/admin/products/images", icon: ImagePlus, tint: "#F1EAF8", color: "#7C3AED" },
-    { label: "View Reports", href: "/admin/reports", icon: BarChart3, tint: "#E8F0EA", color: "#175C3D" },
-    { label: "Edit Homepage", href: "/admin/content", icon: PenLine, tint: "#FBE9E7", color: "#C06014" },
+    { label: "Edit Products", href: "/admin/products", icon: LayoutGrid, tint: "#E7EEF6", color: "#2563EB" },
+    { label: "Inventory", href: "/admin/inventory", icon: Boxes, tint: "#F1EAF8", color: "#7C3AED" },
+    { label: "Customers", href: "/admin/customers", icon: Users, tint: "#E8F0EA", color: "#175C3D" },
+    { label: "Settings", href: "/admin/settings", icon: Settings, tint: "#FBE9E7", color: "#C06014" },
   ];
 
   return (

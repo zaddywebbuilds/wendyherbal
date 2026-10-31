@@ -9,32 +9,22 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 
+/**
+ * Only screens that exist are linked.
+ *
+ * The approved mockup also showed Categories, Reviews, Blog & Content,
+ * Promotions, Delivery & Shipping, Reports, three sales channels, Messages,
+ * Contact Form, Newsletter and Help & Docs. None was ever built, so each was
+ * a link to a 404. They are listed in HANDOFF.md; restoring one is a single
+ * line here once its screen exists.
+ */
 const MAIN = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Orders", href: "/admin/orders", icon: ClipboardList, badgeKey: "orders" },
   { label: "Products", href: "/admin/products", icon: Package },
-  { label: "Categories", href: "/admin/categories", icon: FolderTree },
-  { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Inventory", href: "/admin/inventory", icon: Boxes },
-  { label: "Reviews", href: "/admin/reviews", icon: Star },
-  { label: "Blog & Content", href: "/admin/content", icon: FileText },
-  { label: "Promotions", href: "/admin/promotions", icon: Tag },
-  { label: "Delivery & Shipping", href: "/admin/shipping", icon: Truck },
-  { label: "Reports", href: "/admin/reports", icon: BarChart3 },
+  { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Settings", href: "/admin/settings", icon: Settings },
-];
-
-const CHANNELS = [
-  { label: "Online Store", href: "/admin/channels/store", icon: Store },
-  { label: "WhatsApp Orders", href: "/admin/channels/whatsapp", icon: MessageCircle },
-  { label: "POS (In-store)", href: "/admin/channels/pos", icon: Monitor },
-];
-
-const SUPPORT = [
-  { label: "Messages", href: "/admin/messages", icon: Inbox, badgeKey: "messages" },
-  { label: "Contact Form", href: "/admin/contact", icon: Mail, badgeKey: "contact" },
-  { label: "Newsletter", href: "/admin/newsletter", icon: Send },
-  { label: "Help & Docs", href: "/admin/help", icon: HelpCircle },
 ];
 
 interface Props {
@@ -130,16 +120,6 @@ export function AdminSidebar({ badges = {} }: Props) {
       <nav className={cn("flex-1 overflow-y-auto py-3", collapsed ? "px-2" : "px-3")}>
         <div className="space-y-0.5">
           {MAIN.map((i) => <Item key={i.href} item={i} />)}
-        </div>
-
-        <SectionLabel>Sales Channels</SectionLabel>
-        <div className="space-y-0.5">
-          {CHANNELS.map((i) => <Item key={i.href} item={i} />)}
-        </div>
-
-        <SectionLabel>Support</SectionLabel>
-        <div className="space-y-0.5">
-          {SUPPORT.map((i) => <Item key={i.href} item={i} />)}
         </div>
       </nav>
 
