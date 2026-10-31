@@ -22,13 +22,21 @@ export interface ReceiptPayload {
  * lists product names only as the customer already chose them — it adds no
  * health details of its own, and the customer can edit before sending.
  */
-export function buildReceiptMessage({ orderNumber, items, subtotal, address, notes }: ReceiptPayload): string {
+/**
+ * The message the buyer sends to open their order.
+ *
+ * It used to say a transfer had already been made and a receipt was attached.
+ * Neither is true any more: the order is sent first, Wendy quotes the way
+ * bill, and payment follows the confirmed total. Saying otherwise would have
+ * her chasing receipts that do not exist.
+ */
+export function buildOrderMessage({ orderNumber, items, subtotal, address, notes }: ReceiptPayload): string {
   const lines = items.map(
     (i) => `• ${i.product.name}${i.size ? ` (${i.size})` : ""} ×${i.quantity} — ${FORMAT_NGN((i.product.price ?? 0) * i.quantity)}`
   );
 
   return [
-    `Hello Wendy Herbals, I have made a bank transfer for my order.`,
+    `Hello Wendy Herbals, I would like to place this order.`,
     ``,
     `Order: ${orderNumber}`,
     `Name: ${address.full_name}`,
@@ -37,21 +45,22 @@ export function buildReceiptMessage({ orderNumber, items, subtotal, address, not
     `Items:`,
     ...lines,
     ``,
-    `Total: ${FORMAT_NGN(subtotal)} (excluding way bill)`,
+    `Products subtotal: ${FORMAT_NGN(subtotal)}`,
+    `(The way bill is not included in this figure.)`,
     ``,
     `Deliver to:`,
     `${address.street}, ${address.city}, ${address.state}`,
     address.landmark ? `Landmark: ${address.landmark}` : null,
     notes ? `\nNotes: ${notes}` : null,
     ``,
-    `I am attaching my payment receipt.`,
+    `Please confirm the way bill for my area and my full total, and I will transfer it.`,
   ]
     .filter((l) => l !== null)
     .join("\n");
 }
 
-export const receiptWhatsAppUrl = (payload: ReceiptPayload) =>
-  `${WHATSAPP_URL}?text=${encodeURIComponent(buildReceiptMessage(payload))}`;
+export const orderWhatsAppUrl = (payload: ReceiptPayload) =>
+  `${WHATSAPP_URL}?text=${encodeURIComponent(buildOrderMessage(payload))}`;
 
 /** Nigerian states, for the delivery form and shipping zones. */
 export const NIGERIAN_STATES = [

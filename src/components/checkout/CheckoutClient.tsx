@@ -7,11 +7,11 @@ import {
 import { useCartStore } from "@/store/cart";
 import { ProductImage } from "@/components/ui/ProductImage";
 import { FORMAT_NGN, BANK_DETAILS, DELIVERY_NOTE } from "@/lib/constants";
-import { generateOrderNumber, receiptWhatsAppUrl, NIGERIAN_STATES } from "@/lib/order";
+import { generateOrderNumber, orderWhatsAppUrl, NIGERIAN_STATES } from "@/lib/order";
 import type { Address } from "@/lib/types";
 import { cn } from "@/lib/cn";
 
-type Step = "details" | "payment";
+type Step = "details" | "confirm";
 
 const EMPTY: Address = { full_name: "", phone: "", state: "", city: "", street: "", landmark: "" };
 
@@ -45,7 +45,7 @@ export function CheckoutClient() {
     e.preventDefault();
     const number = generateOrderNumber();
     setOrderNumber(number);
-    setStep("payment");
+    setStep("confirm");
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     // Record the buyer so Wendy can follow up later. The payment handoff does
@@ -72,7 +72,7 @@ export function CheckoutClient() {
     }
   }
 
-  const waUrl = receiptWhatsAppUrl({ orderNumber, items, subtotal, address, notes });
+  const waUrl = orderWhatsAppUrl({ orderNumber, items, subtotal, address, notes });
 
   /* ---------------- empty cart ---------------- */
   if (items.length === 0 && step === "details") {
@@ -99,9 +99,9 @@ export function CheckoutClient() {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Steps */}
         <div className="flex items-center gap-2 mb-7" style={{ fontFamily: "var(--font-body)" }}>
-          {(["details", "payment"] as Step[]).map((s, i) => {
+          {(["details", "confirm"] as Step[]).map((s, i) => {
             const active = step === s;
-            const done = step === "payment" && s === "details";
+            const done = step === "confirm" && s === "details";
             return (
               <div key={s} className="flex items-center gap-2">
                 <span className={cn("w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold",
@@ -109,7 +109,7 @@ export function CheckoutClient() {
                   {done ? <Check size={12} /> : i + 1}
                 </span>
                 <span className={cn("text-[12.5px]", active || done ? "text-[#123D2B] font-medium" : "text-[#6b7265]")}>
-                  {s === "details" ? "Delivery Details" : "Payment"}
+                  {s === "details" ? "Delivery Details" : "Confirm Order"}
                 </span>
                 {i === 0 && <span className="w-8 h-px bg-[#E7E0CF] mx-1" />}
               </div>
@@ -181,7 +181,7 @@ export function CheckoutClient() {
                 <button type="submit"
                   className="mt-5 w-full h-12 bg-[#123D2B] text-white text-[14px] font-medium rounded-md hover:bg-[#175C3D] transition-colors active:scale-[0.99]"
                   style={{ fontFamily: "var(--font-body)" }}>
-                  Continue to Payment
+                  Review &amp; Send Order
                 </button>
 
                 <Link href="/shop"
@@ -191,7 +191,7 @@ export function CheckoutClient() {
                 </Link>
               </form>
             ) : (
-              /* ---------------- payment ---------------- */
+              /* ---------------- confirm ---------------- */
               <div className="bg-white rounded-xl border border-[#E9E4D6] p-5 sm:p-6">
                 <div className="flex items-start gap-3 mb-5">
                   <span className="w-10 h-10 rounded-xl bg-[#E8F0EA] flex items-center justify-center shrink-0">
@@ -200,13 +200,31 @@ export function CheckoutClient() {
                   <div>
                     <h1 className="text-[1.4rem] text-[#123D2B] leading-tight"
                       style={{ fontFamily: "var(--font-heading)" }}>
-                      Pay by Bank Transfer
+                      Send your order for confirmation
                     </h1>
                     <p className="text-[12.5px] text-[#6b7265] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
                       Order <span className="font-semibold text-[#123D2B]">{orderNumber}</span>
                     </p>
                   </div>
                 </div>
+
+                {/* What happens next, before any money is mentioned. */}
+                <ol className="space-y-2.5 mb-5">
+                  {[
+                    "Send your order on WhatsApp using the button below.",
+                    "Wendy confirms the way bill for your area and your full total.",
+                    "Transfer that confirmed total to the account below.",
+                    "Send your receipt. The order is confirmed once the transfer is checked.",
+                  ].map((t, i) => (
+                    <li key={i} className="flex gap-2.5 text-[12.5px] text-[#4a5245]"
+                      style={{ fontFamily: "var(--font-body)" }}>
+                      <span className="w-5 h-5 rounded-full bg-[#EFE9DD] text-[#123D2B] text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
+                        {i + 1}
+                      </span>
+                      {t}
+                    </li>
+                  ))}
+                </ol>
 
                 {/* Bank details */}
                 <div className="rounded-lg border border-[#C6A667]/40 bg-[#FDF9EF] p-4 space-y-3">
@@ -216,7 +234,7 @@ export function CheckoutClient() {
                   <Row label="Account name" value={BANK_DETAILS.accountName} />
                   <div className="pt-3 border-t border-[#C6A667]/30 flex items-center justify-between">
                     <span className="text-[12px] text-[#6b7265]" style={{ fontFamily: "var(--font-body)" }}>
-                      Amount to transfer
+                      Products subtotal
                     </span>
                     <button type="button" onClick={() => copy(String(subtotal), "amt")}
                       className="flex items-center gap-1.5 text-[1.15rem] font-bold text-[#123D2B] hover:text-[#175C3D]"
@@ -231,27 +249,11 @@ export function CheckoutClient() {
                 <div className="mt-3 flex gap-2.5 p-3 bg-[#FBF0DE] border border-[#C6A667]/30 rounded-lg">
                   <Info size={15} className="text-[#B5713A] shrink-0 mt-0.5" />
                   <p className="text-[11.5px] leading-relaxed text-[#6b4a22]" style={{ fontFamily: "var(--font-body)" }}>
-                    {DELIVERY_NOTE} Wendy will confirm the way bill amount with you on WhatsApp.
+                    <span className="font-semibold">Do not transfer yet.</span> {DELIVERY_NOTE} Wendy
+                    confirms the way bill on WhatsApp, and your total is the subtotal above plus that
+                    amount.
                   </p>
                 </div>
-
-                {/* Steps */}
-                <ol className="mt-5 space-y-2.5">
-                  {[
-                    "Transfer the amount above to the account shown.",
-                    "Tap the button below — it opens WhatsApp with your order details ready.",
-                    "Attach your payment receipt and send it to Wendy.",
-                    "Your order is confirmed once Wendy verifies the transfer.",
-                  ].map((t, i) => (
-                    <li key={i} className="flex gap-2.5 text-[12.5px] text-[#4a5245]"
-                      style={{ fontFamily: "var(--font-body)" }}>
-                      <span className="w-5 h-5 rounded-full bg-[#EFE9DD] text-[#123D2B] text-[10px] font-bold flex items-center justify-center shrink-0 mt-px">
-                        {i + 1}
-                      </span>
-                      {t}
-                    </li>
-                  ))}
-                </ol>
 
                 {saveNote && !saving && (
                   <p className="mt-4 text-[11.5px] text-[#B5713A] leading-relaxed"
@@ -264,7 +266,7 @@ export function CheckoutClient() {
                   onClick={() => setSent(true)}
                   className="mt-6 w-full h-12 flex items-center justify-center gap-2 bg-[#25D366] text-white text-[14px] font-semibold rounded-md hover:bg-[#1FB855] transition-colors active:scale-[0.99]"
                   style={{ fontFamily: "var(--font-body)" }}>
-                  <MessageCircle size={17} /> I&rsquo;ve Paid — Send Receipt on WhatsApp
+                  <MessageCircle size={17} /> Send My Order on WhatsApp
                 </a>
 
                 {sent && (
@@ -273,7 +275,8 @@ export function CheckoutClient() {
                       WhatsApp opened with your order details.
                     </p>
                     <p className="text-[11.5px] text-[#4a5245] mt-1" style={{ fontFamily: "var(--font-body)" }}>
-                      Attach your receipt there, then you can clear your bag.
+                      Wendy will reply with the way bill and your full total. Transfer that amount,
+                      then send her the receipt.
                     </p>
                     <button onClick={() => { clearCart(); setStep("details"); setAddress(EMPTY); setNotes(""); setSent(false); }}
                       className="mt-2.5 text-[12px] font-medium text-[#123D2B] underline underline-offset-2"
@@ -328,7 +331,9 @@ export function CheckoutClient() {
                 <span>Way bill</span><span className="text-[11.5px]">Confirmed on WhatsApp</span>
               </div>
               <div className="flex justify-between pt-2 mt-1 border-t border-[#EFE9DD]">
-                <span className="text-[13px] font-semibold text-[#123D2B]">Total</span>
+                {/* Not "Total": the way bill is still to be added, and calling this
+                    the total is what the review flagged as misleading. */}
+                <span className="text-[13px] font-semibold text-[#123D2B]">Products total</span>
                 <span className="text-[1.05rem] font-bold text-[#123D2B] tabular-nums">{FORMAT_NGN(subtotal)}</span>
               </div>
             </div>
