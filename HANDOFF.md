@@ -60,7 +60,7 @@ distributes, so this is not a leak — but make it a choice, not a discovery. If
 the client objects, make the repo private; do not strip the details, checkout
 needs them.
 
-Product photography is now **partly done**: 72 of 93 products carry an image.
+Product photography is **complete in the sense that nothing shows a placeholder**: all 93 carry an image.
 Read Task 2 before touching it: what the client supplied is not what that
 section originally anticipated, and two questions are still open with her.
 
@@ -82,7 +82,7 @@ section originally anticipated, and two questions are still open with her.
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
-| Product photos | ◐ 72 of 93 wired. Client renders, not photos. Read Task 2 |
+| Product photos | ✅ All 93 carry one. 80 packshots, 13 botanical stand-ins |
 | Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |
 | Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
 | Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
@@ -204,7 +204,7 @@ later, authoritative source.
 
 ### What is wired now
 
-**72 of 93 products carry an image.** Files live in `public/media/products/`
+**All 93 products carry an image.** Files live in `public/media/products/`
 (20MB) and are mapped in `src/lib/products.ts` by `HERBAL_PHOTOS` (keyed by
 source S/N) and `SPICE_PHOTOS` (keyed by exact product name). The other 24 keep
 the branded placeholder from `src/components/ui/ProductImage.tsx`.
@@ -236,15 +236,40 @@ this is not an image borrowed from a neighbouring product. The clip also shows
 Sheabutter, Original Honey and Herbal Palm Kernel Oil, which already had
 images, so nothing was replaced.
 
-### Still without an image (21)
+### The last gap closed, and how
 
-Herbal S/N 14, 19, 22, 25, 27, 28, 30, 32, 34, 44, 47, 48, 53, 59, 61, 63, 75.
-PCOS (25) is the only one left in `getFeatured()`, so the homepage row now
-runs four photos to one placeholder.
+The client sent `Wendy_Herbals_Missing_Images.zip` on 31 Oct 2026. It held
+eight packshots and four photographs of a plain house jerrycan.
 
-Spices: Ginger, Turmeric, Garlic, Black Pepper. Three of the four the client's
-brief singled out are still missing. Her brief was specific about how they
-must look:
+**Eight real packshots** went straight in: Hotness of the Womb (22), PCOS (25),
+Blocked Fallopian Tubes (27), Ulcer (63), and the Ginger, Turmeric, Garlic and
+Black Pepper powders. Every label was read before use. Two notes:
+
+- Its README claimed 27 came from a generic "natural wellness" sample. It did
+  not. The image is a correct Blocked Fallopian Tubes pack with its balm.
+  Check the pictures, not the manifest.
+- `63-ulcer-herbs.jpg` is **byte for byte** the file already on WH-052. Using
+  it for WH-063 assumes the two price-list rows are the same product, which is
+  still the open DUPLICATE_AUDIT question.
+
+**Thirteen products have no packshot and will not get one.** The client
+declined to render condition-named packaging for Hepatitis, Staphylococcus,
+PID, Syphilis, Gonorrhea, Breast Lump, E-coli, Sepsis, Herpes, Diabetes, Eye
+Problem, Goiter and Anti-Poison, which was the right call: a
+"SYPHILIS HERBS, Safe & Effective" render is the last thing this catalogue
+needs. On the owner's instruction they now carry botanical and workshop
+photographs from her own Facebook material, prefixed `fb-` in
+`public/media/products/`.
+
+**Be clear about what those are.** They show herbs, powders, production drums
+and the preparation work, not the pack the buyer receives, and nine images
+cover thirteen products so some repeat. This is a deliberate departure from
+Principle 3, made by the owner after the trade-off was put to her. The product
+page's "Packaging and contents are confirmed at order" line carries the weight.
+Replace them with real packshots when they exist.
+
+The spice brief is now satisfied for Banga, Ginger, Turmeric and Garlic. Her
+brief was specific about how they must look:
 
 - **Banga (Ofe Akwu)** — must show ripe reddish-orange oil palm fruits
 - **Ginger Powder** — ginger roots visible
@@ -298,7 +323,7 @@ Roughly in priority order.
 
    Products is built: `/admin/products` lists the whole catalogue with search,
    a category filter and gap filters for the three things that need the client
-   (21 without a photo, 12 without a price, 73 with NAFDAC pending), plus a
+   (none without a photo now, 12 without a price, 73 with NAFDAC pending), plus a
    catalogue CSV at `/api/admin/products/export` so prices can be worked
    through offline.
 

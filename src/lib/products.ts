@@ -146,8 +146,14 @@ const COMMODITY_SNS = new Set([1, 2, 4, 5, 6, 18, 68, 80]);
  * and a trademark symbol the site itself does not make. Wiring them in was the
  * owner's decision. Replace with real packshots when they exist.
  *
- * A product absent from these maps keeps the branded placeholder. An image is
- * never reused across products; see Principle 3 in HANDOFF.md.
+ * Most entries are packshots of the product itself. Thirteen are not. The
+ * client declined to render condition-named packaging for the serious-disease
+ * products, which was the right call, so those carry botanical and workshop
+ * photographs from her own Facebook material, prefixed `fb-`. Those show what
+ * goes into the preparations and how they are made rather than the pack you
+ * receive, and the product page already tells the buyer that packaging and
+ * contents are confirmed at order. Replace them with real packshots when they
+ * exist.
  */
 const HERBAL_PHOTOS: Record<number, string> = {
   1: "01-infection-soap.jpg",
@@ -163,18 +169,27 @@ const HERBAL_PHOTOS: Record<number, string> = {
   11: "11-high-prolactin-herbs.jpg",
   12: "12-progesterone-herbs.jpg",
   13: "13-slimming-herbs.jpg",
+  14: "fb-dried-herbs-and-hibiscus-bowls.jpg",
   15: "15-bronchitis-herbs.jpg",
   16: "16-vaginal-steaming-herbs.jpg",
   17: "17-prostate-enlargement-herbs.jpg",
   18: "18-feminine-herbal-wash.jpg",
+  19: "fb-ground-herb-powders.jpg",
   20: "20-ceased-period-herbs.jpg",
   21: "21-fibroid-herbs-with-balm.jpg",
+  22: "22-hotness-of-the-womb-herbs.jpg",
   23: "23-ovarian-cyst-herbs-with-balm.jpg",
   24: "24-hormonal-imbalance-herbs.jpg",
+  25: "25-pcos-herbs-with-balm.jpg",
   26: "26-endometriosis-with-balm.jpg",
+  27: "27-blocked-fallopian-tubes-herbs-with-balm.jpg",
+  28: "fb-scent-leaf-plant.jpg",
   29: "29-yeast-infection-herbs.jpg",
+  30: "fb-production-drums.jpg",
   31: "31-candidiasis-infection-herbs.jpg",
+  32: "fb-measuring-herbal-preparation.jpg",
   33: "33-uti-infection-herbs.jpg",
+  34: "fb-filling-herbal-preparation.jpg",
   35: "35-manpower-with-infection-herbs.jpg",
   36: "36-sperm-motility-herbs.jpg",
   37: "37-sperm-booster-herbs.jpg",
@@ -184,19 +199,26 @@ const HERBAL_PHOTOS: Record<number, string> = {
   41: "41-sperm-pap-herbs.jpg",
   42: "42-sperm-morphology-herbs.jpg",
   43: "43-estrogen-hormone-herbs.jpg",
+  44: "fb-cooking-over-open-fire.jpg",
   45: "45-zero-sperm-herbs.jpg",
   46: "46-egg-booster-herbs.jpg",
+  47: "fb-sorting-dried-herbs.jpg",
+  48: "fb-native-spices.jpg",
   49: "49-warts-herbs-with-infection-cream.jpg",
   50: "50-tummy-and-fat-blast-herbs.jpg",
   51: "51-sex-sweetener-herbs.jpg",
   52: "52-ulcer-herbs.jpg",
+  53: "fb-dried-herbs-and-hibiscus-bowls.jpg",
   54: "54-h-pylori-herbs.jpg",
   55: "55-infertility-flusher-herbs.jpg",
   56: "56-toothache-herbs.jpg",
   57: "57-hydrosalpinx-herbs-with-balm.jpg",
   58: "58-vaginal-tightener-herbs.jpg",
+  59: "fb-ground-herb-powders.jpg",
   60: "60-kidney-stones-herbs.jpg",
+  61: "fb-scent-leaf-plant.jpg",
   62: "62-pile-herbs-with-balm.jpg",
+  63: "63-ulcer-herbs.jpg",
   64: "64-arthritis-and-massage-balm.jpg",
   65: "65-rheumatism-and-massage-cream.jpg",
   66: "66-brain-booster-herbs-big.jpg",
@@ -208,6 +230,7 @@ const HERBAL_PHOTOS: Record<number, string> = {
   72: "72-weight-gain-herbs.jpg",
   73: "73-ajumbaise.jpg",
   74: "74-ajumbaise-with-some-infection-herbs.jpg",
+  75: "fb-production-drums.jpg",
   76: "76-butt-enlargement-herbs.jpg",
   77: "77-boobs-enlargement-herbs.jpg",
   78: "78-hair-growth-herbs.jpg",
@@ -218,6 +241,10 @@ const HERBAL_PHOTOS: Record<number, string> = {
 
 const SPICE_PHOTOS: Record<string, string> = {
   "Banga Spices (Ofe Akwu)": "83-banga-spices-ofe-akwu.jpg",
+  "Ginger Powder": "89-ginger-powder.jpg",
+  "Turmeric Powder": "90-turmeric-powder.jpg",
+  "Garlic Powder": "91-garlic-powder.jpg",
+  "Black Pepper Powder": "92-black-pepper-powder.jpg",
   "Jollof Rice Spice": "85-jollof-rice-spice.jpg",
   "Stew Spice": "82-stew-spice.jpg",
   "Soup Mixed Spices": "84-soup-mixed-spices.jpg",
