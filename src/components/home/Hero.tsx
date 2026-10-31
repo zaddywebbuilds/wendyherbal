@@ -72,7 +72,7 @@ export function Hero() {
       <div aria-hidden className="absolute -right-20 bottom-0 w-[420px] h-[420px] rounded-full bg-[#C6A667]/15 blur-[100px] pointer-events-none" />
 
       <div className="relative max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-12 items-center py-14 lg:py-20">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-14 items-center py-16 lg:py-28">
           {/* ---------- Left: copy ---------- */}
           <div className="max-w-xl">
             <motion.p custom={0} variants={fade} initial="hidden" animate="show"
@@ -134,7 +134,7 @@ export function Hero() {
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="relative">
-            <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-[#EFE9DD] to-[#DDD4BC] aspect-[16/10] lg:aspect-[16/9] shadow-[0_18px_60px_-20px_rgba(18,61,43,0.35)]">
+            <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-[#EFE9DD] to-[#DDD4BC] aspect-[16/10] lg:aspect-[16/9] shadow-[0_24px_64px_-28px_rgba(18,61,43,0.18)]">
               {playVideo ? (
                 <video
                   className="absolute inset-0 w-full h-full object-cover"
@@ -161,7 +161,7 @@ export function Hero() {
             {/* Gold seal */}
             <motion.div initial={{ opacity: 0, rotate: -25, scale: 0.7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute -top-4 -right-2 sm:top-5 sm:right-5 w-[92px] h-[92px] sm:w-[108px] sm:h-[108px] rounded-full bg-[#F7F4E9] border border-[#C6A667]/60 flex flex-col items-center justify-center text-center shadow-[0_8px_28px_-8px_rgba(198,166,103,0.6)]">
+              className="absolute -top-4 -right-2 sm:top-5 sm:right-5 w-[92px] h-[92px] sm:w-[108px] sm:h-[108px] rounded-full bg-[#F7F4E9] border border-[#C6A667]/60 flex flex-col items-center justify-center text-center shadow-[0_8px_24px_-10px_rgba(198,166,103,0.32)]">
               <span className="text-[#C6A667] text-[13px] sm:text-[15px] italic leading-[1.15]"
                 style={{ fontFamily: "var(--font-heading)" }}>
                 Herbal<br />Goodness

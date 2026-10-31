@@ -28,6 +28,19 @@
   --radius-xl: 24px;
 }
 
+/*
+ * Layout rhythm, so sections stop being set by eye.
+ *
+ * Bands use py-14 lg:py-24 (56px / 96px) and the hero py-16 lg:py-28
+ * (64px / 112px). Cards sit at 12px or 16px and nothing in between.
+ * Shadows stay under 0.2 alpha: on ivory a heavy shadow reads as dirt
+ * rather than depth.
+ *
+ * The palette is deliberately unchanged. A review suggested warming the
+ * ivory to #F8F3E7, but #F7F4E9 is the palette the client approved and
+ * swapping an approved brand colour is her decision, not a polish pass.
+ */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }

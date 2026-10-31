@@ -15,7 +15,7 @@ const CARDS = [
 
 export function CollectionStrip() {
   return (
-    <section className="bg-[#FCFAF3] py-14 lg:py-16">
+    <section className="bg-[#FCFAF3] py-14 lg:py-24">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="relative text-center mb-9">
@@ -48,25 +48,13 @@ export function CollectionStrip() {
                 className={i === 4 ? "col-span-2 md:col-span-1" : ""}
               >
                 <Link href={`/shop?category=${c.id}`}
-                  className="group relative block rounded-lg overflow-hidden aspect-[4/3] lg:aspect-[3/2.4]"
+                  className="group relative block rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-[3/2.4]"
                   style={{ background: c.grad }}>
                   <Image src={img.src} alt={img.alt} fill sizes="(max-width:768px) 50vw, 20vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   {/* scrim: keeps the white heading legible over any photograph */}
                   <div aria-hidden className="absolute inset-0"
                     style={{ background: "linear-gradient(to top, rgba(9,28,19,0.88) 0%, rgba(9,28,19,0.42) 48%, rgba(9,28,19,0.12) 100%)" }} />
-
-                  {/* botanical texture */}
-                  <div aria-hidden className="absolute inset-0 opacity-[0.07]">
-                    <svg width="100%" height="100%">
-                      <defs>
-                        <pattern id={`p-${c.id}`} width="54" height="54" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
-                          <path d="M27 9C27 9 17 15 17 26C17 33 21.5 38 27 38C32.5 38 37 33 37 26C37 15 27 9 27 9Z" fill="#fff" />
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill={`url(#p-${c.id})`} />
-                    </svg>
-                  </div>
 
                   {/* hover lift */}
                   <div aria-hidden className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-400" />

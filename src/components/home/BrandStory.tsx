@@ -19,7 +19,7 @@ interface Props {
 
 export function BrandStory({ portraitSrc }: Props) {
   return (
-    <section className="relative overflow-hidden bg-[#123D2B] py-14 lg:py-16">
+    <section className="relative overflow-hidden bg-[#123D2B] py-14 lg:py-24">
       {/* Botanical corners */}
       <div aria-hidden className="absolute inset-0 opacity-[0.08]">
         <svg width="100%" height="100%">

@@ -5,9 +5,15 @@ import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
 import type { Product } from "@/lib/types";
 
-const BADGES: Record<number, "New" | "Bestseller" | null> = {
-  0: "New", 1: "Bestseller", 2: "New", 3: "Bestseller", 4: null,
-};
+/*
+ * No badges here.
+ *
+ * This row used to label products "New" and "Bestseller" from a hardcoded
+ * map of positions. Nothing supported either word: the shop has taken no
+ * orders, so nothing is a bestseller, and every coded product shares the same
+ * created_at. ProductCard still accepts a badge, so wire it to real data when
+ * sales or genuine addition dates exist.
+ */
 
 export function FeaturedRow({ products }: { products: Product[] }) {
 
@@ -15,7 +21,7 @@ export function FeaturedRow({ products }: { products: Product[] }) {
     // relative + overflow-hidden: the promo card carries a decorative blur
     // circle offset past its own right edge, which otherwise widens the page
     // on narrow screens.
-    <section className="relative overflow-hidden bg-[#F7F4E9] py-14 lg:py-16">
+    <section className="relative overflow-hidden bg-[#F7F4E9] py-14 lg:py-24">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_440px] gap-6 lg:gap-7">
 
@@ -48,7 +54,7 @@ export function FeaturedRow({ products }: { products: Product[] }) {
                   transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
                   className={i === 4 ? "hidden xl:block" : ""}
                 >
-                  <ProductCard product={p} badge={BADGES[i]} />
+                  <ProductCard product={p} />
                 </motion.div>
               ))}
             </div>

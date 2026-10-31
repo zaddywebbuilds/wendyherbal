@@ -12,7 +12,9 @@ import type { BrandClip } from "@/lib/media";
  * metered data downloads three small JPEGs instead of three MP4s. Autoplay is
  * also skipped for anyone who has asked for reduced motion.
  */
-export function WorkshopTile({ clip, priority }: { clip: BrandClip; priority?: boolean }) {
+export function WorkshopTile({ clip, priority, className }: {
+  clip: BrandClip; priority?: boolean; className?: string;
+}) {
   const [playing, setPlaying] = useState(false);
   const [autoplay, setAutoplay] = useState(false);
 
@@ -32,7 +34,7 @@ export function WorkshopTile({ clip, priority }: { clip: BrandClip; priority?: b
   const showVideo = autoplay || playing;
 
   return (
-    <figure className="group relative rounded-lg overflow-hidden aspect-[4/5] bg-[#EFE9DD]">
+    <figure className={`group relative rounded-2xl overflow-hidden aspect-[4/5] bg-[#EFE9DD] ${className ?? ""}`}>
       {showVideo ? (
         <video
           className="absolute inset-0 w-full h-full object-cover"
