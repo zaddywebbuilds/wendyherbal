@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { CATEGORY_LABELS } from "@/lib/products";
+import { unitPrice } from "@/lib/pricing";
 import { FORMAT_NGN, WHATSAPP_URL } from "@/lib/constants";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/lib/types";
@@ -19,12 +20,22 @@ export function ProductDetail({ product, related }: { product: Product; related:
   const [tab, setTab] = useState<Tab>("Product Information");
   const [activeImg, setActiveImg] = useState(0);
 
+  // Sized products start with no size chosen, so the page quotes the cheapest
+  // and the Add button waits until the customer picks one. Defaulting to a
+  // size would let someone buy the small bottle without noticing there was a
+  // choice.
+  const [variantId, setVariantId] = useState<string | undefined>(undefined);
+  const variants = product.variants ?? [];
+
   const addItem = useCartStore((s) => s.addItem);
   const toggleWishlist = useWishlistStore((s) => s.toggle);
   const wished = useWishlistStore((s) => s.ids.includes(product.id));
 
-  const price = typeof product.price === "number" && product.price > 0 ? product.price : null;
-  const canBuy = price !== null && !product.is_enquiry_only && product.in_stock;
+  const resolved = unitPrice(product, variantId);
+  const price = typeof resolved === "number" && resolved > 0 ? resolved : null;
+  const canBuy =
+    price !== null && !product.is_enquiry_only && product.in_stock &&
+    (variants.length === 0 || Boolean(variantId));
 
   const enquiryHref = `${WHATSAPP_URL}?text=${encodeURIComponent(
     `Hello Wendy Herbals, I would like information about: ${product.name} (${product.sku}).`
@@ -85,6 +96,9 @@ export function ProductDetail({ product, related }: { product: Product; related:
             <div className="mt-4">
               {price !== null ? (
                 <p className="text-[1.6rem] font-bold text-[#123D2B]" style={{ fontFamily: "var(--font-body)" }}>
+                  {variants.length > 0 && !variantId && (
+                    <span className="text-[13px] font-medium text-[#6b7265] mr-1.5">from</span>
+                  )}
                   {FORMAT_NGN(price)}
                 </p>
               ) : (
@@ -111,6 +125,38 @@ export function ProductDetail({ product, related }: { product: Product; related:
                   disabled until that is complete — please enquire for details.
                 </p>
               </div>
+            )}
+
+            {variants.length > 0 && (
+              <fieldset className="mt-5">
+                <legend className="text-[12px] font-medium text-[#252B23] mb-2"
+                  style={{ fontFamily: "var(--font-body)" }}>
+                  Choose a size
+                </legend>
+                <div className="flex flex-wrap gap-2.5">
+                  {variants.map((v) => (
+                    <button key={v.id} type="button" onClick={() => setVariantId(v.id)}
+                      aria-pressed={variantId === v.id}
+                      className={cn(
+                        "h-11 px-4 rounded-lg border text-[13px] font-medium transition-colors",
+                        variantId === v.id
+                          ? "bg-[#123D2B] text-white border-[#123D2B]"
+                          : "bg-white text-[#252B23] border-[#E7E0CF] hover:border-[#175C3D]"
+                      )}
+                      style={{ fontFamily: "var(--font-body)" }}>
+                      {v.label}
+                      <span className={cn("ml-2 tabular-nums", variantId === v.id ? "text-white/80" : "text-[#6b7265]")}>
+                        {FORMAT_NGN(v.price)}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                {!variantId && (
+                  <p className="mt-2 text-[11.5px] text-[#B5713A]" style={{ fontFamily: "var(--font-body)" }}>
+                    Pick a size to add this to your bag.
+                  </p>
+                )}
+              </fieldset>
             )}
 
             {/* What's included */}
@@ -161,7 +207,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
                   </button>
                 </div>
 
-                <button onClick={() => addItem(product, qty)}
+                <button onClick={() => addItem(product, qty, variantId)}
                   className="flex-1 min-w-[180px] h-11 flex items-center justify-center gap-2 bg-[#123D2B] text-white text-[13.5px] font-medium rounded-md hover:bg-[#175C3D] transition-colors active:scale-[0.99]"
                   style={{ fontFamily: "var(--font-body)" }}>
                   <ShoppingCart size={15} /> Add to Cart

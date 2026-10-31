@@ -24,8 +24,12 @@ export function ProductCard({ product, badge, className }: Props) {
   useEffect(() => setMounted(true), []);
 
   const wished = mounted && wishIds.includes(product.id);
+  // With sizes, the card quotes the cheapest and says so; the size itself is
+  // chosen on the product page, so the card links through rather than adding
+  // straight to the bag.
+  const hasSizes = Boolean(product.variants?.length);
   const price = typeof product.price === "number" && product.price > 0 ? product.price : null;
-  const canBuy = price !== null && !product.is_enquiry_only && product.in_stock;
+  const canBuy = price !== null && !product.is_enquiry_only && product.in_stock && !hasSizes;
 
   const enquiryHref = `${WHATSAPP_URL}?text=${encodeURIComponent(
     `Hello Wendy Herbals, I would like information about: ${product.name} (${product.sku}).`

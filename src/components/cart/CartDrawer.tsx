@@ -4,6 +4,7 @@ import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/store/cart";
 import { ProductImage } from "@/components/ui/ProductImage";
+import { lineTotal, variantLabel } from "@/lib/pricing";
 import { FORMAT_NGN } from "@/lib/constants";
 import { cn } from "@/lib/cn";
 
@@ -77,7 +78,7 @@ export function CartDrawer() {
                         </p>
                       )}
                       <p className="text-[13px] font-bold text-[#123D2B] mt-1" style={{ fontFamily: "var(--font-body)" }}>
-                        {FORMAT_NGN((item.product.price ?? 0) * item.quantity)}
+                        {FORMAT_NGN(lineTotal(item))}
                       </p>
 
                       <div className="flex items-center justify-between mt-1.5">

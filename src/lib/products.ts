@@ -134,6 +134,18 @@ const SPICE_NAMES = [
   "Paprika",
 ];
 
+/**
+ * Bottle sizes confirmed by Wendy on 31 Oct 2026: small ₦2,500, big ₦5,000.
+ *
+ * These replace "price on enquiry" for the whole spice range. They are applied
+ * only to the spices, never to the herbal preparations, whose prices come from
+ * her printed list.
+ */
+const SPICE_VARIANTS = [
+  { id: "SM", label: "Small bottle", price: 2500 },
+  { id: "BG", label: "Big bottle", price: 5000 },
+];
+
 const SPICE_STORAGE =
   "Store in a cool, dry place away from direct sunlight. Keep the jar tightly closed after use.";
 
@@ -366,8 +378,10 @@ function buildSpices(): Product[] {
     name,
     slug: slugify(name),
     category: "food-spices" as const,
-    description: describe(name, "food-spices", false, false),
-    price: null,
+    description: describe(name, "food-spices", false, true),
+    // price is the cheapest variant, so cards and listings read "from ₦2,500".
+    price: SPICE_VARIANTS[0].price,
+    variants: SPICE_VARIANTS,
     images: photo(SPICE_PHOTOS[name]),
     in_stock: true,
     stock_count: 0,

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCatalogueFresh } from "@/lib/catalogue";
+import { unitPrice, variantLabel } from "@/lib/pricing";
 import { isSheetsReady, recordOrder } from "@/lib/sheets";
 
 interface IncomingItem { sku: string; quantity: number; size?: string }
@@ -53,13 +54,30 @@ export async function POST(req: Request) {
     if (!product || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       return NextResponse.json({ error: "One of the items in your order is not valid." }, { status: 400 });
     }
-    if (product.price === null) {
+    const size = str(raw?.size, 40);
+
+    // A product with sizes must arrive with one of them, so nobody can pay
+    // the cheapest price for the biggest bottle by omitting the field.
+    if (product.variants?.length && !product.variants.some((v) => v.id === size)) {
+      return NextResponse.json(
+        { error: `Choose a size for ${product.name} before ordering.` },
+        { status: 400 }
+      );
+    }
+
+    const price = unitPrice(product, size || undefined);
+    if (price === null) {
       return NextResponse.json(
         { error: `${product.name} has no published price and must be ordered by enquiry.` },
         { status: 400 }
       );
     }
-    priced.push({ name: product.name, qty, unitPrice: product.price, size: str(raw?.size, 40) });
+    priced.push({
+      name: product.name,
+      qty,
+      unitPrice: price,
+      size: variantLabel(product, size || undefined) ?? size,
+    });
   }
 
   const subtotal = priced.reduce((s, i) => s + i.unitPrice * i.qty, 0);

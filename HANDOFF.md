@@ -183,9 +183,9 @@ closed: no `ADMIN_PASSWORD` set means the dashboard is unreachable, not open.
 - **81 herbal / body-care**, transcribed verbatim from the client's three-page
   price list (WhatsApp, 28 Oct 2026). Source S/N numbering preserved as
   `WH-001`…`WH-081`. Prices ₦800–₦25,000.
-- **12 food spices**, `price: null` — they are **not** on the supplied price
-  list. They render "Price on enquiry" rather than a made-up figure. Get these
-  prices from the client and it is a one-line change each.
+- **12 food spices**, now priced by bottle size: ₦2,500 small, ₦5,000 big,
+  confirmed by Wendy on 31 Oct 2026. They are the only products with
+  variants; see `src/lib/pricing.ts`.
 
 **Known duplicate:** S/N 52 and S/N 63 are both "Ulcer Herbs" at ₦15,000. Both
 rows are kept and recorded in `DUPLICATE_AUDIT`. The client must decide whether

@@ -7,6 +7,7 @@ import {
 import { useCartStore } from "@/store/cart";
 import { ProductImage } from "@/components/ui/ProductImage";
 import { FORMAT_NGN, BANK_DETAILS, DELIVERY_NOTE } from "@/lib/constants";
+import { lineTotal } from "@/lib/pricing";
 import { generateOrderNumber, orderWhatsAppUrl, NIGERIAN_STATES } from "@/lib/order";
 import type { Address } from "@/lib/types";
 import { cn } from "@/lib/cn";
@@ -316,7 +317,7 @@ export function CheckoutClient() {
                   </div>
                   <span className="text-[12px] font-semibold text-[#123D2B] shrink-0 tabular-nums"
                     style={{ fontFamily: "var(--font-body)" }}>
-                    {FORMAT_NGN((i.product.price ?? 0) * i.quantity)}
+                    {FORMAT_NGN(lineTotal(i))}
                   </span>
                 </li>
               ))}

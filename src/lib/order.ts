@@ -1,3 +1,4 @@
+import { lineTotal, variantLabel } from "./pricing";
 import { FORMAT_NGN, WHATSAPP_URL } from "./constants";
 import type { CartItem, Address } from "./types";
 
@@ -32,7 +33,10 @@ export interface ReceiptPayload {
  */
 export function buildOrderMessage({ orderNumber, items, subtotal, address, notes }: ReceiptPayload): string {
   const lines = items.map(
-    (i) => `• ${i.product.name}${i.size ? ` (${i.size})` : ""} ×${i.quantity} — ${FORMAT_NGN((i.product.price ?? 0) * i.quantity)}`
+    (i) => {
+      const size = variantLabel(i.product, i.size) ?? i.size;
+      return `• ${i.product.name}${size ? ` (${size})` : ""} ×${i.quantity} — ${FORMAT_NGN(lineTotal(i))}`;
+    }
   );
 
   return [

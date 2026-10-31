@@ -1,5 +1,16 @@
 import type { OrderStatus } from "./constants";
 
+/**
+ * A size the customer picks before buying, each with its own price and SKU.
+ * Only the food spices have these so far.
+ */
+export interface ProductVariant {
+  /** Appended to the product SKU, so WH-FS-001 small is WH-FS-001-SM. */
+  id: string;
+  label: string;
+  price: number;
+}
+
 export interface Product {
   id: string;
   sku: string;
@@ -15,6 +26,8 @@ export interface Product {
   in_stock: boolean;
   stock_count: number;
   size_options?: string[];
+  /** When present, price is per variant and `price` is the cheapest of them. */
+  variants?: ProductVariant[];
   includes_balm?: boolean;
   ingredients?: string;
   storage_info?: string;
@@ -30,6 +43,7 @@ export interface CartItem {
   product_id: string;
   product: Product;
   quantity: number;
+  /** A ProductVariant id when the product has variants. */
   size?: string;
 }
 

@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem, Product } from "@/lib/types";
+import { lineTotal } from "@/lib/pricing";
 
 interface CartStore {
   items: CartItem[];
@@ -23,6 +24,11 @@ export const useCartStore = create<CartStore>()(
       items: [],
       isOpen: false,
 
+      /**
+       * stock_count 0 means "not counted yet", not "none left", so it must
+       * never cap a quantity. Clamping to it was silently setting the
+       * quantity to zero the second time anything was added to the bag.
+       */
       addItem: (product, quantity = 1, size) => {
         set((state) => {
           const key = size ? `${product.id}-${size}` : product.id;
@@ -34,7 +40,9 @@ export const useCartStore = create<CartStore>()(
               items: state.items.map((i) => {
                 const iKey = size ? `${i.product_id}-${i.size}` : i.product_id;
                 return iKey === key
-                  ? { ...i, quantity: Math.min(i.quantity + quantity, i.product.stock_count) }
+                  ? { ...i, quantity: i.product.stock_count > 0
+                      ? Math.min(i.quantity + quantity, i.product.stock_count)
+                      : i.quantity + quantity }
                   : i;
               }),
               isOpen: true,
@@ -65,11 +73,11 @@ export const useCartStore = create<CartStore>()(
           items: state.items.map((i) => {
             if (size) {
               return i.product_id === productId && i.size === size
-                ? { ...i, quantity: Math.min(quantity, i.product.stock_count) }
+                ? { ...i, quantity: (i.product.stock_count > 0 ? Math.min(quantity, i.product.stock_count) : quantity) }
                 : i;
             }
             return i.product_id === productId
-              ? { ...i, quantity: Math.min(quantity, i.product.stock_count) }
+              ? { ...i, quantity: (i.product.stock_count > 0 ? Math.min(quantity, i.product.stock_count) : quantity) }
               : i;
           }),
         }));
@@ -81,8 +89,7 @@ export const useCartStore = create<CartStore>()(
       toggleCart: () => set((s) => ({ isOpen: !s.isOpen })),
 
       itemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
-      subtotal: () =>
-        get().items.reduce((sum, i) => sum + (i.product.price ?? 0) * i.quantity, 0),
+      subtotal: () => get().items.reduce((sum, i) => sum + lineTotal(i), 0),
     }),
     { name: "wendy-herbals-cart" }
   )
