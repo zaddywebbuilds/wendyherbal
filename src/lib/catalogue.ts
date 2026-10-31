@@ -89,7 +89,7 @@ export async function findProductBySku(sku: string): Promise<Product | undefined
 export async function getFeaturedProducts(n = 5): Promise<Product[]> {
   const all = await getPublishedCatalogue();
   const preferred = [
-    "ovarian-cyst-herbs-with-balm", "pcos-herbs-with-balm", "fibroid-herbs-with-balm",
+    "ovarian-cyst-herbs-with-balm", "pcos-herbs", "fibroid-herbs-with-balm",
     "sperm-booster-herbs", "hyper-ovulation-booster-herbs-for-twins",
   ];
 

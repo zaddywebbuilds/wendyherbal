@@ -49,7 +49,10 @@ const ROWS: Row[] = [
   [22, "Hotness of the Womb Herbs", 12000, "womens-wellness"],
   [23, "Ovarian Cyst Herbs with Balm", 17000, "womens-wellness"],
   [24, "Hormonal Imbalance Herbs", 15000, "womens-wellness"],
-  [25, "PCOS Herbs with Balm", 15000, "womens-wellness"],
+  // Wendy confirmed on 31 Oct 2026 that PCOS does not ship with a balm,
+  // settling the conflict recorded below: the brief said no balm, her price
+  // list said "with Balm". Her own packshot shows liquid and powder only.
+  [25, "PCOS Herbs", 15000, "womens-wellness"],
   [26, "Endometriosis Herbs with Balm", 17000, "womens-wellness"],
   [27, "Blocked Fallopian Tubes Herbs with Balm", 17000, "womens-wellness"],
 
@@ -180,7 +183,7 @@ const HERBAL_PHOTOS: Record<number, string> = {
   22: "22-hotness-of-the-womb-herbs.jpg",
   23: "23-ovarian-cyst-herbs-with-balm.jpg",
   24: "24-hormonal-imbalance-herbs.jpg",
-  25: "25-pcos-herbs-with-balm.jpg",
+  25: "25-pcos-herbs.jpg",
   26: "26-endometriosis-with-balm.jpg",
   27: "27-blocked-fallopian-tubes-herbs-with-balm.jpg",
   28: "28-pid-herbs.jpg",
@@ -397,7 +400,7 @@ export const getProduct = (slug: string) => PRODUCTS.find((p) => p.slug === slug
 export const getByCategory = (cat: string) => PRODUCTS.filter((p) => p.category === cat);
 
 export const getFeatured = (n = 5) =>
-  ["ovarian-cyst-herbs-with-balm", "pcos-herbs-with-balm", "fibroid-herbs-with-balm",
+  ["ovarian-cyst-herbs-with-balm", "pcos-herbs", "fibroid-herbs-with-balm",
    "sperm-booster-herbs", "hyper-ovulation-booster-herbs-for-twins"]
     .map(getProduct)
     .filter((p): p is Product => Boolean(p))
