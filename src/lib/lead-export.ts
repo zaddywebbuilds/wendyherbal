@@ -166,7 +166,7 @@ export function toVCard(customers: SheetCustomer[]): VCardResult {
  * else is silently skipped. So the buyer list is only half the job, and this
  * is the other half.
  */
-export function businessVCard(opts: { name: string; phone: string; site: string; tagline: string }): string {
+export function businessVCard(opts: { name: string; phone: string; site?: string; tagline: string }): string {
   const tel = e164(opts.phone) ?? opts.phone;
   const lines = [
     "BEGIN:VCARD",
@@ -175,9 +175,10 @@ export function businessVCard(opts: { name: string; phone: string; site: string;
     `FN:${esc(opts.name)}`,
     `ORG:${esc(opts.name)}`,
     `TEL;TYPE=CELL,VOICE:${tel}`,
-    `URL:${esc(opts.site)}`,
-    `NOTE:${esc(opts.tagline)}`,
-    "END:VCARD",
   ];
+  // No invented address: a URL line pointing at a domain that does not resolve
+  // is worse than no URL line, because it is saved in the customer's phone.
+  if (opts.site) lines.push(`URL:${esc(opts.site)}`);
+  lines.push(`NOTE:${esc(opts.tagline)}`, "END:VCARD");
   return lines.map(fold).join("\r\n") + "\r\n";
 }

@@ -12,7 +12,7 @@ export function GET() {
   const vcf = businessVCard({
     name: SITE_NAME,
     phone: WHATSAPP_NUMBER,
-    site: process.env.NEXT_PUBLIC_SITE_URL ?? "https://wendyherbals.com",
+    site: process.env.NEXT_PUBLIC_SITE_URL || undefined,
     tagline: `Herbal wellness and food spices. ${BRAND_PHRASE}`,
   });
 

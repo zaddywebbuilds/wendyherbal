@@ -10,22 +10,37 @@ relitigated.
 
 ---
 
-## ▶ START HERE — resume at deployment
+## ▶ START HERE — the site is live, and misconfigured
 
-Last session stopped mid-deploy. Everything is committed and pushed; the build
-is green (114 routes). Nothing is half-finished in the code.
+**https://wendyherbal.vercel.app returns 200.** The client connected Vercel to
+the GitHub repo, so pushes to `main` deploy themselves. The CLI on the build
+machine is still unauthenticated (`vercel whoami` → `Not authorized`), which no
+longer matters: nothing here needs it.
 
-**What blocked it:** the Vercel CLI (v63.1.0) is installed but **not
-authenticated** — `vercel whoami` returns `Not authorized`, and there is no auth
-file on disk. The Vercel MCP connector also needs authorising via `/mcp`. Both
-are sign-ins only the account holder can perform.
+What does matter is that **three environment variables are missing in Vercel**,
+and each one silently disables something. Verified against the live site on
+31 Oct 2026:
 
-**To resume, in order:**
+| Missing | What it breaks, observed |
+|---|---|
+| `ADMIN_PASSWORD` + `ADMIN_SECRET` | `/admin` 307s to `/admin/login?setup=1`. The gate fails closed, which is right, but **Wendy cannot sign in at all** — Products, Orders, Customers, Testimonials and the lead downloads are unreachable in production. |
+| `NEXT_PUBLIC_SITE_URL` | `/sitemap.xml` is **empty** (the builder returns `[]` with no base), canonicals render relative (`href="/shop"`), and Open Graph has no absolute image URLs. |
+
+Set those and both problems go away; no code change is involved. Re-check with:
 
 ```bash
-vercel login          # the blocker — only a human can do this
-vercel                # preview deploy, NOT --prod
+curl -s -o /dev/null -w "%{http_code} -> %{redirect_url}\n" https://wendyherbal.vercel.app/admin
+curl -s https://wendyherbal.vercel.app/sitemap.xml | head -5
 ```
+
+**`robots.txt` says `Disallow: /`, and that is deliberate** — see `src/app/robots.ts`.
+Indexing stays off until the NAFDAC review is done and the rendered mockups are
+replaced with real photographs. Flip `NEXT_PUBLIC_ALLOW_INDEXING=true` then, not
+before: de-indexing herbal products named after medical conditions is slow.
+
+**The custom domain is not connected.** `wendyherbals.com` does not resolve.
+Until it does, `NEXT_PUBLIC_SITE_URL` should be the `.vercel.app` address, or
+the sitemap and canonicals will advertise a dead host.
 
 Then follow [DEPLOY.md](DEPLOY.md) for environment variables. Two of them are
 traps worth reading about before Wendy ever connects her account:
