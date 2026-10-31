@@ -310,38 +310,26 @@ Roughly in priority order.
 
 1. **Deployment.** In progress — see START HERE at the top and
    [DEPLOY.md](DEPLOY.md).
-2. **Admin CRUD.** Orders is built: `/admin/orders` reads the Orders tab via
-   `listOrders()` in `sheets.ts`, with a table on desktop, cards on a phone,
-   an awaiting-payment count and a CSV export at
-   `/api/admin/orders/export`. It is **read-only on purpose**: the owner edits
-   the Status column in the spreadsheet, and a writer here would fight her for
-   the same cell. Giving admin a write path means deciding what wins, which is
-   a conversation, not a commit.
+2. **Admin CRUD.** Built, and the sidebar has no dead links: Dashboard,
+   Orders, Products, Inventory, Testimonials, Customers, Newsletter and
+   Settings all resolve. The thirteen screens from the approved mockup that
+   had nothing behind them were retired from the nav rather than left to 404.
+
+   Orders reads the Orders tab via `listOrders()`, with a table on desktop and
+   cards on a phone, an awaiting-payment count and a CSV export. It is
+   **read-only on purpose** — see "What the Google Sheet is for".
 
    The sidebar badge is **not** wired to the sheet. The admin layout wraps
    every route including login, so a read there costs a Google call per page
    load, one of them unauthenticated, and it stops `/admin/login`
    prerendering. The count lives on the Orders page instead.
 
-   Products is built: `/admin/products` lists the whole catalogue with search,
-   a category filter and gap filters for the three things that need the client
-   (none without a photo now, 12 without a price, 73 with NAFDAC pending), plus a
-   catalogue CSV at `/api/admin/products/export` so prices can be worked
-   through offline.
+   Products edits for real, from a phone or a computer, including adding and
+   deleting. The catalogue is a TypeScript module on a read-only filesystem,
+   so edits live in a KV overlay merged over the coded rows at read time — see
+   "The editable catalogue". `supabase/schema.sql` remains the migration path
+   if this ever outgrows KV.
 
-   It does **not** edit, and the screen explains why in the owner's own terms.
-   The catalogue is a TypeScript module, and the hosting filesystem is
-   read-only, so a web page cannot write to it. Making it editable means
-   moving the catalogue somewhere writable: a Products tab in the same Google
-   Sheet that holds the orders, which keeps her in one familiar place, or a
-   real database, which scales better. That is a client conversation, and
-   `supabase/schema.sql` is still the migration path if the answer is the
-   database. Do not quietly pick one.
-
-   Still 404: Sidebar links to Categories, Inventory,
-   Reviews, Blog, Promotions, Shipping, Reports — all 404. The sidebar was
-   built to match the client's approved dashboard mockup; the screens behind it
-   were not.
 3. **Blog.** Linked from the footer until now; the link was removed because
    there is no blog and no post store behind it. Restore the footer entry when
    one is built.

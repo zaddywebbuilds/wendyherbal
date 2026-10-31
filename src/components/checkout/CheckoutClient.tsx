@@ -136,18 +136,18 @@ export function CheckoutClient() {
                       onChange={(e) => setEmail(e.target.value)} placeholder="For your order confirmation" />
                   </div>
 
-                  <div>
-                    <label className="block text-[12px] font-medium text-[#252B23] mb-1.5"
+                  <label className="block">
+                    <span className="block text-[12px] font-medium text-[#252B23] mb-1.5"
                       style={{ fontFamily: "var(--font-body)" }}>
                       State <span className="text-[#C06014]">*</span>
-                    </label>
+                    </span>
                     <select required value={address.state} onChange={set("state")}
                       className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
                       style={{ fontFamily: "var(--font-body)" }}>
                       <option value="">Select state</option>
                       {NIGERIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
-                  </div>
+                  </label>
 
                   <Field label="City / Town" required value={address.city} onChange={set("city")} />
 
@@ -158,14 +158,14 @@ export function CheckoutClient() {
                     <Field label="Landmark (optional)" value={address.landmark ?? ""} onChange={set("landmark")} />
                   </div>
 
-                  <div className="sm:col-span-2">
-                    <label className="block text-[12px] font-medium text-[#252B23] mb-1.5"
-                      style={{ fontFamily: "var(--font-body)" }}>Order notes (optional)</label>
+                  <label className="sm:col-span-2 block text-[12px] font-medium text-[#252B23]"
+                    style={{ fontFamily: "var(--font-body)" }}>
+                    <span className="block mb-1.5">Order notes (optional)</span>
                     <textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)}
                       placeholder="Anything Wendy should know about your order or delivery"
-                      className="w-full px-3 py-2.5 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D] resize-y"
+                      className="w-full px-3 py-2.5 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D] resize-y font-normal"
                       style={{ fontFamily: "var(--font-body)" }} />
-                  </div>
+                  </label>
                 </div>
 
                 {/* Marketing opt-in — separate from the order itself, never pre-ticked. */}
@@ -279,19 +279,20 @@ export function CheckoutClient() {
                       Wendy will reply with the way bill and your full total. Transfer that amount,
                       then send her the receipt.
                     </p>
-                    {/* Saving the number is what lets her send delivery updates later:
-                        WhatsApp only delivers a broadcast to people who have the
-                        sender saved as a contact. */}
-                    <a href="/contact-card" download="wendy-herbals.vcf"
-                      className="mt-2.5 inline-flex items-center gap-1.5 text-[12px] font-medium text-[#123D2B] underline underline-offset-2"
+                    <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5"
                       style={{ fontFamily: "var(--font-body)" }}>
-                      <UserPlus size={13} /> Save our number to your phone
-                    </a>
-                    <button onClick={() => { clearCart(); setStep("details"); setAddress(EMPTY); setNotes(""); setSent(false); }}
-                      className="mt-2.5 text-[12px] font-medium text-[#123D2B] underline underline-offset-2"
-                      style={{ fontFamily: "var(--font-body)" }}>
-                      Clear my bag
-                    </button>
+                      {/* Saving the number is what lets her send delivery updates
+                          later: WhatsApp only delivers a broadcast to people who
+                          have the sender saved as a contact. */}
+                      <a href="/contact-card" download="wendy-herbals.vcf"
+                        className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[#123D2B] underline underline-offset-2">
+                        <UserPlus size={13} /> Save our number to your phone
+                      </a>
+                      <button onClick={() => { clearCart(); setStep("details"); setAddress(EMPTY); setNotes(""); setSent(false); }}
+                        className="text-[12px] font-medium text-[#123D2B] underline underline-offset-2">
+                        Clear my bag
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -359,15 +360,18 @@ function Field({ label, required, ...props }: {
   label: string; required?: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div>
-      <label className="block text-[12px] font-medium text-[#252B23] mb-1.5"
+    // The input is nested inside the label so the two are associated without
+    // an id. As siblings the label named nothing, and a screen reader read
+    // these fields out as the placeholder or as nothing at all.
+    <label className="block">
+      <span className="block text-[12px] font-medium text-[#252B23] mb-1.5"
         style={{ fontFamily: "var(--font-body)" }}>
         {label} {required && <span className="text-[#C06014]">*</span>}
-      </label>
+      </span>
       <input required={required} {...props}
         className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] placeholder-[#A8B99C] focus:outline-none focus:border-[#175C3D]"
         style={{ fontFamily: "var(--font-body)" }} />
-    </div>
+    </label>
   );
 }
 

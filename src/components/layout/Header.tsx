@@ -95,7 +95,8 @@ export function Header() {
                 )}
               </Link>
 
-              <button onClick={toggleCart} aria-label={`Shopping bag, ${mounted ? itemCount : 0} items`}
+              <button onClick={toggleCart}
+                aria-label={`Shopping bag, ${mounted ? itemCount : 0} ${(mounted ? itemCount : 0) === 1 ? "item" : "items"}`}
                 className="p-2 text-[#252B23] hover:text-[#123D2B] transition-colors relative">
                 <ShoppingBag size={18} strokeWidth={1.6} />
                 {mounted && itemCount > 0 && (
