@@ -38,13 +38,13 @@ export function WorkshopBand() {
               className={i === 0 ? "col-span-2 lg:row-span-2 lg:aspect-auto" : undefined} />
           ))}
 
-          <figure className="group relative rounded-2xl overflow-hidden aspect-[4/5] bg-[#EFE9DD]">
-            <Image src={still.src} alt={still.alt} fill sizes="(max-width:1024px) 50vw, 25vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105" />
-            <div aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-[#09231a]/80 via-[#09231a]/10 to-transparent" />
+          <figure className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-[#EFE9DD]">
+            <div className="relative aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
+              <Image src={still.src} alt={still.alt} fill sizes="(max-width:1024px) 50vw, 25vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
             <figcaption
-              className="absolute bottom-0 left-0 right-0 p-3.5 text-[11.5px] leading-snug text-white/90"
+              className="p-3.5 text-[12px] leading-snug text-[#4a5245]"
               style={{ fontFamily: "var(--font-body)" }}>
               {still.caption}
             </figcaption>

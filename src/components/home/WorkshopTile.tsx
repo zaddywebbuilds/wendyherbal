@@ -34,7 +34,8 @@ export function WorkshopTile({ clip, priority, className }: {
   const showVideo = autoplay || playing;
 
   return (
-    <figure className={`group relative rounded-2xl overflow-hidden aspect-[4/5] bg-[#EFE9DD] ${className ?? ""}`}>
+    <figure className={`group flex flex-col rounded-2xl overflow-hidden bg-white border border-[#EFE9DD] ${className ?? ""}`}>
+      <div className="relative aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
       {showVideo ? (
         <video
           className="absolute inset-0 w-full h-full object-cover"
@@ -53,20 +54,19 @@ export function WorkshopTile({ clip, priority, className }: {
           className="object-cover" priority={priority} />
       )}
 
-      {!showVideo && (
-        <button type="button" onClick={() => setPlaying(true)}
-          className="absolute inset-0 flex items-center justify-center md:hidden"
-          aria-label={`Play clip: ${clip.alt}`}>
-          <span className="w-12 h-12 rounded-full bg-[#123D2B]/75 backdrop-blur-sm flex items-center justify-center">
-            <Play size={18} className="text-white fill-white ml-0.5" />
-          </span>
-        </button>
-      )}
+        {!showVideo && (
+          <button type="button" onClick={() => setPlaying(true)}
+            className="absolute inset-0 flex items-center justify-center md:hidden"
+            aria-label={`Play clip: ${clip.alt}`}>
+            <span className="w-12 h-12 rounded-full bg-[#123D2B]/75 backdrop-blur-sm flex items-center justify-center">
+              <Play size={18} className="text-white fill-white ml-0.5" />
+            </span>
+          </button>
+        )}
+      </div>
 
-      <div aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-[#09231a]/80 via-[#09231a]/10 to-transparent pointer-events-none" />
       <figcaption
-        className="absolute bottom-0 left-0 right-0 p-3 sm:p-3.5 text-[11px] sm:text-[11.5px] leading-snug text-white/90 pointer-events-none"
+        className="p-3 sm:p-3.5 text-[11.5px] sm:text-[12px] leading-snug text-[#4a5245]"
         style={{ fontFamily: "var(--font-body)" }}>
         {clip.caption}
       </figcaption>

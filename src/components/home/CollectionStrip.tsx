@@ -47,34 +47,30 @@ export function CollectionStrip() {
                 transition={{ duration: 0.55, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                 className={i === 4 ? "col-span-2 md:col-span-1" : ""}
               >
+                {/* Photograph on top, words on a plain surface beneath it.
+                    Nothing is set over the picture, so no scrim is needed and
+                    the heading is black on white rather than white on a
+                    gradient that has to be dark enough to carry it. */}
                 <Link href={`/shop?category=${c.id}`}
-                  className="group relative block rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-[3/2.4]"
-                  style={{ background: c.grad }}>
-                  <Image src={img.src} alt={img.alt} fill sizes="(max-width:768px) 50vw, 20vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  {/* scrim: keeps the white heading legible over any photograph */}
-                  <div aria-hidden className="absolute inset-0"
-                    style={{ background: "linear-gradient(to top, rgba(9,28,19,0.88) 0%, rgba(9,28,19,0.42) 48%, rgba(9,28,19,0.12) 100%)" }} />
+                  className="group block rounded-2xl overflow-hidden bg-white border border-[#EFE9DD] transition-colors hover:border-[#C6A667]">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#EFE9DD]">
+                    <Image src={img.src} alt={img.alt} fill sizes="(max-width:768px) 50vw, 20vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  </div>
 
-                  {/* hover lift */}
-                  <div aria-hidden className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-400" />
-
-                  <div className="relative h-full flex flex-col justify-between p-4">
-                    <span className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center transition-transform duration-400 group-hover:scale-110">
-                      <Icon size={17} className="text-[#E8DFC4]" strokeWidth={1.6} />
+                  <div className="p-3.5 lg:p-4">
+                    <span className="w-8 h-8 rounded-full bg-[#E8F0EA] flex items-center justify-center mb-2.5">
+                      <Icon size={15} className="text-[#175C3D]" strokeWidth={1.7} />
                     </span>
-
-                    <div>
-                      <h3 className="text-white text-[17px] lg:text-[19px] leading-[1.15] font-medium whitespace-pre-line"
-                        style={{ fontFamily: "var(--font-heading)" }}>
-                        {c.title}
-                      </h3>
-                      <span className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] text-[#E8DFC4] font-medium"
-                        style={{ fontFamily: "var(--font-body)" }}>
-                        Shop Collection
-                        <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
-                      </span>
-                    </div>
+                    <h3 className="text-[#123D2B] text-[16px] lg:text-[18px] leading-[1.15] font-medium whitespace-pre-line"
+                      style={{ fontFamily: "var(--font-heading)" }}>
+                      {c.title}
+                    </h3>
+                    <span className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] text-[#175C3D] font-medium"
+                      style={{ fontFamily: "var(--font-body)" }}>
+                      Shop Collection
+                      <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
                   </div>
                 </Link>
               </motion.div>
