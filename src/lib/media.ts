@@ -97,6 +97,20 @@ export interface BrandClip {
  * commercial site. Each is cut to 12 seconds and re-encoded for the web; the
  * originals are the 706MB set under public/media/videos, which is gitignored.
  */
+/**
+ * The homepage hero clip, supplied by the client on 30 Oct 2026.
+ *
+ * Like the product packshots it is an AI-rendered showcase rather than
+ * filmed stock, and its labels carry claims the site itself does not make,
+ * "Safe & Effective" among them. See HANDOFF.md.
+ */
+export const HERO_CLIP: BrandClip = {
+  src: "/media/clips/hero-product-range.mp4",
+  poster: "/media/clips/hero-product-range.jpg",
+  alt: "Wendy Herbals products arranged on freshly dug earth beside harvested roots and a clay pot",
+  caption: "From the ground to your door",
+};
+
 export const BRAND_CLIPS: BrandClip[] = [
   {
     src: "/media/clips/cooking-over-open-fire.mp4",

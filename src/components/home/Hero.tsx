@@ -1,8 +1,9 @@
 "use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { BRAND_IMAGES } from "@/lib/media";
+import { HERO_CLIP } from "@/lib/media";
 import { ArrowRight, Play, Leaf, Award, ShieldCheck, Truck, HeartHandshake } from "lucide-react";
 
 const TRUST = [
@@ -21,9 +22,28 @@ const fade = {
   }),
 };
 
-const HERO_IMAGE = BRAND_IMAGES.driedHerbs;
+
 
 export function Hero() {
+  /**
+   * Same rule as the workshop tiles: a phone gets the poster image, not 2MB of
+   * video, and anyone who has asked for reduced motion gets the still too.
+   */
+  const [playVideo, setPlayVideo] = useState(false);
+
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 768px)");
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const decide = () => setPlayVideo(wide.matches && !calm.matches);
+    decide();
+    wide.addEventListener("change", decide);
+    calm.addEventListener("change", decide);
+    return () => {
+      wide.removeEventListener("change", decide);
+      calm.removeEventListener("change", decide);
+    };
+  }, []);
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#F7F4E9] via-[#F2EDDE] to-[#E8E2CE]">
       {/* Botanical texture */}
@@ -106,13 +126,27 @@ export function Hero() {
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="relative">
-            <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-[#EFE9DD] to-[#DDD4BC] aspect-[4/3] shadow-[0_18px_60px_-20px_rgba(18,61,43,0.35)]">
-              <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill priority
-                sizes="(max-width:1024px) 100vw, 52vw" className="object-cover" />
+            <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-[#EFE9DD] to-[#DDD4BC] aspect-[16/10] lg:aspect-[16/9] shadow-[0_18px_60px_-20px_rgba(18,61,43,0.35)]">
+              {playVideo ? (
+                <video
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src={HERO_CLIP.src}
+                  poster={HERO_CLIP.poster}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  aria-label={HERO_CLIP.alt}
+                />
+              ) : (
+                <Image src={HERO_CLIP.poster} alt={HERO_CLIP.alt} fill priority
+                  sizes="(max-width:1024px) 100vw, 52vw" className="object-cover" />
+              )}
               <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0b241a]/55 via-[#0b241a]/10 to-transparent" />
               <p className="absolute bottom-3 left-4 right-4 text-[10px] uppercase tracking-[0.18em] text-white/85"
                 style={{ fontFamily: "var(--font-body)" }}>
-                {HERO_IMAGE.caption}
+                {HERO_CLIP.caption}
               </p>
             </div>
 

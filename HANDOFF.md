@@ -462,6 +462,32 @@ because the source reels carry licensed music from a social editing app that
 the shop has no commercial licence for. A CapCut watermark and a song-credit
 sticker are burned into some frames; replacing them needs new footage.
 
+### The hero clip, and a claim worth watching
+
+The homepage hero is a video the client supplied on 30 Oct 2026, registered as
+`HERO_CLIP` and served from `public/media/clips/hero-product-range.mp4`.
+It is 11 seconds of product packshots appearing against a farm backdrop,
+closing on a portrait of the founder. Re-encoded from 14.8MB to 2.3MB, no
+audio track in the source. Desktop plays it; a phone gets the poster frame
+and downloads no video at all, the same rule as the workshop tiles.
+
+It carries **no** testimonial, patient or treatment content, which is why it
+was usable at all. But its labels go further than the packshots already on the
+site. Alongside the familiar "100% Natural" and the nonsense phrase
+"Natural-Based Sympathies", they read:
+
+> Safe & Effective
+
+on products named after medical conditions, Ovarian Cyst Herbs among them.
+That is a therapeutic and safety claim, and it is the most prominent thing on
+the homepage. It contradicts the Medical Disclaimer this site serves, which
+tells people a product name is not a claim and to speak to a doctor first.
+The owner was told and chose to use the clip.
+
+**This is the one to raise with the client before launch**, ahead of the
+packshot labels, because "Effective" is a stronger claim than anything else
+published here and it sits above the fold.
+
 ### The rest of the library is not publishable
 
 Of 67 images in `public/media/images/`, only nine were cleared. Every image
