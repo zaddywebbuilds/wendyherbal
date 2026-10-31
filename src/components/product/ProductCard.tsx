@@ -61,7 +61,10 @@ export function ProductCard({ product, badge, className }: Props) {
       </button>
 
       {/* Image */}
-      <Link href={`/product/${product.slug}`} className="block" tabIndex={-1}>
+      {/* Redundant with the product-name link below, so it is taken out of the
+          tab order and hidden from screen readers rather than read as an
+          unnamed link. */}
+      <Link href={`/product/${product.slug}`} className="block" tabIndex={-1} aria-hidden="true">
         <ProductImage src={product.images[0]} alt={product.name} category={product.category}
           className="aspect-square" sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 20vw" />
       </Link>

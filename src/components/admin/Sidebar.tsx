@@ -25,6 +25,7 @@ const MAIN = [
   { label: "Inventory", href: "/admin/inventory", icon: Boxes },
   { label: "Testimonials", href: "/admin/testimonials", icon: Star },
   { label: "Customers", href: "/admin/customers", icon: Users },
+  { label: "Newsletter", href: "/admin/newsletter", icon: Send },
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 

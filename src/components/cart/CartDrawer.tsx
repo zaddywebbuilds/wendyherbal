@@ -74,7 +74,7 @@ export function CartDrawer() {
                         style={{ fontFamily: "var(--font-body)" }}>{item.product.name}</p>
                       {item.size && (
                         <p className="text-[10.5px] text-[#6b7265] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
-                          Size: {item.size}
+                          {variantLabel(item.product, item.size) ?? `Size: ${item.size}`}
                         </p>
                       )}
                       <p className="text-[13px] font-bold text-[#123D2B] mt-1" style={{ fontFamily: "var(--font-body)" }}>

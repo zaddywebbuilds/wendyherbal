@@ -32,13 +32,13 @@ export function Logo({ variant = "dark", className }: LogoProps) {
 
       <div className="flex flex-col">
         <span
-          className={cn("text-lg font-semibold tracking-wide leading-none", textColor)}
+          className={cn("text-[1.35rem] sm:text-[1.5rem] font-bold tracking-[0.02em] leading-none", textColor)}
           style={{ fontFamily: "var(--font-heading)" }}
         >
           WENDY HERBALS
         </span>
         <span
-          className={cn("text-[9px] tracking-widest uppercase leading-none mt-0.5", subColor)}
+          className={cn("text-[8.5px] sm:text-[9px] tracking-[0.18em] uppercase leading-none mt-1", subColor)}
           style={{ fontFamily: "var(--font-body)" }}
         >
           Rooted in Nature. Inspired by Wellness.

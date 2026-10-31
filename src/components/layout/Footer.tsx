@@ -53,10 +53,12 @@ export function Footer() {
             {/* Social */}
             <div className="flex gap-3 mt-6">
               <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer"
+                aria-label="Wendy Herbals on Facebook"
                 className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:border-[#C6A667] hover:text-[#C6A667] transition-colors">
                 <Facebook size={15} />
               </a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
+                aria-label="Message Wendy Herbals on WhatsApp"
                 className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:border-[#C6A667] hover:text-[#C6A667] transition-colors">
                 <MessageCircle size={15} />
               </a>

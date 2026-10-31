@@ -133,6 +133,7 @@ export function Header() {
             <div className="relative flex">
               <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A8B99C] pointer-events-none" />
               <input value={query} onChange={(e) => setQuery(e.target.value)} type="search" placeholder="Search products..."
+                aria-label="Search products"
                 className="w-full h-10 pl-9 pr-3 text-sm bg-white border border-[#E7E0CF] rounded-l-md focus:outline-none focus:border-[#175C3D]"
                 style={{ fontFamily: "var(--font-body)" }} />
               <button type="submit" aria-label="Search" className="h-10 px-4 bg-[#175C3D] text-white rounded-r-md">
