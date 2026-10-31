@@ -183,7 +183,7 @@ const HERBAL_PHOTOS: Record<number, string> = {
   25: "25-pcos-herbs-with-balm.jpg",
   26: "26-endometriosis-with-balm.jpg",
   27: "27-blocked-fallopian-tubes-herbs-with-balm.jpg",
-  28: "fb-scent-leaf-plant.jpg",
+  28: "28-pid-herbs.jpg",
   29: "29-yeast-infection-herbs.jpg",
   30: "fb-production-drums.jpg",
   31: "31-candidiasis-infection-herbs.jpg",
