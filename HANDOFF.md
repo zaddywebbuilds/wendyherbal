@@ -398,6 +398,44 @@ is linked from About, FAQ, Terms and every product page. It states plainly that
 a product name is not a claim, which is the thing most likely to matter if the
 catalogue is ever challenged.
 
+## The design system, and the checkout rule
+
+A review of the live site on 31 Oct 2026 drove a pass over the storefront.
+Two things from it are rules now rather than preferences.
+
+**Rhythm and shape.** Bands are `py-14 lg:py-24`, 56px on a phone and 96px on
+a laptop. The hero opens wider at `py-16 lg:py-28`. Cards are 12px or 16px and
+nothing in between. Shadows stay under 0.2 alpha, because on ivory anything
+heavier reads as dirt. The botanical pattern belongs on the hero and the
+founder band only; over a photograph it is noise. This is written at the top
+of `globals.css`.
+
+**The palette did not change.** The review proposed warming the ivory to
+#F8F3E7. It is #F7F4E9 because that is what the client approved, and swapping
+an approved brand colour is her call.
+
+**Quote before payment.** Checkout sends the order first, Wendy confirms the
+way bill and the full total, and payment follows that figure. The old flow
+said "Pay by Bank Transfer", labelled the product subtotal "Amount to
+transfer" and ended on "I've Paid", which asked people to pay an amount that
+was not their total. Do not reintroduce a total anywhere that excludes the way
+bill: the cart summary says "Products total" for exactly this reason, and the
+WhatsApp message asks for a quote rather than claiming a payment was made.
+
+### Claims removed, and why they keep coming back
+
+Three separate times, copy asserted something nothing supported:
+
+- the hero trust row: "100% Ingredients", "Premium Quality", "Safe & Trusted"
+- the featured row: "New" and "Bestseller", from a hardcoded map of grid
+  positions, on a shop that has taken no orders
+- the About page: that the founder personally prepares, answers and packs,
+  which was written without confirming it
+
+All are gone. The pattern to watch is decorative copy that sounds like a fact.
+On a catalogue named after medical conditions with no NAFDAC review, "Safe"
+is not decoration.
+
 ## The dashboard
 
 Everything on `/admin` is derived in `dashboard-data.ts` from the order

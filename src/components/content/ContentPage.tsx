@@ -14,7 +14,7 @@ import { WHATSAPP_URL, WHATSAPP_NUMBER, FACEBOOK_URL } from "@/lib/constants";
 export function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: string; intro?: string }) {
   return (
     <section className="bg-[#F7F4E9] border-b border-[#123D2B]/8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
         <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#175C3D] mb-3"
           style={{ fontFamily: "var(--font-body)" }}>
           {eyebrow}
@@ -38,7 +38,7 @@ export function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: st
 export function PageBody({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16 space-y-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24 space-y-12">
         {children}
       </div>
     </div>
@@ -99,7 +99,7 @@ export function Callout({
   const t = TONES[tone];
   const Icon = t.icon;
   return (
-    <div className="rounded-lg border-l-[3px] p-4 sm:p-5"
+    <div className="rounded-xl border-l-[3px] p-4 sm:p-5"
       style={{ background: t.bg, borderLeftColor: t.border }}>
       <div className="flex gap-3">
         <Icon size={17} className="shrink-0 mt-[2px]" style={{ color: t.iconColor }} strokeWidth={1.8} />
@@ -126,7 +126,7 @@ export function EffectiveDate({ date }: { date: string }) {
 /** WhatsApp-first contact block. The shop genuinely runs on WhatsApp. */
 export function ContactStrip({ className }: { className?: string }) {
   return (
-    <div className={cn("rounded-xl bg-[#123D2B] text-white p-6 sm:p-8", className)}>
+    <div className={cn("rounded-2xl bg-[#123D2B] text-white p-6 sm:p-8", className)}>
       <h2 className="text-[1.4rem] leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
         Questions? Message Wendy Herbals.
       </h2>
