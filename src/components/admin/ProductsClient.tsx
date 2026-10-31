@@ -94,11 +94,13 @@ export function ProductsClient({ products }: { products: Product[] }) {
             <table className="w-full text-left" style={{ fontFamily: "var(--font-body)" }}>
               <thead>
                 <tr className="text-[10.5px] uppercase tracking-wider text-[#A8B99C] border-b border-[#EFE9DD]">
-                  <th className="pb-2.5 font-semibold">Product</th>
-                  <th className="pb-2.5 font-semibold">Collection</th>
-                  <th className="pb-2.5 font-semibold text-right">Price</th>
-                  <th className="pb-2.5 font-semibold">Photo</th>
-                  <th className="pb-2.5 font-semibold">NAFDAC</th>
+                  <th className="pb-2.5 pr-4 font-semibold">Product</th>
+                  <th className="pb-2.5 pr-4 font-semibold">Collection</th>
+                  {/* pr-6: the price is right-aligned and Photo is left-aligned,
+                      so without it they render as one run of text. */}
+                  <th className="pb-2.5 pr-6 font-semibold text-right">Price</th>
+                  <th className="pb-2.5 pr-4 font-semibold">Photo</th>
+                  <th className="pb-2.5 pr-4 font-semibold">NAFDAC</th>
                   <th className="pb-2.5 font-semibold text-right">Edit</th>
                 </tr>
               </thead>
@@ -162,7 +164,7 @@ function Nafdac({ product }: { product: Product }) {
 function Row({ product }: { product: Product }) {
   return (
     <tr className="border-b border-[#F4F0E4] last:border-0 text-[12.5px]">
-      <td className="py-2.5">
+      <td className="py-2.5 pr-4">
         <div className="flex items-center gap-3">
           <Thumb product={product} />
           <div className="min-w-0">
@@ -171,16 +173,16 @@ function Row({ product }: { product: Product }) {
           </div>
         </div>
       </td>
-      <td className="py-2.5 text-[#6b7265]">{CATEGORY_LABELS[product.category]}</td>
-      <td className="py-2.5 text-right"><Price product={product} /></td>
-      <td className="py-2.5">
+      <td className="py-2.5 pr-4 text-[#6b7265]">{CATEGORY_LABELS[product.category]}</td>
+      <td className="py-2.5 pr-6 text-right"><Price product={product} /></td>
+      <td className="py-2.5 pr-4">
         {product.images.length > 0 ? (
           <span className="text-[#175C3D]">Yes</span>
         ) : (
           <span className="text-[#B5713A]">Pending</span>
         )}
       </td>
-      <td className="py-2.5"><Nafdac product={product} /></td>
+      <td className="py-2.5 pr-4"><Nafdac product={product} /></td>
       <td className="py-2.5 text-right whitespace-nowrap">
         <Link href={`/admin/products/${product.sku}`}
           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#123D2B] text-white text-[11.5px] font-medium hover:bg-[#175C3D] transition-colors">
