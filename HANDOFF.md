@@ -60,7 +60,7 @@ distributes, so this is not a leak — but make it a choice, not a discovery. If
 the client objects, make the repo private; do not strip the details, checkout
 needs them.
 
-Product photography is now **partly done**: 69 of 93 products carry an image.
+Product photography is now **partly done**: 72 of 93 products carry an image.
 Read Task 2 before touching it: what the client supplied is not what that
 section originally anticipated, and two questions are still open with her.
 
@@ -82,7 +82,7 @@ section originally anticipated, and two questions are still open with her.
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
-| Product photos | ◐ 69 of 93 wired. Client renders, not photos. Read Task 2 |
+| Product photos | ◐ 72 of 93 wired. Client renders, not photos. Read Task 2 |
 | Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |
 | Product copy | ✅ All 93 have real descriptions, generated from catalogue facts |
 | Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
@@ -204,7 +204,7 @@ later, authoritative source.
 
 ### What is wired now
 
-**69 of 93 products carry an image.** Files live in `public/media/products/`
+**72 of 93 products carry an image.** Files live in `public/media/products/`
 (20MB) and are mapped in `src/lib/products.ts` by `HERBAL_PHOTOS` (keyed by
 source S/N) and `SPICE_PHOTOS` (keyed by exact product name). The other 24 keep
 the branded placeholder from `src/components/ui/ProductImage.tsx`.
@@ -226,15 +226,25 @@ Principles 1, 3 and 4 was put to them. It is settled; do not quietly revert it.
 **Two things still need the client:** confirm these labels match what actually
 ships, and resolve the ® and the on-label claims before NAFDAC review.
 
-### Still without an image (24)
+### Three more came out of the hero video
 
-Herbal S/N 14, 19, 21, 22, 23, 25, 27, 28, 30, 32, 34, 44, 47, 48, 53, 59, 61,
-63, 75. Three of those (Fibroid 21, Ovarian Cyst 23, PCOS 25) sit in
-`getFeatured()`, so the homepage row runs two photos to three placeholders.
+The hero clip supplied on 30 Oct 2026 contains packshots for products that had
+none. Frames were cut from it at full resolution and cropped square for
+Fibroid Herbs with Balm (21), Ovarian Cyst Herbs with Balm (23) and Banga
+Spices (83). These are the client's own renders of those exact products, so
+this is not an image borrowed from a neighbouring product. The clip also shows
+Sheabutter, Original Honey and Herbal Palm Kernel Oil, which already had
+images, so nothing was replaced.
 
-Spices: Banga (Ofe Akwu), Ginger, Turmeric, Garlic, Black Pepper. Those are
-exactly the four the client's brief singled out, plus one. Her brief was
-specific about how they must look:
+### Still without an image (21)
+
+Herbal S/N 14, 19, 22, 25, 27, 28, 30, 32, 34, 44, 47, 48, 53, 59, 61, 63, 75.
+PCOS (25) is the only one left in `getFeatured()`, so the homepage row now
+runs four photos to one placeholder.
+
+Spices: Ginger, Turmeric, Garlic, Black Pepper. Three of the four the client's
+brief singled out are still missing. Her brief was specific about how they
+must look:
 
 - **Banga (Ofe Akwu)** — must show ripe reddish-orange oil palm fruits
 - **Ginger Powder** — ginger roots visible
@@ -288,7 +298,7 @@ Roughly in priority order.
 
    Products is built: `/admin/products` lists the whole catalogue with search,
    a category filter and gap filters for the three things that need the client
-   (24 without a photo, 12 without a price, 73 with NAFDAC pending), plus a
+   (21 without a photo, 12 without a price, 73 with NAFDAC pending), plus a
    catalogue CSV at `/api/admin/products/export` so prices can be worked
    through offline.
 

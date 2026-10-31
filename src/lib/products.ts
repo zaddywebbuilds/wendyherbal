@@ -168,6 +168,8 @@ const HERBAL_PHOTOS: Record<number, string> = {
   17: "17-prostate-enlargement-herbs.jpg",
   18: "18-feminine-herbal-wash.jpg",
   20: "20-ceased-period-herbs.jpg",
+  21: "21-fibroid-herbs-with-balm.jpg",
+  23: "23-ovarian-cyst-herbs-with-balm.jpg",
   24: "24-hormonal-imbalance-herbs.jpg",
   26: "26-endometriosis-with-balm.jpg",
   29: "29-yeast-infection-herbs.jpg",
@@ -215,6 +217,7 @@ const HERBAL_PHOTOS: Record<number, string> = {
 };
 
 const SPICE_PHOTOS: Record<string, string> = {
+  "Banga Spices (Ofe Akwu)": "83-banga-spices-ofe-akwu.jpg",
   "Jollof Rice Spice": "85-jollof-rice-spice.jpg",
   "Stew Spice": "82-stew-spice.jpg",
   "Soup Mixed Spices": "84-soup-mixed-spices.jpg",
