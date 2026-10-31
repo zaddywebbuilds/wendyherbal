@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Returns & Refunds",
   description:
     "What to do if an order from Wendy Herbals arrives wrong, damaged or incomplete, and how refunds are handled.",
+  alternates: { canonical: "/returns" },
 };
 
 const UPDATED = "30 October 2026";

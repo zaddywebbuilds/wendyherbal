@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     description: "What we make, who makes it, and how we talk about our products.",
     images: [{ url: BRAND_IMAGES.measuring.src, alt: BRAND_IMAGES.measuring.alt }],
   },
+  alternates: { canonical: "/about" },
 };
 
 // Counted from the catalogue at build time rather than written in by hand, so

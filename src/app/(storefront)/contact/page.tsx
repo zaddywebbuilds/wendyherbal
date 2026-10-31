@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Contact",
   description:
     "Reach Wendy Herbals on WhatsApp for orders, product questions and delivery. Nationwide delivery across Nigeria.",
+  alternates: { canonical: "/contact" },
 };
 
 const CHANNELS = [

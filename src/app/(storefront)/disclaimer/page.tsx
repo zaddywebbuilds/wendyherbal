@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Medical Disclaimer",
   description:
     "Wendy Herbals products are not medicines and are not intended to diagnose, treat, cure or prevent any disease. Read this before buying or using them.",
+  alternates: { canonical: "/disclaimer" },
 };
 
 const UPDATED = "30 October 2026";

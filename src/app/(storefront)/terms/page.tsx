@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
     "The terms you are agreeing to when you order from Wendy Herbals: prices, payment, delivery, availability and governing law.",
+  alternates: { canonical: "/terms" },
 };
 
 const UPDATED = "30 October 2026";

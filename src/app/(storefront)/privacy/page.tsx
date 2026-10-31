@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "What Wendy Herbals collects when you order, where it is stored, who else sees it, and your rights under the Nigeria Data Protection Act.",
+  alternates: { canonical: "/privacy" },
 };
 
 const UPDATED = "30 October 2026";

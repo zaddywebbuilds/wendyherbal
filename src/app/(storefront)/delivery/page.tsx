@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Delivery Information",
   description:
     "How Wendy Herbals delivers across Nigeria, how the way bill is agreed, and what happens after you pay.",
+  alternates: { canonical: "/delivery" },
 };
 
 const UPDATED = "30 October 2026";

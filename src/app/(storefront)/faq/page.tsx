@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "FAQs",
   description:
     "How to order from Wendy Herbals, how payment and delivery work, and what our product names do and do not mean.",
+  alternates: { canonical: "/faq" },
 };
 
 const ENQUIRY_COUNT = PRODUCTS.filter((p) => p.price === null).length;

@@ -7,6 +7,7 @@ import { getCatalogue } from "@/lib/catalogue";
 export const metadata: Metadata = {
   title: "Shop",
   description: "Browse Wendy Herbals' botanical collections, natural body care and authentic Nigerian kitchen spices.",
+  alternates: { canonical: "/shop" },
 };
 
 export const instant = false;

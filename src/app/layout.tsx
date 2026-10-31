@@ -19,7 +19,15 @@ const manrope = Manrope({
   display: "swap",
 });
 
+/**
+ * metadataBase turns the relative image and canonical paths below into
+ * absolute URLs. Without it Open Graph images silently do not render when a
+ * link is shared, which is most of this shop's traffic: Facebook and WhatsApp.
+ */
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+
 export const metadata: Metadata = {
+  ...(SITE_URL ? { metadataBase: new URL(SITE_URL) } : {}),
   title: { default: `${SITE_NAME} — ${SITE_TAGLINE}`, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
   openGraph: {
