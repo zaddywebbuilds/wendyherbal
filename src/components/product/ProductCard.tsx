@@ -33,7 +33,7 @@ export function ProductCard({ product, badge, className }: Props) {
 
   return (
     <div className={cn(
-      "group relative flex flex-col bg-white rounded-lg border border-[#EFE9DD] overflow-hidden transition-all duration-300 hover:border-[#C6A667]/50 hover:shadow-[0_10px_30px_-12px_rgba(18,61,43,0.22)]",
+      "group relative flex flex-col bg-white rounded-xl border border-[#EFE9DD] overflow-hidden transition-all duration-300 hover:border-[#C6A667]/50 hover:shadow-[0_14px_36px_-18px_rgba(18,61,43,0.18)]",
       className
     )}>
       {/* Badge */}

@@ -50,7 +50,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
         <div className="grid lg:grid-cols-[55fr_45fr] gap-8 lg:gap-11">
           {/* ---------- Gallery ---------- */}
           <div className="min-w-0">
-            <div className="group rounded-xl overflow-hidden bg-white border border-[#EFE9DD]">
+            <div className="group rounded-2xl overflow-hidden bg-white border border-[#EFE9DD]">
               <ProductImage src={product.images[activeImg]} alt={product.name} category={product.category}
                 className="aspect-square" sizes="(max-width:1024px) 100vw, 55vw" priority />
             </div>
@@ -114,14 +114,33 @@ export function ProductDetail({ product, related }: { product: Product; related:
             )}
 
             {/* What's included */}
-            <div className="mt-5 flex items-start gap-2.5 text-[12.5px] text-[#4a5245]"
+            <div className="mt-5 rounded-xl border border-[#EFE9DD] bg-[#FCFAF3] p-4"
               style={{ fontFamily: "var(--font-body)" }}>
-              <Package size={15} className="text-[#175C3D] shrink-0 mt-0.5" />
-              <span>
-                {product.includes_balm
-                  ? "Supplied with a matching balm container."
-                  : "Packaging and contents are confirmed at order."}
-              </span>
+              <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#175C3D] mb-2.5">
+                <Package size={14} /> What&rsquo;s included
+              </p>
+              <ul className="space-y-1.5 text-[12.5px] leading-relaxed text-[#4a5245]">
+                <li className="flex gap-2.5">
+                  <span aria-hidden className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#C6A667] shrink-0" />
+                  <span>{product.name}, as described on this page.</span>
+                </li>
+                {product.includes_balm && (
+                  <li className="flex gap-2.5">
+                    <span aria-hidden className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#C6A667] shrink-0" />
+                    <span>A matching balm or cream, supplied with it.</span>
+                  </li>
+                )}
+                <li className="flex gap-2.5">
+                  <span aria-hidden className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#A8B99C] shrink-0" />
+                  <span>
+                    <span className="font-medium text-[#252B23]">Not included:</span> the way bill.
+                    It is confirmed with you on WhatsApp before you pay.
+                  </span>
+                </li>
+              </ul>
+              <p className="mt-2.5 text-[11.5px] text-[#A8B99C] leading-relaxed">
+                Exact pack sizes and contents are confirmed when you order.
+              </p>
             </div>
 
             {/* Quantity + actions */}
@@ -171,8 +190,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
             <div className="mt-5 flex items-center gap-2 text-[12px] text-[#4a5245] p-3 bg-[#FCFAF3] border border-[#EFE9DD] rounded-lg"
               style={{ fontFamily: "var(--font-body)" }}>
               <Truck size={15} className="text-[#175C3D] shrink-0" />
-              The way bill is not included in this price. It is confirmed with you on WhatsApp
-              before you pay.
+              Questions about a product or your order? Message us on WhatsApp.
             </div>
 
             {/* Tabs */}

@@ -2,7 +2,10 @@
 import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SlidersHorizontal, X, Search as SearchIcon, PackageX } from "lucide-react";
+import Image from "next/image";
 import { ProductCard } from "@/components/product/ProductCard";
+import { CATEGORY_IMAGE } from "@/lib/media";
+import { COLLECTIONS } from "@/lib/constants";
 import { CATEGORY_LABELS } from "@/lib/products";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/lib/types";
@@ -130,20 +133,53 @@ export function ShopClient({ products: PRODUCTS }: { products: Product[] }) {
 
   return (
     <div className="bg-[#F7F4E9] min-h-screen">
-      {/* Page head */}
-      <div className="bg-[#FCFAF3] border-b border-[#EFE9DD]">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-9">
-          <h1 className="text-[2.1rem] lg:text-[2.6rem] text-[#123D2B] font-medium"
-            style={{ fontFamily: "var(--font-heading)" }}>
-            {category === "all" ? "All Products" : CATEGORY_LABELS[category] ?? "Shop"}
-          </h1>
-          <p className="text-[13px] text-[#6b7265] mt-1" style={{ fontFamily: "var(--font-body)" }}>
-            {filtered.length} {filtered.length === 1 ? "product" : "products"}
-          </p>
+      {/* Page head. Choosing a collection gives it a banner rather than just
+          swapping the heading, using the same photograph as its homepage card
+          so the two read as one journey. */}
+      {category === "all" || !CATEGORY_IMAGE[category] ? (
+        <div className="bg-[#FCFAF3] border-b border-[#EFE9DD]">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-9">
+            <h1 className="text-[2.1rem] lg:text-[2.6rem] text-[#123D2B] font-medium"
+              style={{ fontFamily: "var(--font-heading)" }}>
+              All Products
+            </h1>
+            <p className="text-[13px] text-[#6b7265] mt-1" style={{ fontFamily: "var(--font-body)" }}>
+              {filtered.length} {filtered.length === 1 ? "product" : "products"}
+            </p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="relative border-b border-[#EFE9DD]">
+          <div className="relative h-[200px] sm:h-[240px] lg:h-[280px] overflow-hidden">
+            <Image src={CATEGORY_IMAGE[category].src} alt={CATEGORY_IMAGE[category].alt}
+              fill priority sizes="100vw" className="object-cover" />
+            <div aria-hidden className="absolute inset-0"
+              style={{ background: "linear-gradient(90deg, rgba(9,28,19,0.88) 0%, rgba(9,28,19,0.62) 45%, rgba(9,28,19,0.25) 100%)" }} />
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-7">
+            <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+              <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#C6A667] mb-2"
+                style={{ fontFamily: "var(--font-body)" }}>
+                Collection
+              </p>
+              <h1 className="text-[2.1rem] lg:text-[2.9rem] leading-[1.08] text-white font-medium"
+                style={{ fontFamily: "var(--font-heading)" }}>
+                {CATEGORY_LABELS[category] ?? "Shop"}
+              </h1>
+              {COLLECTIONS.find((c) => c.id === category)?.description && (
+                <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/80 max-w-md"
+                  style={{ fontFamily: "var(--font-body)" }}>
+                  {COLLECTIONS.find((c) => c.id === category)!.description}
+                </p>
+              )}
+              <p className="mt-3 text-[12.5px] text-white/65" style={{ fontFamily: "var(--font-body)" }}>
+                {filtered.length} {filtered.length === 1 ? "product" : "products"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
         <div className="grid lg:grid-cols-[220px_1fr] gap-7">
           {/* Sidebar */}
           <aside className="hidden lg:block">
