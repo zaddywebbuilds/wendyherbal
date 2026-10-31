@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import {
-  ChevronLeft, Copy, Check, MessageCircle, Landmark, ShoppingBag, Info,
+  ChevronLeft, Copy, Check, MessageCircle, Landmark, ShoppingBag, Info, UserPlus,
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { ProductImage } from "@/components/ui/ProductImage";
@@ -279,6 +279,14 @@ export function CheckoutClient() {
                       Wendy will reply with the way bill and your full total. Transfer that amount,
                       then send her the receipt.
                     </p>
+                    {/* Saving the number is what lets her send delivery updates later:
+                        WhatsApp only delivers a broadcast to people who have the
+                        sender saved as a contact. */}
+                    <a href="/contact-card" download="wendy-herbals.vcf"
+                      className="mt-2.5 inline-flex items-center gap-1.5 text-[12px] font-medium text-[#123D2B] underline underline-offset-2"
+                      style={{ fontFamily: "var(--font-body)" }}>
+                      <UserPlus size={13} /> Save our number to your phone
+                    </a>
                     <button onClick={() => { clearCart(); setStep("details"); setAddress(EMPTY); setNotes(""); setSent(false); }}
                       className="mt-2.5 text-[12px] font-medium text-[#123D2B] underline underline-offset-2"
                       style={{ fontFamily: "var(--font-body)" }}>

@@ -1,8 +1,10 @@
 import { connection } from "next/server";
-import { Users, Download, MessageCircle, Phone, Mail, Wallet, ExternalLink } from "lucide-react";
+import { Users, MessageCircle, Phone, Mail, Wallet, ExternalLink } from "lucide-react";
 import { isSheetsReady, listCustomers, activeSpreadsheetUrl, type SheetCustomer } from "@/lib/sheets";
 import { FORMAT_NGN } from "@/lib/constants";
+import { isReachablePhone } from "@/lib/lead-export";
 import { Stat } from "@/components/admin/Stat";
+import { LeadDownloads } from "@/components/admin/LeadDownloads";
 
 export const instant = false;
 
@@ -29,6 +31,7 @@ export default async function CustomersPage() {
 
   const consented = customers.filter((c) => c.consent);
   const lifetime = customers.reduce((s, c) => s + c.spent, 0);
+  const unreachable = customers.filter((c) => !isReachablePhone(c.phone)).length;
 
   return (
     <div className="p-5 lg:p-7 max-w-[1700px]">
@@ -43,22 +46,13 @@ export default async function CustomersPage() {
           </p>
         </div>
 
-        <div className="flex gap-2.5">
-          {sheetUrl && (
-            <a href={sheetUrl} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 h-10 px-4 bg-[#123D2B] text-white rounded-lg text-[12.5px] font-medium hover:bg-[#175C3D] transition-colors"
-              style={{ fontFamily: "var(--font-body)" }}>
-              <ExternalLink size={14} /> Open Google Sheet
-            </a>
-          )}
-          {customers.length > 0 && (
-            <a href="/api/admin/customers/export"
-              className="inline-flex items-center gap-2 h-10 px-4 bg-white border border-[#E9E4D6] rounded-lg text-[12.5px] font-medium text-[#252B23] hover:border-[#175C3D] transition-colors"
-              style={{ fontFamily: "var(--font-body)" }}>
-              <Download size={14} /> Export CSV
-            </a>
-          )}
-        </div>
+        {sheetUrl && (
+          <a href={sheetUrl} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 h-10 px-4 bg-white border border-[#E9E4D6] rounded-lg text-[12.5px] font-medium text-[#252B23] hover:border-[#175C3D] transition-colors"
+            style={{ fontFamily: "var(--font-body)" }}>
+            <ExternalLink size={14} /> Open Google Sheet
+          </a>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
@@ -66,6 +60,14 @@ export default async function CustomersPage() {
         <Stat label="Opted in to updates" value={String(consented.length)} icon={MessageCircle} tint="#E7EEF6" color="#2563EB" />
         <Stat label="Lifetime value" value={FORMAT_NGN(lifetime)} icon={Wallet} tint="#FBF0DE" color="#B5713A" />
       </div>
+
+      {customers.length > 0 && (
+        <LeadDownloads
+          total={customers.length}
+          consented={consented.length}
+          unreachable={unreachable}
+        />
+      )}
 
       <section className="bg-white rounded-xl border border-[#E9E4D6] p-4">
         {!configured ? (

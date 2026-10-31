@@ -78,7 +78,7 @@ section originally anticipated, and two questions are still open with her.
 | Buyer capture | ✅ Done — writes to her Google Sheet |
 | Admin login | ✅ Done — password gate |
 | Admin dashboard | ✅ Reads the order sheet. Real figures, honest zeros |
-| Admin Customers | ✅ Done — list, WhatsApp links, CSV export |
+| Admin Customers | ✅ Done — list, WhatsApp links, contact-card and CSV downloads |
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
@@ -352,10 +352,49 @@ Roughly in priority order.
    account. Still missing: order history and tracking.
 5. **Shipping zones.** Way bill is currently agreed on WhatsApp, matching her
    price list note. A configurable engine was specced but not built.
-6. **Newsletter storage.** Validates input; only persists with Supabase
-   configured, which it currently is not. Says so rather than pretending.
-7. **Real order statuses.** The sheet has a Status column she edits by hand.
-   Admin cannot yet update order state.
+6. **Real order statuses.** The sheet has a Status column she edits by hand.
+   Admin cannot update order state, and **this is now a decision, not a gap** —
+   see "What the Google Sheet is for" below. Do not build a writer.
+
+---
+
+## What the Google Sheet is for
+
+Settled by the client on 31 Oct 2026: **the sheet's job is keeping customer
+contacts so she can follow up later.** It is the order book and the address
+book, nothing more.
+
+So **do not build order-status write-back.** Two writers on one cell, with her
+editing by hand in Sheets while an admin page holds a stale copy, buys a
+conflict-resolution problem in exchange for something she did not ask for.
+`listOrders()` still carries each row's 1-based `row` number; leave it
+unused rather than acting on it.
+
+### Following up, and why the contact card exists
+
+She works from a phone and follows up on WhatsApp, so the export that matters
+is **`.vcf`, not `.csv`**: WhatsApp only shows people who are in the phone's
+contacts. `/admin/customers` offers both, each in two scopes — everyone who
+bought, and only those who ticked the updates box. The scope is chosen before
+the download rather than left as a column to remember to read, because that is
+a consent line.
+
+**A WhatsApp broadcast only reaches recipients who have the sender's number
+saved.** Everyone else is silently skipped, with no error. That is why
+`/contact-card` exists and why the checkout confirmation offers "Save our
+number to your phone": without it, a carefully kept buyer list still reaches
+nobody. If that link is ever removed, the follow-up feature stops working and
+nothing will report it.
+
+Numbers too short to dial are left out of the `.vcf` and the page says how
+many, so a half-complete contacts file is not mistaken for the whole list.
+
+### Not the WhatsApp Business Platform
+
+Bulk sending through Meta's API needs a verified business, a phone number
+dedicated to the API and separate from the WhatsApp app, Meta-approved
+marketing templates, and per-message fees. It is a setup project, not a
+setting. The broadcast path above costs nothing and needs no approval.
 
 ---
 
