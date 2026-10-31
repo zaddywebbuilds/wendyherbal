@@ -74,16 +74,16 @@ export default function AboutPage() {
         <Section title="In the workshop">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {GALLERY.map((frame) => (
-              <figure key={frame.src} className="relative rounded-lg overflow-hidden aspect-[4/5] bg-[#EFE9DD]">
-                <Image src={frame.src} alt={frame.alt} fill sizes="(max-width:1024px) 50vw, 30vw"
-                  className="object-cover" />
+              <figure key={frame.src}
+                className="flex flex-col rounded-xl overflow-hidden bg-white border border-[#EFE9DD]">
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
+                  <Image src={frame.src} alt={frame.alt} fill sizes="(max-width:1024px) 50vw, 30vw"
+                    className="object-cover" />
+                </div>
                 {frame.caption && (
-                  <>
-                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#09231a]/80 via-transparent to-transparent" />
-                    <figcaption className="absolute bottom-0 left-0 right-0 p-3 text-[11px] leading-snug text-white/90">
-                      {frame.caption}
-                    </figcaption>
-                  </>
+                  <figcaption className="p-3 text-[11.5px] leading-snug text-[#4a5247]">
+                    {frame.caption}
+                  </figcaption>
                 )}
               </figure>
             ))}

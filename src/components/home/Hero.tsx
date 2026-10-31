@@ -54,25 +54,12 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#F7F4E9] via-[#F2EDDE] to-[#E8E2CE]">
-      {/* Botanical texture */}
-      <div aria-hidden className="absolute inset-0 opacity-[0.07] pointer-events-none">
-        <svg width="100%" height="100%">
-          <defs>
-            <pattern id="leafPattern" width="120" height="120" patternUnits="userSpaceOnUse" patternTransform="rotate(12)">
-              <path d="M60 20C60 20 40 32 40 54C40 68 49 78 60 78C71 78 80 68 80 54C80 32 60 20 60 20Z" fill="#123D2B" />
-              <line x1="60" y1="24" x2="60" y2="76" stroke="#123D2B" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#leafPattern)" />
-        </svg>
-      </div>
-
-      {/* Soft greenery glows */}
-      <div aria-hidden className="absolute -left-32 top-10 w-96 h-96 rounded-full bg-[#A8B99C]/25 blur-[90px] pointer-events-none" />
-      <div aria-hidden className="absolute -right-20 bottom-0 w-[420px] h-[420px] rounded-full bg-[#C6A667]/15 blur-[100px] pointer-events-none" />
+      {/* No pattern and no glows behind the copy. Everything on this page
+          sits on a plain surface; the only imagery is the clip, in its own
+          frame on the right. */}
 
       <div className="relative max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-14 items-center py-16 lg:py-28">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-7 lg:gap-12 items-center py-9 lg:py-16">
           {/* ---------- Left: copy ---------- */}
           <div className="max-w-xl">
             <motion.p custom={0} variants={fade} initial="hidden" animate="show"
@@ -98,7 +85,7 @@ export function Hero() {
             </motion.p>
 
             <motion.div custom={3} variants={fade} initial="hidden" animate="show"
-              className="mt-8 flex flex-wrap gap-3">
+              className="mt-6 flex flex-wrap gap-3">
               <Link href="/shop"
                 className="group inline-flex items-center gap-2 px-7 py-3.5 bg-[#123D2B] text-white text-sm font-medium rounded-md hover:bg-[#175C3D] transition-all active:scale-[0.98]"
                 style={{ fontFamily: "var(--font-body)" }}>
@@ -117,7 +104,7 @@ export function Hero() {
 
             {/* Trust row */}
             <motion.div custom={4} variants={fade} initial="hidden" animate="show"
-              className="mt-10 grid grid-cols-3 sm:grid-cols-5 gap-x-3 gap-y-5 max-w-lg">
+              className="mt-7 grid grid-cols-3 sm:grid-cols-5 gap-x-3 gap-y-5 max-w-lg">
               {TRUST.map(({ icon: Icon, title, sub }) => (
                 <div key={title} className="flex items-center gap-2">
                   <Icon size={17} className="text-[#175C3D] shrink-0" strokeWidth={1.6} />
@@ -151,12 +138,12 @@ export function Hero() {
                 <Image src={HERO_CLIP.poster} alt={HERO_CLIP.alt} fill priority
                   sizes="(max-width:1024px) 100vw, 52vw" className="object-cover" />
               )}
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0b241a]/55 via-[#0b241a]/10 to-transparent" />
-              <p className="absolute bottom-3 left-4 right-4 text-[10px] uppercase tracking-[0.18em] text-white/85"
-                style={{ fontFamily: "var(--font-body)" }}>
-                {HERO_CLIP.caption}
-              </p>
             </div>
+
+            <p className="mt-2.5 text-[10.5px] uppercase tracking-[0.18em] text-[#6b7265]"
+              style={{ fontFamily: "var(--font-body)" }}>
+              {HERO_CLIP.caption}
+            </p>
 
             {/* Gold seal */}
             <motion.div initial={{ opacity: 0, rotate: -25, scale: 0.7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }}

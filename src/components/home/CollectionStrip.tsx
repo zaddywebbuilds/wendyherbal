@@ -15,7 +15,7 @@ const CARDS = [
 
 export function CollectionStrip() {
   return (
-    <section className="bg-[#FCFAF3] py-14 lg:py-24">
+    <section className="bg-[#FCFAF3] py-10 lg:py-16">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="relative text-center mb-9">
@@ -53,7 +53,7 @@ export function CollectionStrip() {
                     gradient that has to be dark enough to carry it. */}
                 <Link href={`/shop?category=${c.id}`}
                   className="group block rounded-2xl overflow-hidden bg-white border border-[#EFE9DD] transition-colors hover:border-[#C6A667]">
-                  <div className="relative aspect-[4/3] overflow-hidden bg-[#EFE9DD]">
+                  <div className="relative aspect-[3/2] sm:aspect-[4/3] overflow-hidden bg-[#EFE9DD]">
                     <Image src={img.src} alt={img.alt} fill sizes="(max-width:768px) 50vw, 20vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>

@@ -13,7 +13,7 @@ export function WorkshopBand() {
   const still = BRAND_IMAGES.productionDrums;
 
   return (
-    <section className="bg-[#F7F4E9] py-14 lg:py-24">
+    <section className="bg-[#F7F4E9] py-10 lg:py-16">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-9">
           <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#175C3D] mb-2.5"
@@ -35,11 +35,11 @@ export function WorkshopBand() {
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
           {BRAND_CLIPS.map((clip, i) => (
             <WorkshopTile key={clip.src} clip={clip} priority={i === 0}
-              className={i === 0 ? "col-span-2 lg:row-span-2 lg:aspect-auto" : undefined} />
+              className={i === 0 ? "lg:col-span-2 lg:row-span-2" : undefined} />
           ))}
 
           <figure className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-[#EFE9DD]">
-            <div className="relative aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
+            <div className="relative aspect-square sm:aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
               <Image src={still.src} alt={still.alt} fill sizes="(max-width:1024px) 50vw, 25vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>

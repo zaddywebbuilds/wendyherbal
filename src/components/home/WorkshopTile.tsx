@@ -35,7 +35,7 @@ export function WorkshopTile({ clip, priority, className }: {
 
   return (
     <figure className={`group flex flex-col rounded-2xl overflow-hidden bg-white border border-[#EFE9DD] ${className ?? ""}`}>
-      <div className="relative aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
+      <div className="relative aspect-square sm:aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
       {showVideo ? (
         <video
           className="absolute inset-0 w-full h-full object-cover"

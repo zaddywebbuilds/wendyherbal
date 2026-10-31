@@ -149,37 +149,41 @@ export function ShopClient({ products: PRODUCTS }: { products: Product[] }) {
           </div>
         </div>
       ) : (
-        <div className="relative border-b border-[#EFE9DD]">
-          <div className="relative h-[200px] sm:h-[240px] lg:h-[280px] overflow-hidden">
-            <Image src={CATEGORY_IMAGE[category].src} alt={CATEGORY_IMAGE[category].alt}
-              fill priority sizes="100vw" className="object-cover" />
-            <div aria-hidden className="absolute inset-0"
-              style={{ background: "linear-gradient(90deg, rgba(9,28,19,0.88) 0%, rgba(9,28,19,0.62) 45%, rgba(9,28,19,0.25) 100%)" }} />
+        /* The photograph sits beside the words rather than behind them, so
+           nothing needs a scrim and the heading keeps brand colour. */
+        <div className="bg-[#FCFAF3] border-b border-[#EFE9DD]">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 lg:gap-6">
+              <div className="relative w-full sm:w-[170px] lg:w-[200px] shrink-0 aspect-[16/9] sm:aspect-square rounded-2xl overflow-hidden bg-[#EFE9DD]">
+                <Image src={CATEGORY_IMAGE[category].src} alt={CATEGORY_IMAGE[category].alt}
+                  fill priority sizes="(max-width:640px) 100vw, 200px" className="object-cover" />
+              </div>
 
-            <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-              <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#C6A667] mb-2"
-                style={{ fontFamily: "var(--font-body)" }}>
-                Collection
-              </p>
-              <h1 className="text-[2.1rem] lg:text-[2.9rem] leading-[1.08] text-white font-medium"
-                style={{ fontFamily: "var(--font-heading)" }}>
-                {CATEGORY_LABELS[category] ?? "Shop"}
-              </h1>
-              {COLLECTIONS.find((c) => c.id === category)?.description && (
-                <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/80 max-w-md"
+              <div className="min-w-0">
+                <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#175C3D] mb-1.5"
                   style={{ fontFamily: "var(--font-body)" }}>
-                  {COLLECTIONS.find((c) => c.id === category)!.description}
+                  Collection
                 </p>
-              )}
-              <p className="mt-3 text-[12.5px] text-white/65" style={{ fontFamily: "var(--font-body)" }}>
-                {filtered.length} {filtered.length === 1 ? "product" : "products"}
-              </p>
+                <h1 className="text-[1.9rem] lg:text-[2.4rem] leading-[1.08] text-[#123D2B] font-medium"
+                  style={{ fontFamily: "var(--font-heading)" }}>
+                  {CATEGORY_LABELS[category] ?? "Shop"}
+                </h1>
+                {COLLECTIONS.find((c) => c.id === category)?.description && (
+                  <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#4a5247] max-w-lg"
+                    style={{ fontFamily: "var(--font-body)" }}>
+                    {COLLECTIONS.find((c) => c.id === category)!.description}
+                  </p>
+                )}
+                <p className="mt-1.5 text-[12.5px] text-[#6b7265]" style={{ fontFamily: "var(--font-body)" }}>
+                  {filtered.length} {filtered.length === 1 ? "product" : "products"}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
         <div className="grid lg:grid-cols-[220px_1fr] gap-7">
           {/* Sidebar */}
           <aside className="hidden lg:block">

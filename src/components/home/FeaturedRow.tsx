@@ -21,7 +21,7 @@ export function FeaturedRow({ products }: { products: Product[] }) {
     // relative + overflow-hidden: the promo card carries a decorative blur
     // circle offset past its own right edge, which otherwise widens the page
     // on narrow screens.
-    <section className="relative overflow-hidden bg-[#F7F4E9] py-14 lg:py-24">
+    <section className="relative overflow-hidden bg-[#F7F4E9] py-10 lg:py-16">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_440px] gap-6 lg:gap-7">
 
@@ -75,20 +75,8 @@ export function FeaturedRow({ products }: { products: Product[] }) {
             className="relative rounded-xl overflow-hidden min-h-[340px] lg:min-h-full flex flex-col justify-center p-7 lg:p-8"
             style={{ background: "linear-gradient(145deg,#F6E4CA 0%,#EBCFA6 48%,#D9B478 100%)" }}
           >
-            {/* spice texture */}
-            <div aria-hidden className="absolute inset-0 opacity-[0.16]">
-              <svg width="100%" height="100%">
-                <defs>
-                  <pattern id="spiceDots" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
-                    <circle cx="7" cy="7" r="2.4" fill="#8B4513" />
-                    <circle cx="23" cy="17" r="1.7" fill="#B5713A" />
-                    <circle cx="13" cy="27" r="2" fill="#C06014" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#spiceDots)" />
-              </svg>
-            </div>
-            <div aria-hidden className="absolute -right-14 -bottom-14 w-56 h-56 rounded-full bg-[#C06014]/18 blur-3xl" />
+            {/* Plain gradient. The dot texture and the blur that used to sit
+                behind this copy are gone with the rest of the backdrops. */}
 
             <div className="relative">
               <p className="text-[10.5px] font-semibold tracking-[0.2em] uppercase text-[#8B4513] mb-3"

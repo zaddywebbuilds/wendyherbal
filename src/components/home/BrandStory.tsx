@@ -19,21 +19,8 @@ interface Props {
 
 export function BrandStory({ portraitSrc }: Props) {
   return (
-    <section className="relative overflow-hidden bg-[#123D2B] py-14 lg:py-24">
-      {/* Botanical corners */}
-      <div aria-hidden className="absolute inset-0 opacity-[0.08]">
-        <svg width="100%" height="100%">
-          <defs>
-            <pattern id="storyLeaf" width="90" height="90" patternUnits="userSpaceOnUse" patternTransform="rotate(-15)">
-              <path d="M45 16C45 16 29 26 29 43C29 54 36 62 45 62C54 62 61 54 61 43C61 26 45 16 45 16Z" fill="#C6A667" />
-              <line x1="45" y1="19" x2="45" y2="60" stroke="#C6A667" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#storyLeaf)" />
-        </svg>
-      </div>
-      <div aria-hidden className="absolute -left-24 top-0 w-80 h-80 rounded-full bg-[#A8B99C]/10 blur-[80px]" />
-      <div aria-hidden className="absolute -right-16 bottom-0 w-80 h-80 rounded-full bg-[#C6A667]/10 blur-[80px]" />
+    <section className="relative overflow-hidden bg-[#123D2B] py-10 lg:py-16">
+      {/* Plain surface: no pattern, no glows. */}
 
       <div className="relative max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[1.1fr_auto_1fr] gap-9 lg:gap-10 items-center">

@@ -14,7 +14,7 @@ import { WHATSAPP_URL, WHATSAPP_NUMBER, FACEBOOK_URL } from "@/lib/constants";
 export function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: string; intro?: string }) {
   return (
     <section className="bg-[#F7F4E9] border-b border-[#123D2B]/8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
         <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#175C3D] mb-3"
           style={{ fontFamily: "var(--font-body)" }}>
           {eyebrow}
@@ -38,7 +38,7 @@ export function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: st
 export function PageBody({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24 space-y-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16 space-y-12">
         {children}
       </div>
     </div>
