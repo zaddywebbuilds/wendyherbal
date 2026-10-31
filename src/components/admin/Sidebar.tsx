@@ -23,6 +23,7 @@ const MAIN = [
   { label: "Orders", href: "/admin/orders", icon: ClipboardList, badgeKey: "orders" },
   { label: "Products", href: "/admin/products", icon: Package },
   { label: "Inventory", href: "/admin/inventory", icon: Boxes },
+  { label: "Testimonials", href: "/admin/testimonials", icon: Star },
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];

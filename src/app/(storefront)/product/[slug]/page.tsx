@@ -2,6 +2,8 @@ import { connection } from "next/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/product/ProductDetail";
+import { ProductTestimonials } from "@/components/product/ProductTestimonials";
+import { publishedFor } from "@/lib/testimonials-store";
 import { PRODUCTS, CATEGORY_LABELS } from "@/lib/products";
 import { getCatalogue, findProduct } from "@/lib/catalogue";
 
@@ -68,6 +70,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ProductDetail product={product} related={related} />
+      <div className="bg-[#F7F4E9]">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
+          <ProductTestimonials items={await publishedFor(product.sku)} />
+        </div>
+      </div>
     </>
   );
 }

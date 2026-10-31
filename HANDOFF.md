@@ -88,6 +88,7 @@ section originally anticipated, and two questions are still open with her.
 | Admin Orders | ✅ Done. Reads the sheet, CSV export, read-only |
 | Admin Products | ✅ Editable. Add, edit, hide, delete, from a phone |
 | Admin Inventory | ✅ Stock view, built on the editable catalogue |
+| Testimonials | ✅ Wendy adds them. Consent and claim gates enforced server-side |
 | Admin CRUD screens | ✅ No dead links. 13 unbuilt screens retired from the nav |
 | Content pages | ✅ All 8 built. Policy gaps flagged on the pages themselves |
 
@@ -435,6 +436,34 @@ Three separate times, copy asserted something nothing supported:
 All are gone. The pattern to watch is decorative copy that sounds like a fact.
 On a catalogue named after medical conditions with no NAFDAC review, "Safe"
 is not decoration.
+
+## Testimonials
+
+Wendy adds these herself at `/admin/testimonials`, one per product. The store
+is the same KV-or-file pair as the catalogue, so no new service.
+
+**Two refusals live in the API, not just the form**, because they protect the
+customer rather than the shop:
+
+1. Nothing publishes without `consentConfirmed`. These are other people's
+   words.
+2. Nothing whose text reads as a medical claim publishes without a separate
+   `claimAcknowledged` tick. `detectsMedicalClaim` flags cure, heal, treat,
+   pregnancy, named conditions and guarantees, and the form shows the warning
+   as she types. It prompts a human decision rather than silently filtering.
+
+The second gate exists because the Medical Disclaimer this site serves states
+plainly that Wendy Herbals publishes no testimonials claiming treatment. If
+testimonials carrying claims start going up, that page is no longer true and
+has to be rewritten with them. Do not let the two drift apart.
+
+The product page renders nothing when a product has none, rather than an empty
+"no reviews yet" shell that invites someone to invent some.
+
+**The Facebook library is still not a source for these.** Those screenshots
+name real patients alongside their conditions and show faces, phone numbers
+and a hospital radiology report. Consent comes from the customer before any
+of it is retyped here, and a screenshot needs cropping first.
 
 ## The dashboard
 
