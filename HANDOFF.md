@@ -343,8 +343,11 @@ Roughly in priority order.
 3. **Blog.** Linked from the footer until now; the link was removed because
    there is no blog and no post store behind it. Restore the footer entry when
    one is built.
-4. **Customer accounts.** Guest checkout only. Order history, tracking, saved
-   addresses, wishlist persistence beyond localStorage.
+4. **Customer accounts.** Guest checkout only, and deliberately so. The account
+   icon was removed from the header on 31 Oct 2026: it advertised something
+   that does not exist, and the FAQ already says there are no accounts. The
+   wishlist is built at `/wishlist`, backed by localStorage, so it needs no
+   account. Still missing: order history and tracking.
 5. **Shipping zones.** Way bill is currently agreed on WhatsApp, matching her
    price list note. A configurable engine was specced but not built.
 6. **Newsletter storage.** Validates input; only persists with Supabase

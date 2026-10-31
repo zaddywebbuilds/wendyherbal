@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
-import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { NAV_LINKS } from "@/lib/constants";
 import { useCartStore } from "@/store/cart";
@@ -85,11 +85,6 @@ export function Header() {
 
             {/* Utilities */}
             <div className="flex items-center gap-0.5 shrink-0 ml-auto md:ml-2">
-              <Link href="/account" aria-label="Account"
-                className="p-2 text-[#252B23] hover:text-[#123D2B] transition-colors hidden sm:flex">
-                <User size={18} strokeWidth={1.6} />
-              </Link>
-
               <Link href="/wishlist" aria-label="Wishlist"
                 className="p-2 text-[#252B23] hover:text-[#123D2B] transition-colors relative hidden sm:flex">
                 <Heart size={18} strokeWidth={1.6} />
@@ -157,10 +152,6 @@ export function Header() {
           </div>
 
           <div className="px-5 py-4 border-t border-[#E7E0CF] flex gap-5">
-            <Link href="/account" onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 text-sm text-[#252B23]" style={{ fontFamily: "var(--font-body)" }}>
-              <User size={16} /> Account
-            </Link>
             <Link href="/wishlist" onClick={() => setMobileOpen(false)}
               className="flex items-center gap-2 text-sm text-[#252B23]" style={{ fontFamily: "var(--font-body)" }}>
               <Heart size={16} /> Wishlist{mounted && wishlistCount > 0 ? ` (${wishlistCount})` : ""}

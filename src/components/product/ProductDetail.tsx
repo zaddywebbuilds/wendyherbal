@@ -171,7 +171,8 @@ export function ProductDetail({ product, related }: { product: Product; related:
             <div className="mt-5 flex items-center gap-2 text-[12px] text-[#4a5245] p-3 bg-[#FCFAF3] border border-[#EFE9DD] rounded-lg"
               style={{ fontFamily: "var(--font-body)" }}>
               <Truck size={15} className="text-[#175C3D] shrink-0" />
-              Delivery fees are calculated at checkout based on your state.
+              The way bill is not included in this price. It is confirmed with you on WhatsApp
+              before you pay.
             </div>
 
             {/* Tabs */}

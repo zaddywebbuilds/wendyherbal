@@ -4,14 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { HERO_CLIP } from "@/lib/media";
-import { ArrowRight, Play, Leaf, Award, ShieldCheck, Truck, HeartHandshake } from "lucide-react";
+import { ArrowRight, Play, Leaf, Boxes, MessageCircle, Truck, Wallet } from "lucide-react";
 
+/**
+ * Facts about the shop, not claims about the products.
+ *
+ * The previous row read "100% Ingredients", "Premium Quality" and "Safe &
+ * Trusted". The first is meaningless, and the other two assert quality and
+ * safety that nothing here substantiates, on a catalogue that has had no
+ * NAFDAC review. Everything below can be checked against the site itself.
+ */
 const TRUST = [
-  { icon: Leaf, title: "100%", sub: "Ingredients" },
-  { icon: Award, title: "Premium", sub: "Quality" },
-  { icon: ShieldCheck, title: "Safe &", sub: "Trusted" },
+  { icon: Leaf, title: "93", sub: "Products" },
+  { icon: Boxes, title: "Five", sub: "Collections" },
   { icon: Truck, title: "Nationwide", sub: "Delivery" },
-  { icon: HeartHandshake, title: "Wellness", sub: "For Everyone" },
+  { icon: MessageCircle, title: "WhatsApp", sub: "Order Support" },
+  { icon: Wallet, title: "Bank Transfer", sub: "At Checkout" },
 ];
 
 const fade = {

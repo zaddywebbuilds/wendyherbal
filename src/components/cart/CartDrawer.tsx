@@ -118,7 +118,7 @@ export function CartDrawer() {
                 </span>
               </div>
               <p className="text-[11px] text-[#6b7265] mb-3" style={{ fontFamily: "var(--font-body)" }}>
-                Delivery is calculated at checkout.
+                The way bill is confirmed on WhatsApp.
               </p>
               <Link href="/checkout" onClick={closeCart}
                 className="w-full h-11 flex items-center justify-center bg-[#123D2B] text-white text-[13.5px] font-medium rounded-md hover:bg-[#175C3D] transition-colors"

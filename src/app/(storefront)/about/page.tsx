@@ -99,9 +99,9 @@ export default function AboutPage() {
             </div>
             <div className="space-y-4">
               <p>
-                Wendy Herbals is run by its founder, who prepares the range, answers the WhatsApp
-                line and packs the orders herself. When you message the number on this site, you
-                are messaging her.
+                Wendy Herbals is run by its founder. The WhatsApp number on this site reaches the
+                business directly rather than a call centre, so the person who answers is the
+                person who sells you the product.
               </p>
               <p className="text-[1.2rem] text-[#123D2B] leading-snug" style={{ fontFamily: "var(--font-heading)" }}>
                 &ldquo;{BRAND_PHRASE}&rdquo;
