@@ -19,7 +19,7 @@ export default function DisclaimerPage() {
       {/* Given what the products are named after, this page leads with the
           warning rather than with brand furniture. */}
       <section className="bg-[#123D2B]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
           <div className="flex items-center gap-2.5 mb-4">
             <AlertTriangle size={17} className="text-[#C6A667]" strokeWidth={2} />
             <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#C6A667]"

@@ -15,7 +15,7 @@ const CARDS = [
 
 export function CollectionStrip() {
   return (
-    <section className="bg-[#FCFAF3] py-10 lg:py-16">
+    <section className="bg-[#FCFAF3] py-8 lg:py-12">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="relative text-center mb-9">

@@ -59,7 +59,7 @@ export function Hero() {
           frame on the right. */}
 
       <div className="relative max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-7 lg:gap-12 items-center py-9 lg:py-16">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-7 lg:gap-12 items-center py-8 lg:py-12">
           {/* ---------- Left: copy ---------- */}
           <div className="max-w-xl">
             <motion.p custom={0} variants={fade} initial="hidden" animate="show"

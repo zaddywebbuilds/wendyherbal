@@ -13,7 +13,7 @@ export function WorkshopBand() {
   const still = BRAND_IMAGES.productionDrums;
 
   return (
-    <section className="bg-[#F7F4E9] py-10 lg:py-16">
+    <section className="bg-[#F7F4E9] py-8 lg:py-12">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-9">
           <p className="text-[10.5px] font-semibold tracking-[0.22em] uppercase text-[#175C3D] mb-2.5"

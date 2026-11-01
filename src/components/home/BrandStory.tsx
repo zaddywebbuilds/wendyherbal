@@ -19,7 +19,7 @@ interface Props {
 
 export function BrandStory({ portraitSrc }: Props) {
   return (
-    <section className="relative overflow-hidden bg-[#123D2B] py-10 lg:py-16">
+    <section className="relative overflow-hidden bg-[#123D2B] py-8 lg:py-12">
       {/* Plain surface: no pattern, no glows. */}
 
       <div className="relative max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
