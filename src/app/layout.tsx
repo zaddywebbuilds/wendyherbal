@@ -6,7 +6,8 @@ import { OG_IMAGE } from "@/lib/media";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  // 400 for body italic quotes, 500 for headings; italic style for decorative spans.
+  weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
   display: "swap",
@@ -14,7 +15,8 @@ const cormorant = Cormorant_Garamond({
 
 const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  // 400 body, 500 labels, 600 nav/buttons, 700 bold UI — 300 and 800 unused.
+  weight: ["400", "500", "600", "700"],
   variable: "--font-manrope",
   display: "swap",
 });
