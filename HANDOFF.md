@@ -10,37 +10,54 @@ relitigated.
 
 ---
 
-## ▶ START HERE — the site is live, and misconfigured
+## ▶ START HERE — live and configured
 
-**https://wendyherbal.vercel.app returns 200.** The client connected Vercel to
-the GitHub repo, so pushes to `main` deploy themselves. The CLI on the build
-machine is still unauthenticated (`vercel whoami` → `Not authorized`), which no
-longer matters: nothing here needs it.
+**https://wendyherbal.vercel.app is up and the dashboard works.** Verified by
+signing in against production on 1 Nov 2026: the dashboard, Products and
+Customers all return 200, a wrong password is refused, and `sitemap.xml`
+carries 108 URLs.
 
-What does matter is that **three environment variables are missing in Vercel**,
-and each one silently disables something. Verified against the live site on
-31 Oct 2026:
+Set on the project (`vercel env ls`):
 
-| Missing | What it breaks, observed |
+| Variable | Environments |
 |---|---|
-| `ADMIN_PASSWORD` + `ADMIN_SECRET` | `/admin` 307s to `/admin/login?setup=1`. The gate fails closed, which is right, but **Wendy cannot sign in at all** — Products, Orders, Customers, Testimonials and the lead downloads are unreachable in production. |
-| `NEXT_PUBLIC_SITE_URL` | `/sitemap.xml` is **empty** (the builder returns `[]` with no base), canonicals render relative (`href="/shop"`), and Open Graph has no absolute image URLs. |
+| `ADMIN_PASSWORD`, `ADMIN_SECRET` | Production, Preview |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Production, Preview |
+| `NEXT_PUBLIC_SITE_URL` | Production |
+| `KV_REST_API_*`, `KV_URL`, `REDIS_URL` | Production, Preview, Development |
 
-Set those and both problems go away; no code change is involved. Re-check with:
+**The KV store is attached**: Upstash `wendyherbal-kv`, provisioned through the
+Vercel Marketplace, which wired the `KV_REST_API_*` names the code already
+read — no renaming needed. Confirmed reachable with a direct `PING` → `PONG`.
+With it in place the forced password change is live again: signing in with the
+handover password now redirects to `/admin/password?first=1`.
 
-```bash
-curl -s -o /dev/null -w "%{http_code} -> %{redirect_url}\n" https://wendyherbal.vercel.app/admin
-curl -s https://wendyherbal.vercel.app/sitemap.xml | head -5
-```
+### Two traps around that store
 
-**`robots.txt` says `Disallow: /`, and that is deliberate** — see `src/app/robots.ts`.
-Indexing stays off until the NAFDAC review is done and the rendered mockups are
-replaced with real photographs. Flip `NEXT_PUBLIC_ALLOW_INDEXING=true` then, not
-before: de-indexing herbal products named after medical conditions is slow.
+1. **`vercel env pull` puts the live store's credentials into `.env.local`,**
+   because the integration set them on the Development environment too. Left
+   active, `npm run dev` writes into Wendy's real catalogue, testimonials and
+   newsletter list. They are **commented out** in `.env.local` with a note, so
+   local dev falls back to `.data/*.json`. Re-running `vercel env pull` or
+   `vercel link` will uncomment them again — check after either.
+2. **Never set `ADMIN_PASSWORD` without a KV store.** That combination used to
+   lock the owner out entirely; the middleware now only forces the change where
+   it can be completed. The guard is there, but the pairing is still the right
+   habit.
 
-**The custom domain is not connected.** `wendyherbals.com` does not resolve.
-Until it does, `NEXT_PUBLIC_SITE_URL` should be the `.vercel.app` address, or
-the sitemap and canonicals will advertise a dead host.
+### Still outstanding
+
+- **The Google consent screen must be published "In production".** Left in
+  "Testing", Google expires the refresh token after 7 days and orders stop
+  saving with nothing reporting it. This is the last thing standing between
+  Wendy and a working order book.
+- `NEXT_PUBLIC_GOOGLE_API_KEY` is unset, so "choose an existing sheet" is
+  unavailable. Creating a fresh order book works without it.
+- **`robots.txt` says `Disallow: /` deliberately** — see `src/app/robots.ts`.
+  Indexing stays off until the NAFDAC review is done and the rendered mockups
+  are replaced with photographs. Flip `NEXT_PUBLIC_ALLOW_INDEXING=true` then.
+- **The custom domain is not connected.** `wendyherbals.com` does not resolve;
+  see "Moving to the custom domain" below before switching.
 
 Then follow [DEPLOY.md](DEPLOY.md) for environment variables. Two of them are
 traps worth reading about before Wendy ever connects her account:
