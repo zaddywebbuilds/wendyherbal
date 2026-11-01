@@ -9,9 +9,13 @@ import { WorkshopTile } from "./WorkshopTile";
  * Deliberately not a testimonial wall: the client's library has those, and the
  * Medical Disclaimer commits the site to publishing none of them.
  */
-export function WorkshopBand() {
-  const still = BRAND_IMAGES.productionDrums;
+const STILLS = [
+  BRAND_IMAGES.productionDrums,
+  BRAND_IMAGES.measuring,
+  BRAND_IMAGES.filling,
+] as const;
 
+export function WorkshopBand() {
   return (
     <section className="bg-[#F7F4E9] py-8 lg:py-12">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,25 +34,27 @@ export function WorkshopBand() {
           </p>
         </div>
 
-        {/* First frame runs wide on desktop so this band does not read as
-            another four-across row after the collections. */}
+        {/* First clip runs wide on desktop (2 cols × 2 rows); stills fill the
+            remaining column in rows 1–2, then all three fill row 3. */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
           {BRAND_CLIPS.map((clip, i) => (
             <WorkshopTile key={clip.src} clip={clip} priority={i === 0}
               className={i === 0 ? "lg:col-span-2 lg:row-span-2" : undefined} />
           ))}
 
-          <figure className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-[#EFE9DD]">
-            <div className="relative aspect-square sm:aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
-              <Image src={still.src} alt={still.alt} fill sizes="(max-width:1024px) 50vw, 25vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <figcaption
-              className="p-3.5 text-[12px] leading-snug text-[#4a5245]"
-              style={{ fontFamily: "var(--font-body)" }}>
-              {still.caption}
-            </figcaption>
-          </figure>
+          {STILLS.map((still) => (
+            <figure key={still.src} className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-[#EFE9DD]">
+              <div className="relative aspect-square sm:aspect-[4/5] overflow-hidden bg-[#EFE9DD]">
+                <Image src={still.src} alt={still.alt} fill sizes="(max-width:1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <figcaption
+                className="p-3.5 text-[12px] leading-snug text-[#4a5245]"
+                style={{ fontFamily: "var(--font-body)" }}>
+                {still.caption}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </div>
     </section>
