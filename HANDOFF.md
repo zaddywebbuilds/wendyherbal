@@ -91,7 +91,7 @@ section originally anticipated, and two questions are still open with her.
 | Cart | ✅ Done — persistent, drawer |
 | Checkout | ✅ Done — bank transfer → WhatsApp receipt |
 | Buyer capture | ✅ Done — writes to her Google Sheet |
-| Admin login | ✅ Done — password gate |
+| Admin login | ✅ Password gate, forced change on first sign-in |
 | Admin dashboard | ✅ Reads the order sheet. Real figures, honest zeros |
 | Admin Customers | ✅ Done — list, WhatsApp links, contact-card and CSV downloads |
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
@@ -360,6 +360,47 @@ Roughly in priority order.
    see "What the Google Sheet is for" below. Do not build a writer.
 
 ---
+
+## The two passwords
+
+There is no email on this deployment, so there is no "forgot my password"
+link and no way to send a reset. That shapes the whole design.
+
+**`ADMIN_PASSWORD` in Vercel is the handover password.** It is what we write
+down at setup and send to the owner, and it stays valid forever as the way
+back in. Signing in with it **always** lands on `/admin/password?first=1` and
+nothing else in admin opens until a new password is set. So the password we
+once put in a message is never the one the shop actually runs on, and losing
+her own password is recoverable without locking her out of her own business.
+
+**Her own password** lives in `admin-password.ts`, in the same KV-or-file
+store as everything else, hashed with PBKDF2-HMAC-SHA256, a random 16-byte
+salt and 310,000 iterations. The iteration count is stored per record, so it
+can be raised later without invalidating existing ones.
+
+### Things that will break if you move them
+
+- **`admin-auth.ts` must not import `admin-password.ts`.** The middleware
+  imports `admin-auth` and runs on the Edge; the store's file fallback needs
+  `node:fs` and will not bundle there. The env-password check lives in
+  `admin-auth`, the stored-password check in the login route. Keep them apart.
+- **The forced-change flag rides in the signed session cookie**, not in a
+  lookup. The middleware already verifies that cookie, so forcing the change
+  costs no extra I/O. Do not move this check into the admin layout: that
+  layout wraps `/admin/login` too, and making it async stops that page
+  prerendering.
+- **`/admin/password`, `/api/admin/password` and `/api/admin/login` stay
+  reachable while the change is forced** (`DURING_FORCED_CHANGE` in the
+  middleware). Drop one and she is redirected to a page she cannot load, or
+  cannot sign out of the loop.
+- **The change refuses outright when storage is not durable.** On Vercel
+  without KV the write would vanish on the next cold start and she would be
+  locked out of a password she believes she set. Better to say no.
+
+The first-run screen covers the admin chrome (`fixed inset-0`), because a
+visible sidebar there invites clicks that bounce straight back with no
+explanation. Reached voluntarily from Settings, the chrome stays and there is
+a Cancel.
 
 ## What the Google Sheet is for
 

@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { connection } from "next/server";
 import {
-  CheckCircle2, AlertCircle, ExternalLink, Table2, ShieldCheck, Landmark, Info,
+  CheckCircle2, AlertCircle, ExternalLink, Table2, ShieldCheck, Landmark, Info, KeyRound,
 } from "lucide-react";
 import { loadConnection } from "@/lib/token-store";
 import { storageKind, storageIsDurable } from "@/lib/token-store";
@@ -227,6 +228,31 @@ export default async function SettingsPage({
               </li>
             </ul>
           </div>
+        </div>
+      </section>
+
+      {/* ---------------- password ---------------- */}
+      <section className="bg-white rounded-xl border border-[#E9E4D6] p-5 mt-4">
+        <div className="flex flex-wrap items-start gap-3.5">
+          <span className="w-11 h-11 rounded-xl bg-[#E8F0EA] flex items-center justify-center shrink-0">
+            <KeyRound size={20} className="text-[#175C3D]" strokeWidth={1.8} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-[15px] font-semibold text-[#123D2B]"
+              style={{ fontFamily: "var(--font-body)" }}>
+              Your password
+            </h2>
+            <p className="mt-1 text-[12.5px] text-[#6b7265] leading-relaxed max-w-prose"
+              style={{ fontFamily: "var(--font-body)" }}>
+              This is what you type to open the dashboard. Change it whenever you like, and
+              change it straight away if anyone else has seen it.
+            </p>
+          </div>
+          <Link href="/admin/password"
+            className="inline-flex items-center gap-2 h-10 px-4 bg-[#123D2B] text-white rounded-lg text-[12.5px] font-semibold hover:bg-[#175C3D] transition-colors shrink-0"
+            style={{ fontFamily: "var(--font-body)" }}>
+            <KeyRound size={14} /> Change password
+          </Link>
         </div>
       </section>
     </div>

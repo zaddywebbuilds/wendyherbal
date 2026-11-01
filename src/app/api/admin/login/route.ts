@@ -1,14 +1,40 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import {
-  ADMIN_COOKIE, checkPassword, createSession, isAdminAuthConfigured, sessionCookieOptions,
+  ADMIN_COOKIE, checkEnvPassword, createSession, isAdminAuthConfigured, sessionCookieOptions,
 } from "@/lib/admin-auth";
+import { loadStoredPassword, verifyStoredPassword } from "@/lib/admin-password";
 
 // Crude in-memory throttle. Enough to stop casual guessing on a single-shop
 // deployment; a distributed store would be needed across many instances.
 const attempts = new Map<string, { count: number; until: number }>();
 const MAX_ATTEMPTS = 6;
 const LOCKOUT_MS = 10 * 60_000;
+
+/**
+ * Two passwords can open the door.
+ *
+ * Her own, once she has set one, signs her straight in. The handover password
+ * from the environment also works — it is the only way back in on a
+ * deployment with no email — but it always lands on the change-password
+ * screen, so the password we wrote down at setup is never the one the shop
+ * runs on.
+ *
+ * Both branches are evaluated the same way from the outside: a wrong password
+ * costs the same work whichever one it was meant to be.
+ */
+async function authenticate(submitted: string): Promise<{ ok: boolean; mustChange: boolean }> {
+  const stored = await loadStoredPassword();
+
+  const [envOk, ownOk] = await Promise.all([
+    checkEnvPassword(submitted),
+    stored ? verifyStoredPassword(submitted, stored) : Promise.resolve(false),
+  ]);
+
+  if (ownOk) return { ok: true, mustChange: false };
+  if (envOk) return { ok: true, mustChange: true };
+  return { ok: false, mustChange: false };
+}
 
 export async function POST(req: Request) {
   if (!isAdminAuthConfigured()) {
@@ -35,7 +61,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  if (!password || !(await checkPassword(password))) {
+  const { ok, mustChange } = password
+    ? await authenticate(password)
+    : { ok: false, mustChange: false };
+
+  if (!ok) {
     const next = record && Date.now() < record.until
       ? { count: record.count + 1, until: record.until }
       : { count: 1, until: Date.now() + LOCKOUT_MS };
@@ -45,9 +75,11 @@ export async function POST(req: Request) {
 
   attempts.delete(ip);
   const jar = await cookies();
-  jar.set(ADMIN_COOKIE, await createSession(), sessionCookieOptions);
+  jar.set(ADMIN_COOKIE, await createSession(mustChange), sessionCookieOptions);
 
-  return NextResponse.json({ ok: true });
+  // The form sends her to /admin/password itself rather than following its
+  // usual redirect, so the first thing she sees is why, not a bounce.
+  return NextResponse.json({ ok: true, mustChange });
 }
 
 export async function DELETE() {

@@ -1,5 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ADMIN_COOKIE, isValidSession } from "@/lib/admin-auth";
+import { ADMIN_COOKIE, readSession } from "@/lib/admin-auth";
+
+/** Reachable while a password change is being forced, or she would be trapped. */
+const DURING_FORCED_CHANGE = ["/admin/password", "/api/admin/password", "/api/admin/login"];
 
 /**
  * Gates /admin and the admin-only APIs. The Google connect routes are included
@@ -20,7 +23,15 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(`${origin}/admin/login?setup=1`);
   }
 
-  if (await isValidSession(req.cookies.get(ADMIN_COOKIE)?.value)) {
+  const session = await readSession(req.cookies.get(ADMIN_COOKIE)?.value);
+
+  if (session) {
+    // Signed in with the handover password: nothing else opens until she has
+    // set a password of her own. The flag rides in the verified cookie, so
+    // this costs no lookup.
+    if (session.mustChange && !DURING_FORCED_CHANGE.includes(pathname)) {
+      return NextResponse.redirect(`${origin}/admin/password?first=1`);
+    }
     return NextResponse.next();
   }
 

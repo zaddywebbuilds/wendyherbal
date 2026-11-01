@@ -28,6 +28,13 @@ export function LoginForm() {
         setError(data.error ?? "Could not sign in.");
         return;
       }
+      // Signed in with the handover password. Going straight there means the
+      // first thing she sees is the reason, not a bounce off the dashboard.
+      if (data.mustChange) {
+        router.push("/admin/password?first=1");
+        router.refresh();
+        return;
+      }
       router.push(next.startsWith("/admin") ? next : "/admin");
       router.refresh();
     } catch {
