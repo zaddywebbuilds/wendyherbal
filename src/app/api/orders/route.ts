@@ -11,6 +11,10 @@ interface IncomingOrder {
   customer: {
     full_name: string;
     phone: string;
+    whatsapp_phone?: string;
+    sms_phone?: string;
+    birthday_day?: string;
+    birthday_month?: string;
     email?: string;
     state: string;
     city: string;
@@ -36,9 +40,10 @@ export async function POST(req: Request) {
   const c = body?.customer;
   const fullName = str(c?.full_name, 120);
   const phone = str(c?.phone, 40);
+  const whatsappPhone = str(c?.whatsapp_phone, 40);
 
-  if (!orderNumber || !fullName || !phone) {
-    return NextResponse.json({ error: "Name and phone number are required." }, { status: 400 });
+  if (!orderNumber || !fullName || !phone || !whatsappPhone) {
+    return NextResponse.json({ error: "Name, phone number and WhatsApp number are required." }, { status: 400 });
   }
   if (!Array.isArray(body.items) || body.items.length === 0) {
     return NextResponse.json({ error: "Your order has no items." }, { status: 400 });
@@ -97,10 +102,17 @@ export async function POST(req: Request) {
   }
 
   try {
+    const bdDay = str(c?.birthday_day, 2);
+    const bdMonth = str(c?.birthday_month, 20);
+    const birthday = bdDay && bdMonth ? `${bdDay.padStart(2, "0")}/${bdMonth}` : "";
+
     await recordOrder({
       orderNumber,
       name: fullName,
       phone,
+      whatsappPhone,
+      smsPhone: str(c?.sms_phone, 40),
+      birthday,
       email: str(c?.email, 160),
       itemsSummary: priced
         .map((i) => `${i.name}${i.size ? ` (${i.size})` : ""} x${i.qty}`)

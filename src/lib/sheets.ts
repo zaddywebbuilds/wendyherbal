@@ -171,6 +171,9 @@ export interface SheetOrder {
   orderNumber: string;
   name: string;
   phone: string;
+  whatsappPhone: string;
+  smsPhone: string;
+  birthday: string;
   email: string;
   itemsSummary: string;
   total: number;
@@ -196,7 +199,7 @@ export async function recordOrder(o: SheetOrder): Promise<void> {
 
   await ensureTab(t, ORDERS_TAB, ORDERS_HEADER);
   await appendRow(t, ORDERS_TAB, [
-    o.orderNumber, today(), o.name, o.phone, o.email,
+    o.orderNumber, today(), o.name, o.phone, o.whatsappPhone, o.email,
     o.itemsSummary, o.total, o.deliverTo, o.notes, "Awaiting payment",
   ]);
 
@@ -209,23 +212,30 @@ export async function recordOrder(o: SheetOrder): Promise<void> {
 
   if (idx === -1) {
     await appendRow(t, CUSTOMERS_TAB, [
-      o.name, o.phone, o.email, o.city, o.state,
+      o.name, o.phone, o.whatsappPhone, o.smsPhone, o.birthday,
+      o.email, o.city, o.state,
       o.marketingConsent ? "Yes" : "No", 1, o.total, today(), today(),
     ]);
     return;
   }
 
   const prev = rows[idx];
-  const prevOrders = Number(prev[6]) || 0;
-  const prevSpent = Number(String(prev[7] ?? "").replace(/[^\d.]/g, "")) || 0;
+  const prevOrders = Number(prev[9]) || 0;
+  const prevSpent = Number(String(prev[10] ?? "").replace(/[^\d.]/g, "")) || 0;
 
   await updateRow(t, CUSTOMERS_TAB, idx + 1, [
-    o.name || prev[0], o.phone, o.email || prev[2] || "", o.city || prev[3] || "", o.state || prev[4] || "",
+    o.name || prev[0], o.phone,
+    o.whatsappPhone || prev[2] || "",
+    o.smsPhone || prev[3] || "",
+    o.birthday || prev[4] || "",
+    o.email || prev[5] || "",
+    o.city || prev[6] || "",
+    o.state || prev[7] || "",
     // Consent is only ever upgraded here; withdrawing it is done in the sheet.
-    o.marketingConsent ? "Yes" : (prev[5] || "No"),
+    o.marketingConsent ? "Yes" : (prev[8] || "No"),
     prevOrders + 1,
     prevSpent + o.total,
-    prev[8] || today(),
+    prev[11] || today(),
     today(),
   ]);
 }

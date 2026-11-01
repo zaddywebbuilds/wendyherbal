@@ -79,6 +79,10 @@ export interface OrderItem {
 export interface Address {
   full_name: string;
   phone: string;
+  whatsapp_phone: string;
+  sms_phone?: string;
+  birthday_day?: string;
+  birthday_month?: string;
   state: string;
   city: string;
   street: string;

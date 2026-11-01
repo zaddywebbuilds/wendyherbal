@@ -4,12 +4,12 @@ export const ORDERS_TAB = "Orders";
 export const CUSTOMERS_TAB = "Customers";
 
 export const ORDERS_HEADER = [
-  "Order #", "Date", "Name", "Phone", "Email",
+  "Order #", "Date", "Name", "Phone", "WhatsApp", "Email",
   "Items", "Total (NGN)", "Deliver to", "Notes", "Status",
 ];
 
 export const CUSTOMERS_HEADER = [
-  "Name", "Phone", "Email", "City", "State",
+  "Name", "Phone", "WhatsApp", "SMS Number", "Birthday", "Email", "City", "State",
   "Updates OK?", "Orders", "Total spent (NGN)", "First order", "Last order",
 ];
 

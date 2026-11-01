@@ -14,7 +14,16 @@ import { cn } from "@/lib/cn";
 
 type Step = "details" | "confirm";
 
-const EMPTY: Address = { full_name: "", phone: "", state: "", city: "", street: "", landmark: "" };
+const EMPTY: Address = {
+  full_name: "", phone: "", whatsapp_phone: "", sms_phone: "",
+  birthday_day: "", birthday_month: "",
+  state: "", city: "", street: "", landmark: "",
+};
+
+const MONTHS = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
+];
 
 export function CheckoutClient() {
   const items = useCartStore((s) => s.items);
@@ -59,7 +68,14 @@ export function CheckoutClient() {
         body: JSON.stringify({
           orderNumber: number,
           items: items.map((i) => ({ sku: i.product.sku, quantity: i.quantity, size: i.size })),
-          customer: { ...address, email },
+          customer: {
+            ...address,
+            email,
+            whatsapp_phone: address.whatsapp_phone,
+            sms_phone: address.sms_phone,
+            birthday_day: address.birthday_day,
+            birthday_month: address.birthday_month,
+          },
           notes,
           marketingConsent: consent,
         }),
@@ -129,11 +145,44 @@ export function CheckoutClient() {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Field label="Full name" required value={address.full_name} onChange={set("full_name")} />
-                  <Field label="Phone number" required type="tel" value={address.phone} onChange={set("phone")}
+                  <Field label="Phone number (calls & SMS)" required type="tel" value={address.phone} onChange={set("phone")}
+                    placeholder="0803 000 0000" />
+                  <Field label="WhatsApp number" required type="tel" value={address.whatsapp_phone} onChange={set("whatsapp_phone")}
                     placeholder="0803 000 0000" />
                   <div className="sm:col-span-2">
                     <Field label="Email address" type="email" value={email}
                       onChange={(e) => setEmail(e.target.value)} placeholder="For your order confirmation" />
+                  </div>
+                  <Field label="SMS number (if different from phone)" type="tel" value={address.sms_phone ?? ""}
+                    onChange={set("sms_phone")} placeholder="Leave blank if same as above" />
+
+                  {/* Birthday — day + month only, for birthday promo messages */}
+                  <div>
+                    <p className="text-[12px] font-medium text-[#252B23] mb-1.5" style={{ fontFamily: "var(--font-body)" }}>
+                      Birthday <span className="font-normal text-[#6b7265]">(optional — we&rsquo;ll send you a gift!)</span>
+                    </p>
+                    <div className="flex gap-2">
+                      <label className="flex-1">
+                        <span className="sr-only">Birthday day</span>
+                        <select value={address.birthday_day ?? ""} onChange={set("birthday_day")}
+                          className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
+                          style={{ fontFamily: "var(--font-body)" }}>
+                          <option value="">Day</option>
+                          {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                            <option key={d} value={String(d)}>{d}</option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="flex-[2]">
+                        <span className="sr-only">Birthday month</span>
+                        <select value={address.birthday_month ?? ""} onChange={set("birthday_month")}
+                          className="w-full h-11 px-3 bg-white border border-[#E7E0CF] rounded-md text-[16px] sm:text-[13px] text-[#252B23] focus:outline-none focus:border-[#175C3D]"
+                          style={{ fontFamily: "var(--font-body)" }}>
+                          <option value="">Month</option>
+                          {MONTHS.map((m) => <option key={m} value={m}>{m}</option>)}
+                        </select>
+                      </label>
+                    </div>
                   </div>
 
                   <label className="block">
