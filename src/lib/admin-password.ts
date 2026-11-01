@@ -41,12 +41,11 @@ const useRedis = () =>
 /**
  * Whether a new password can actually be saved.
  *
- * On Vercel without a KV store the filesystem is read-only, so a change would
- * appear to work and be gone on the next cold start — and she would then be
- * locked out of an account whose password she believes she changed.
+ * Defined in `admin-auth.ts` because the middleware needs it on the Edge and
+ * cannot import this module. Re-exported here so callers have one name for it
+ * and the gate can never disagree with the writer.
  */
-export const passwordStorageIsDurable = () =>
-  useRedis() || process.env.VERCEL !== "1";
+export { passwordStorageIsDurable } from "./admin-auth";
 
 async function redisCommand(args: (string | number)[]): Promise<unknown> {
   const res = await fetch(process.env.KV_REST_API_URL!, {

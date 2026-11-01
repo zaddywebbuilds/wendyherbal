@@ -19,6 +19,23 @@ export const isAdminAuthConfigured = () =>
   Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_SECRET);
 
 /**
+ * Whether a new password could actually be saved.
+ *
+ * Reads environment variables only — no I/O — so the middleware can call it on
+ * the Edge. `admin-password.ts` re-exports it rather than defining its own, so
+ * the gate and the writer can never disagree about what durable means.
+ *
+ * This decides whether the change is *forced*, not just whether it can be
+ * saved. On Vercel with no KV store attached the change cannot be written, so
+ * forcing it would redirect every admin route to a screen that refuses — the
+ * owner would be locked out of the dashboard completely, by a safety feature.
+ * Better to let her in and leave the password as it is.
+ */
+export const passwordStorageIsDurable = () =>
+  Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) ||
+  process.env.VERCEL !== "1";
+
+/**
  * Checks the submitted password against the handover one in the environment.
  *
  * The owner's own password lives in `admin-password.ts` and is checked by the

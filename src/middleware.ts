@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ADMIN_COOKIE, readSession } from "@/lib/admin-auth";
+import { ADMIN_COOKIE, readSession, passwordStorageIsDurable } from "@/lib/admin-auth";
 
 /** Reachable while a password change is being forced, or she would be trapped. */
 const DURING_FORCED_CHANGE = ["/admin/password", "/api/admin/password", "/api/admin/login"];
@@ -27,9 +27,18 @@ export async function middleware(req: NextRequest) {
 
   if (session) {
     // Signed in with the handover password: nothing else opens until she has
-    // set a password of her own. The flag rides in the verified cookie, so
-    // this costs no lookup.
-    if (session.mustChange && !DURING_FORCED_CHANGE.includes(pathname)) {
+    // set one of her own. The flag rides in the verified cookie, so this costs
+    // no lookup.
+    //
+    // Except where the change could not be completed. With no durable store
+    // the change screen refuses to save, so forcing it would shut her out of
+    // the dashboard entirely — a lockout caused by a safety feature. Settings
+    // still reports the storage state.
+    if (
+      session.mustChange &&
+      passwordStorageIsDurable() &&
+      !DURING_FORCED_CHANGE.includes(pathname)
+    ) {
       return NextResponse.redirect(`${origin}/admin/password?first=1`);
     }
     return NextResponse.next();
