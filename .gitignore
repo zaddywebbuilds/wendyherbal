@@ -51,3 +51,6 @@ next-env.d.ts
 
 # Photographs uploaded in local development; production uses Vercel Blob
 /public/media/uploads/
+
+.vercel
+.env*
