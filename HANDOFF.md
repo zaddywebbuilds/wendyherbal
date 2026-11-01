@@ -361,6 +361,28 @@ Roughly in priority order.
 
 ---
 
+## Moving to the custom domain
+
+`wendyherbals.com` is the intended home and did not resolve as of
+1 Nov 2026. Four things key off the address, and only one of them is in code.
+
+1. **`NEXT_PUBLIC_SITE_URL`** in Vercel. Drives the sitemap, canonical tags,
+   Open Graph URLs and the `URL:` line in `/contact-card`. Until the domain
+   resolves it must be the `.vercel.app` address: pointing the sitemap at a
+   host that does not answer is worse than pointing it at the working one.
+2. **Google's authorised redirect URIs.** The OAuth callback is built from the
+   request's own origin (`new URL(req.url).origin`), so the code follows the
+   domain by itself — but Google rejects any address not on its list. Add
+   `https://wendyherbals.com/api/google/callback` and the `www` variant
+   **before** switching, or connecting the order book breaks at the moment of
+   launch. Keep the `.vercel.app` entries.
+3. **Google's authorised JavaScript origins**, same addresses, for the picker.
+4. **Wendy's stored Google connection survives the move.** The token is not
+   tied to a domain, so she does not reconnect.
+
+Preview deployments get a fresh URL each time, so OAuth never works on them
+unless that exact URL is added by hand. Expected, not a bug.
+
 ## The two passwords
 
 There is no email on this deployment, so there is no "forgot my password"
