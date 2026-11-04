@@ -2,7 +2,9 @@ import { createSign } from "node:crypto";
 import { loadConnection } from "./token-store";
 import { getConnectedAccessToken } from "./google-oauth";
 import {
-  ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER, normalisePhone,
+  ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER,
+  ORDERS_RANGE, CUSTOMERS_RANGE, ORDER_COL, CUSTOMER_COL,
+  normalisePhone, parseMoney,
 } from "./sheet-schema";
 
 export { ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER };
@@ -127,7 +129,12 @@ async function sheetsFetch(target: Target, path: string, init?: RequestInit) {
 
 /* ------------------------------------------------------------ primitives */
 
-async function readRows(t: Target, tab: string, range = "A1:J"): Promise<string[][]> {
+/**
+ * `range` must cover the whole header. A short range returns undefined for the
+ * missing cells, which reads as empty data rather than failing, so callers
+ * pass ORDERS_RANGE / CUSTOMERS_RANGE instead of a literal.
+ */
+async function readRows(t: Target, tab: string, range: string): Promise<string[][]> {
   const data = (await sheetsFetch(t, `/values/${encodeURIComponent(`${tab}!${range}`)}`)) as {
     values?: string[][];
   };
@@ -151,17 +158,17 @@ async function updateRow(t: Target, tab: string, rowNumber: number, row: (string
 }
 
 /** Adds the tab and header row when they are not there yet. */
-async function ensureTab(t: Target, tab: string, header: string[]) {
+async function ensureTab(t: Target, tab: string, header: readonly string[]) {
   try {
-    const rows = await readRows(t, tab, "A1:J1");
-    if (rows.length === 0) await updateRow(t, tab, 1, header);
+    const rows = await readRows(t, tab, "A1:A1");
+    if (rows.length === 0) await updateRow(t, tab, 1, [...header]);
     return;
   } catch {
     await sheetsFetch(t, ":batchUpdate", {
       method: "POST",
       body: JSON.stringify({ requests: [{ addSheet: { properties: { title: tab } } }] }),
     });
-    await updateRow(t, tab, 1, header);
+    await updateRow(t, tab, 1, [...header]);
   }
 }
 
@@ -190,54 +197,63 @@ const today = () => new Date().toISOString().slice(0, 10);
  * Appends the order and folds the buyer into the Customers tab, matched on
  * phone number so repeat buyers accumulate instead of duplicating.
  *
- * Nothing here writes past column J, so any column the owner adds to the right
- * of the sheet survives every future order.
+ * The update path reads the existing row before rewriting it, so the read has
+ * to span the full header. It once did not: lifetime spend and first-order
+ * date sit past the old range, came back undefined, and were overwritten with
+ * this order's total and today's date on every repeat purchase.
  */
 export async function recordOrder(o: SheetOrder): Promise<void> {
   const t = await resolveTarget();
   if (!t) throw new Error("No Google Sheets connection is configured.");
 
   await ensureTab(t, ORDERS_TAB, ORDERS_HEADER);
-  await appendRow(t, ORDERS_TAB, [
-    o.orderNumber, today(), o.name, o.phone, o.whatsappPhone, o.email,
-    o.itemsSummary, o.total, o.deliverTo, o.notes, "Awaiting payment",
-  ]);
+
+  const orderRow: (string | number)[] = [];
+  orderRow[ORDER_COL.orderNumber] = o.orderNumber;
+  orderRow[ORDER_COL.date] = today();
+  orderRow[ORDER_COL.name] = o.name;
+  orderRow[ORDER_COL.phone] = o.phone;
+  orderRow[ORDER_COL.whatsapp] = o.whatsappPhone;
+  orderRow[ORDER_COL.email] = o.email;
+  orderRow[ORDER_COL.items] = o.itemsSummary;
+  orderRow[ORDER_COL.total] = o.total;
+  orderRow[ORDER_COL.deliverTo] = o.deliverTo;
+  orderRow[ORDER_COL.notes] = o.notes;
+  orderRow[ORDER_COL.status] = "Awaiting payment";
+  await appendRow(t, ORDERS_TAB, orderRow);
 
   await ensureTab(t, CUSTOMERS_TAB, CUSTOMERS_HEADER);
-  const rows = await readRows(t, CUSTOMERS_TAB);
+  const rows = await readRows(t, CUSTOMERS_TAB, CUSTOMERS_RANGE);
 
   const target = normalisePhone(o.phone);
   // Row 1 is the header, so a match at index i lives on sheet row i + 1.
-  const idx = rows.findIndex((r, i) => i > 0 && normalisePhone(r[1] ?? "") === target);
+  const idx = rows.findIndex(
+    (r, i) => i > 0 && normalisePhone(r[CUSTOMER_COL.phone] ?? "") === target
+  );
 
-  if (idx === -1) {
-    await appendRow(t, CUSTOMERS_TAB, [
-      o.name, o.phone, o.whatsappPhone, o.smsPhone, o.birthday,
-      o.email, o.city, o.state,
-      o.marketingConsent ? "Yes" : "No", 1, o.total, today(), today(),
-    ]);
-    return;
-  }
+  const prev = idx === -1 ? [] : rows[idx];
+  const keep = (col: number, fresh: string) => fresh || prev[col] || "";
 
-  const prev = rows[idx];
-  const prevOrders = Number(prev[9]) || 0;
-  const prevSpent = Number(String(prev[10] ?? "").replace(/[^\d.]/g, "")) || 0;
+  const row: (string | number)[] = [];
+  row[CUSTOMER_COL.name] = keep(CUSTOMER_COL.name, o.name);
+  row[CUSTOMER_COL.phone] = o.phone;
+  row[CUSTOMER_COL.whatsapp] = keep(CUSTOMER_COL.whatsapp, o.whatsappPhone);
+  row[CUSTOMER_COL.sms] = keep(CUSTOMER_COL.sms, o.smsPhone);
+  row[CUSTOMER_COL.birthday] = keep(CUSTOMER_COL.birthday, o.birthday);
+  row[CUSTOMER_COL.email] = keep(CUSTOMER_COL.email, o.email);
+  row[CUSTOMER_COL.city] = keep(CUSTOMER_COL.city, o.city);
+  row[CUSTOMER_COL.state] = keep(CUSTOMER_COL.state, o.state);
+  // Consent is only ever upgraded here; withdrawing it is done in the sheet.
+  row[CUSTOMER_COL.consent] = o.marketingConsent
+    ? "Yes"
+    : (prev[CUSTOMER_COL.consent] || "No");
+  row[CUSTOMER_COL.orders] = (Number(prev[CUSTOMER_COL.orders]) || 0) + 1;
+  row[CUSTOMER_COL.spent] = parseMoney(prev[CUSTOMER_COL.spent]) + o.total;
+  row[CUSTOMER_COL.firstOrder] = prev[CUSTOMER_COL.firstOrder] || today();
+  row[CUSTOMER_COL.lastOrder] = today();
 
-  await updateRow(t, CUSTOMERS_TAB, idx + 1, [
-    o.name || prev[0], o.phone,
-    o.whatsappPhone || prev[2] || "",
-    o.smsPhone || prev[3] || "",
-    o.birthday || prev[4] || "",
-    o.email || prev[5] || "",
-    o.city || prev[6] || "",
-    o.state || prev[7] || "",
-    // Consent is only ever upgraded here; withdrawing it is done in the sheet.
-    o.marketingConsent ? "Yes" : (prev[8] || "No"),
-    prevOrders + 1,
-    prevSpent + o.total,
-    prev[11] || today(),
-    today(),
-  ]);
+  if (idx === -1) await appendRow(t, CUSTOMERS_TAB, row);
+  else await updateRow(t, CUSTOMERS_TAB, idx + 1, row);
 }
 
 export interface SheetOrderRow {
@@ -251,6 +267,7 @@ export interface SheetOrderRow {
   date: string;
   name: string;
   phone: string;
+  whatsapp: string;
   email: string;
   items: string;
   total: number;
@@ -270,29 +287,31 @@ export async function listOrders(): Promise<SheetOrderRow[]> {
   const t = await resolveTarget();
   if (!t) return [];
 
-  const rows = await readRows(t, ORDERS_TAB);
+  const rows = await readRows(t, ORDERS_TAB, ORDERS_RANGE);
   return rows
     .map((r, i) => ({ r, row: i + 1 }))
     .slice(1)
-    .filter(({ r }) => (r[0] ?? "").trim())
+    .filter(({ r }) => (r[ORDER_COL.orderNumber] ?? "").trim())
     .map(({ r, row }) => ({
       row,
-      orderNumber: r[0] ?? "",
-      date: r[1] ?? "",
-      name: r[2] ?? "",
-      phone: r[3] ?? "",
-      email: r[4] ?? "",
-      items: r[5] ?? "",
-      total: Number(String(r[6] ?? "").replace(/[^d.]/g, "")) || 0,
-      deliverTo: r[7] ?? "",
-      notes: r[8] ?? "",
-      status: (r[9] ?? "").trim(),
+      orderNumber: r[ORDER_COL.orderNumber] ?? "",
+      date: r[ORDER_COL.date] ?? "",
+      name: r[ORDER_COL.name] ?? "",
+      phone: r[ORDER_COL.phone] ?? "",
+      whatsapp: r[ORDER_COL.whatsapp] ?? "",
+      email: r[ORDER_COL.email] ?? "",
+      items: r[ORDER_COL.items] ?? "",
+      total: parseMoney(r[ORDER_COL.total]),
+      deliverTo: r[ORDER_COL.deliverTo] ?? "",
+      notes: r[ORDER_COL.notes] ?? "",
+      status: (r[ORDER_COL.status] ?? "").trim(),
     }))
     .reverse();
 }
 
 export interface SheetCustomer {
-  name: string; phone: string; email: string; city: string; state: string;
+  name: string; phone: string; whatsapp: string; sms: string; birthday: string;
+  email: string; city: string; state: string;
   consent: boolean; orders: number; spent: number; firstOrder: string; lastOrder: string;
 }
 
@@ -300,20 +319,23 @@ export async function listCustomers(): Promise<SheetCustomer[]> {
   const t = await resolveTarget();
   if (!t) return [];
 
-  const rows = await readRows(t, CUSTOMERS_TAB);
+  const rows = await readRows(t, CUSTOMERS_TAB, CUSTOMERS_RANGE);
   return rows.slice(1)
-    .filter((r) => (r[1] ?? "").trim())
+    .filter((r) => (r[CUSTOMER_COL.phone] ?? "").trim())
     .map((r) => ({
-      name: r[0] ?? "",
-      phone: r[1] ?? "",
-      email: r[2] ?? "",
-      city: r[3] ?? "",
-      state: r[4] ?? "",
-      consent: /^y/i.test(r[5] ?? ""),
-      orders: Number(r[6]) || 0,
-      spent: Number(String(r[7] ?? "").replace(/[^\d.]/g, "")) || 0,
-      firstOrder: r[8] ?? "",
-      lastOrder: r[9] ?? "",
+      name: r[CUSTOMER_COL.name] ?? "",
+      phone: r[CUSTOMER_COL.phone] ?? "",
+      whatsapp: r[CUSTOMER_COL.whatsapp] ?? "",
+      sms: r[CUSTOMER_COL.sms] ?? "",
+      birthday: r[CUSTOMER_COL.birthday] ?? "",
+      email: r[CUSTOMER_COL.email] ?? "",
+      city: r[CUSTOMER_COL.city] ?? "",
+      state: r[CUSTOMER_COL.state] ?? "",
+      consent: /^y/i.test(r[CUSTOMER_COL.consent] ?? ""),
+      orders: Number(r[CUSTOMER_COL.orders]) || 0,
+      spent: parseMoney(r[CUSTOMER_COL.spent]),
+      firstOrder: r[CUSTOMER_COL.firstOrder] ?? "",
+      lastOrder: r[CUSTOMER_COL.lastOrder] ?? "",
     }))
     .reverse();
 }

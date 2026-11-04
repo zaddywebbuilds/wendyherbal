@@ -28,13 +28,13 @@ function cell(value: unknown): string {
 }
 
 const CSV_HEADER = [
-  "Name", "Phone", "Email", "City", "State",
+  "Name", "Phone", "WhatsApp", "Email", "Birthday", "City", "State",
   "Marketing consent", "Orders", "Total spent (NGN)", "First order", "Last order",
 ];
 
 export function toCsv(customers: SheetCustomer[]): string {
   const rows = customers.map((c) => [
-    c.name, c.phone, c.email, c.city, c.state,
+    c.name, c.phone, c.whatsapp, c.email, c.birthday, c.city, c.state,
     c.consent ? "Yes" : "No", c.orders, c.spent, c.firstOrder, c.lastOrder,
   ]);
   // BOM so Excel opens Nigerian names spelt with accents correctly.
@@ -146,7 +146,18 @@ export function toVCard(customers: SheetCustomer[]): VCardResult {
       "ORG:Wendy Herbals customer",
       `TEL;TYPE=CELL,VOICE:${tel}`,
     ];
+
+    // A separate WhatsApp number only earns its own entry when it differs from
+    // the main one; the same number twice clutters the contact card.
+    const wa = e164(c.whatsapp);
+    if (wa && wa !== tel) lines.push(`TEL;TYPE=CELL:${wa}`);
+
     if (c.email) lines.push(`EMAIL;TYPE=INTERNET:${esc(c.email)}`);
+    // Only an unambiguous YYYY-MM-DD is emitted. A half-parsed birthday would
+    // fire her greetings on the wrong day, which is worse than none.
+    if (/^\d{4}-\d{2}-\d{2}$/.test(c.birthday.trim())) {
+      lines.push(`BDAY:${c.birthday.trim()}`);
+    }
     if (c.city || c.state) lines.push(`ADR;TYPE=HOME:;;;${esc(c.city)};${esc(c.state)};;Nigeria`);
     lines.push(`NOTE:${esc(note)}`);
     lines.push("CATEGORIES:Wendy Herbals");
