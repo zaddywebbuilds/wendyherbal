@@ -2,6 +2,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { TestimonialPopup } from "@/components/social/TestimonialPopup";
 
 export default function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
       <main id="main">{children}</main>
       <Footer />
       <CartDrawer />
+      <TestimonialPopup />
     </>
   );
 }

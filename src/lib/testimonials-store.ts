@@ -134,12 +134,27 @@ export async function mutateTestimonials(
   return next;
 }
 
+const isPublic = (t: Testimonial) => t.status === "published" && t.consentConfirmed;
+
+const newestFirst = (a: Testimonial, b: Testimonial) =>
+  (b.publishedAt ?? b.createdAt).localeCompare(a.publishedAt ?? a.createdAt);
+
 /** Only what the public may see, newest first. */
 export async function publishedFor(productSku: string): Promise<Testimonial[]> {
   const { items } = await loadTestimonials();
-  return items
-    .filter((t) => t.productSku === productSku && t.status === "published" && t.consentConfirmed)
-    .sort((a, b) => (b.publishedAt ?? b.createdAt).localeCompare(a.publishedAt ?? a.createdAt));
+  return items.filter((t) => t.productSku === productSku && isPublic(t)).sort(newestFirst);
+}
+
+/**
+ * Every published testimonial, across products, for the site-wide popup.
+ *
+ * Same gate as publishedFor: her approval plus confirmed consent. The popup
+ * shows these as what they are, somebody's own words about a product, and
+ * never as a purchase event.
+ */
+export async function publishedAll(): Promise<Testimonial[]> {
+  const { items } = await loadTestimonials();
+  return items.filter(isPublic).sort(newestFirst);
 }
 
 /**
