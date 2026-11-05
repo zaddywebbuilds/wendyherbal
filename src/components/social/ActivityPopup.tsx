@@ -175,10 +175,16 @@ export function ActivityPopup() {
               </p>
               <p className="text-[12.5px] text-[#4a5247] leading-snug">
                 ordered{" "}
-                <Link href={`/product/${card.slug}`}
-                  className="font-medium text-[#175C3D] hover:underline">
-                  {card.product}
-                </Link>
+                {/* On the product's own page, naming it again and linking back
+                    to where you already are is noise. */}
+                {pathname === `/product/${card.slug}` ? (
+                  <span className="font-medium text-[#123D2B]">this product</span>
+                ) : (
+                  <Link href={`/product/${card.slug}`}
+                    className="font-medium text-[#175C3D] hover:underline">
+                    {card.product}
+                  </Link>
+                )}
               </p>
               <p className="mt-1 text-[11px] text-[#A8B99C]">
                 {relativeTime(card.at, card.exactTime)}
