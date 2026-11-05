@@ -68,3 +68,34 @@ export const parseMoney = (v: unknown): number =>
 /** Normalises 0803… and +234 803… to one comparable form. */
 export const normalisePhone = (s: string) =>
   s.replace(/\D/g, "").replace(/^0/, "234");
+
+/* ------------------------------------------------------------ timestamps */
+
+/** Nigeria is UTC+1 all year, with no daylight saving, so this is exact. */
+const LAGOS_OFFSET_MS = 60 * 60 * 1000;
+
+/**
+ * "2026-11-05 14:32", in Lagos time.
+ *
+ * Date-only was the original format and reads fine in her sheet, but it makes
+ * "ordered 20 minutes ago" impossible and lumps a whole day's orders together.
+ * The minute is appended rather than the column changed, so every reader that
+ * matches the leading YYYY-MM-DD keeps working and her sheet still sorts.
+ */
+export const lagosStamp = (d = new Date()) =>
+  new Date(d.getTime() + LAGOS_OFFSET_MS).toISOString().slice(0, 16).replace("T", " ");
+
+/**
+ * Parses either format back to an instant. Rows written before the time was
+ * added parse as midnight Lagos, which is the best that can be said of them.
+ */
+export function parseLagosStamp(value: string): Date | null {
+  const m = value.trim().match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+  if (!m) return null;
+  const [, y, mo, d, hh, mi] = m;
+  const parsed = new Date(`${y}-${mo}-${d}T${hh ?? "00"}:${mi ?? "00"}:00+01:00`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+/** True when the stamp carries a time rather than just a date. */
+export const hasClockTime = (value: string) => /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(value.trim());

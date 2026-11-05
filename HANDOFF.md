@@ -113,6 +113,7 @@ section originally anticipated, and two questions are still open with her.
 | Admin Customers | ✅ Done — list, WhatsApp links, contact-card and CSV downloads |
 | Admin Settings | ✅ Done — Google connect + sheet chooser |
 | SEO | ✅ robots (blocking) + sitemap, 100 URLs |
+| Social proof popup | ✅ Real orders + published testimonials. Empty until there are some |
 | **Deployment** | ⏸ **Resume here.** Blocked on `vercel login` |
 | Product photos | ✅ All 93 carry one. 80 packshots, 13 botanical stand-ins |
 | Brand media | ✅ 9 photos + 3 silent clips placed. Rest of library unpublishable |

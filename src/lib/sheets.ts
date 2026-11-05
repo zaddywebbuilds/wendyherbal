@@ -4,7 +4,7 @@ import { getConnectedAccessToken } from "./google-oauth";
 import {
   ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER,
   ORDERS_RANGE, CUSTOMERS_RANGE, ORDER_COL, CUSTOMER_COL,
-  normalisePhone, parseMoney,
+  normalisePhone, parseMoney, lagosStamp,
 } from "./sheet-schema";
 
 export { ORDERS_TAB, CUSTOMERS_TAB, ORDERS_HEADER, CUSTOMERS_HEADER };
@@ -191,6 +191,7 @@ export interface SheetOrder {
   state: string;
 }
 
+/** Date only, for the customer columns where a time adds nothing. */
 const today = () => new Date().toISOString().slice(0, 10);
 
 /**
@@ -210,7 +211,9 @@ export async function recordOrder(o: SheetOrder): Promise<void> {
 
   const orderRow: (string | number)[] = [];
   orderRow[ORDER_COL.orderNumber] = o.orderNumber;
-  orderRow[ORDER_COL.date] = today();
+  // Minute precision here, unlike the customer columns: the storefront
+  // activity feed says how long ago an order came in.
+  orderRow[ORDER_COL.date] = lagosStamp();
   orderRow[ORDER_COL.name] = o.name;
   orderRow[ORDER_COL.phone] = o.phone;
   orderRow[ORDER_COL.whatsapp] = o.whatsappPhone;

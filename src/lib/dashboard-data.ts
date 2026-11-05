@@ -52,12 +52,9 @@ export interface DashboardData {
   lowStock: Product[];
 }
 
-const voided = (status: string) => /cancel|refund/i.test(status);
-
-const isAwaiting = (o: SheetOrderRow) => {
-  const s = o.status.toLowerCase();
-  return !s || s.includes("await") || s.includes("pending");
-};
+// Shared with the storefront activity feed so the two cannot disagree about
+// what a cancelled order is or how a line maps to a product.
+import { voided, isAwaiting, parseItems, matchProduct } from "./order-lines";
 
 const STATUS_BUCKETS: { label: string; color: string; test: (s: string) => boolean }[] = [
   { label: "Awaiting payment", color: "#F59E0B", test: (s) => !s || /await|pending/.test(s) },
@@ -77,31 +74,6 @@ const STATUS_BUCKETS: { label: string; color: string; test: (s: string) => boole
  * the two Brain Booster pack sizes into one row and match neither against the
  * catalogue. The size is removed only as a fallback when matching.
  */
-function parseItems(summary: string): { label: string; qty: number }[] {
-  if (!summary.trim()) return [];
-  const out: { label: string; qty: number }[] = [];
-
-  for (const chunk of summary.split(";")) {
-    const m = chunk.trim().match(/^(.+?)\s*x\s*(\d+)$/i);
-    if (!m) continue;
-    const qty = Number(m[2]);
-    if (!Number.isFinite(qty) || qty < 1) continue;
-    out.push({ label: m[1].trim(), qty });
-  }
-  return out;
-}
-
-/** Exact name first; only then try it without a trailing size in brackets. */
-function matchProduct(label: string, catalogue: Product[]): Product | undefined {
-  const lower = label.toLowerCase();
-  const exact = catalogue.find((p) => p.name.toLowerCase() === lower);
-  if (exact) return exact;
-
-  const withoutSize = lower.replace(/\s*\([^)]*\)\s*$/, "").trim();
-  if (withoutSize === lower) return undefined;
-  return catalogue.find((p) => p.name.toLowerCase() === withoutSize);
-}
-
 /** YYYY-MM-DD as written by the sheet writer; anything else is skipped. */
 function monthOf(date: string): string | null {
   const m = date.trim().match(/^(\d{4})-(\d{2})-(\d{2})/);
