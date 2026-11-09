@@ -11,6 +11,7 @@ import { FACEBOOK_URL, WHATSAPP_URL, BRAND_PHRASE } from "@/lib/constants";
 const footerLinks = {
   Company: [
     { label: "About Wendy Herbals", href: "/about" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ],
   Shop: [

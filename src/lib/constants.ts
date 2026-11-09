@@ -13,6 +13,7 @@ export const NAV_LINKS = [
   { label: "Men's Wellness", href: "/shop?category=mens-wellness" },
   { label: "Body Care", href: "/shop?category=body-care" },
   { label: "Food Spices", href: "/shop?category=food-spices" },
+  { label: "Blog", href: "/blog" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
