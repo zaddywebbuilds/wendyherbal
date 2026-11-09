@@ -1,0 +1,324 @@
+[
+  {
+    "topic": "Candidiasis (thrush) in Nigerian women — white discharge, itching, and what helps",
+    "name": "Candidiasis Infection Herbs",
+    "slug": "candidiasis-infection-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Blocked fallopian tubes in Nigeria — symptoms, causes, and what women use",
+    "name": "Blocked Fallopian Tubes Herbs with Balm",
+    "slug": "blocked-fallopian-tubes-herbs-with-balm",
+    "price": 17000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Scanty periods (oligomenorrhea) in Nigerian women — why your flow is light and what helps",
+    "name": "Scanty Period Herbs",
+    "slug": "scanty-period-herbs",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Diabetes management in Nigeria — herbs, diet, and lifestyle that Nigerian diabetics use",
+    "name": "Diabetes Herbs",
+    "slug": "diabetes-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Stomach ulcer in Nigeria — symptoms, what causes it, and what Nigerian ulcer patients use",
+    "name": "Ulcer Herbs",
+    "slug": "ulcer-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Weight loss herbs Nigeria — slimming naturally without starvation",
+    "name": "Slimming Herbs",
+    "slug": "slimming-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Belly fat and tummy fat in Nigeria — why it's hard to lose and what helps",
+    "name": "Tummy & Fat Blast Herbs",
+    "slug": "tummy-fat-blast-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Sperm motility problems in Nigerian men — slow sperm, asthenospermia, and what helps",
+    "name": "Sperm Motility Herbs",
+    "slug": "sperm-motility-herbs",
+    "price": 12000,
+    "category": "mens-wellness"
+  },
+  {
+    "topic": "Zero sperm (azoospermia) in Nigerian men — no sperm found, causes, and what helps",
+    "name": "Zero Sperm (Azoospermia) Herbs",
+    "slug": "zero-sperm-azoospermia-herbs",
+    "price": 20000,
+    "category": "mens-wellness"
+  },
+  {
+    "topic": "Endometriosis in Nigeria — symptoms, why it is missed, and herbal support",
+    "name": "Endometriosis Herbs with Balm",
+    "slug": "endometriosis-herbs-with-balm",
+    "price": 17000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Pile (haemorrhoids) in Nigeria — symptoms, causes, and what Nigerian men and women use",
+    "name": "Pile Herbs with Balm",
+    "slug": "pile-herbs-with-balm",
+    "price": 17000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "High prolactin in Nigerian women — what it is, how it blocks pregnancy, and what helps",
+    "name": "High Prolactin Herbs",
+    "slug": "high-prolactin-herbs",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Low progesterone in Nigerian women — signs, how it causes miscarriage and failed implantation",
+    "name": "Progesterone Herbs",
+    "slug": "progesterone-herbs",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Kidney stones in Nigeria — symptoms, what causes them, and herbal support",
+    "name": "Kidney Stones Herbs",
+    "slug": "kidney-stones-herbs",
+    "price": 17000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Hepatitis B in Nigeria — what it means, how it spreads, and what herbal support is available",
+    "name": "Hepatitis Herbs",
+    "slug": "hepatitis-herbs",
+    "price": 20000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Hair loss and slow hair growth in Nigeria — causes and what helps",
+    "name": "Hair Growth Herbs",
+    "slug": "hair-growth-herbs",
+    "price": 10000,
+    "category": "body-care"
+  },
+  {
+    "topic": "Low blood (anaemia) in Nigeria — symptoms, causes and how to boost blood naturally",
+    "name": "Blood Booster Herbs",
+    "slug": "blood-booster-herbs",
+    "price": 10000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Not ovulating in Nigeria — irregular ovulation, how to know if you are ovulating, what helps",
+    "name": "Ovulation Herbs",
+    "slug": "ovulation-herbs",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Pelvic inflammatory disease (PID) in Nigerian women — symptoms, causes, and herbal support",
+    "name": "PID Herbs",
+    "slug": "pid-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Sperm morphology (abnormal sperm shape) in Nigerian men — what it means and what helps",
+    "name": "Sperm Morphology Herbs",
+    "slug": "sperm-morphology-herbs",
+    "price": 15000,
+    "category": "mens-wellness"
+  },
+  {
+    "topic": "Missed periods (amenorrhea) in Nigerian women — why your period stopped and what helps",
+    "name": "Ceased Period Herbs",
+    "slug": "ceased-period-herbs",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Gallstones in Nigeria — symptoms, what causes them, and herbal support",
+    "name": "Gallstones Herbs",
+    "slug": "gallstones-herbs",
+    "price": 17000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "H. pylori infection in Nigeria — stomach ulcer bacteria, symptoms and what helps",
+    "name": "H-Pylori Herbs",
+    "slug": "h-pylori-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Arthritis and joint pain in Nigeria — symptoms, causes, and herbal massage support",
+    "name": "Arthritis Herbs and Massage Balm",
+    "slug": "arthritis-herbs-and-massage-balm",
+    "price": 17000,
+    "category": "body-care"
+  },
+  {
+    "topic": "Weight gain — being underweight in Nigeria, causes, and herbs that help you gain healthy weight",
+    "name": "Weight Gain Herbs",
+    "slug": "weight-gain-herbs",
+    "price": 17000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Breast lump in Nigerian women — when to worry, what causes lumps, and herbal support",
+    "name": "Breast Lump Herbs & Balm",
+    "slug": "breast-lump-herbs-balm",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Infertility in Nigerian women — unexplained infertility, what blocks conception, and herbal cleanse",
+    "name": "Infertility Flusher",
+    "slug": "infertility-flusher",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Low AMH (ovarian reserve) in Nigeria — what AMH is, why it matters for fertility, what helps",
+    "name": "AMH Hormone Herbs",
+    "slug": "amh-hormone-herbs",
+    "price": 12000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Egg quality in Nigerian women — how to improve egg quality before IVF or natural conception",
+    "name": "Egg Booster Herbs",
+    "slug": "egg-booster-herbs",
+    "price": 12000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Rheumatism and body stiffness in Nigeria — what causes it and herbal massage support",
+    "name": "Rheumatism Herbs and Massage Cream",
+    "slug": "rheumatism-herbs-and-massage-cream",
+    "price": 17000,
+    "category": "body-care"
+  },
+  {
+    "topic": "Goiter (swollen neck / thyroid enlargement) in Nigeria — causes, signs, and herbal support",
+    "name": "Goiter Herbs with Balm",
+    "slug": "goiter-herbs-with-balm",
+    "price": 17000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Bronchitis in Nigeria — persistent cough, chest tightness, and what helps",
+    "name": "Bronchitis Herbs",
+    "slug": "bronchitis-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Eye problems in Nigeria — blurred vision, eye pain, and herbal eye support",
+    "name": "Eye Problem Herbs",
+    "slug": "eye-problem-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Body pain and muscle aches in Nigeria — causes and herbal massage relief",
+    "name": "Body Pains Herbs and Massage Cream",
+    "slug": "body-pains-herbs-and-massage-cream",
+    "price": 15000,
+    "category": "body-care"
+  },
+  {
+    "topic": "Dandruff and itchy scalp in Nigeria — causes and what Nigerian women and men use",
+    "name": "Dandruff Herbs",
+    "slug": "dandruff-herbs",
+    "price": 8000,
+    "category": "body-care"
+  },
+  {
+    "topic": "Hydrosalpinx (fluid in fallopian tubes) in Nigeria — what it is, how it blocks conception",
+    "name": "Hydrosalpinx Herbs with Balm",
+    "slug": "hydrosalpinx-herbs-with-balm",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Adhesions and scar tissue in the womb or pelvis in Nigeria — causes and herbal support",
+    "name": "Adhesion Herbs",
+    "slug": "adhesion-herbs",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Hotness in the womb — womb heat and uterine inflammation in Nigeria, signs and herbal support",
+    "name": "Hotness of the Womb Herbs",
+    "slug": "hotness-of-the-womb-herbs",
+    "price": 12000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "Low estrogen in Nigerian women — signs, causes, and what helps",
+    "name": "Estrogen Hormone Herbs",
+    "slug": "estrogen-hormone-herbs",
+    "price": 12000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "LH hormone and ovulation in Nigeria — what LH does, why it matters for fertility",
+    "name": "LH Hormone Herbs",
+    "slug": "lh-hormone-herbs",
+    "price": 12000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "E. coli infection in Nigeria — symptoms, how you catch it, and what helps",
+    "name": "E-coli Infection Herbs",
+    "slug": "e-coli-infection-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Sepsis (blood poisoning) in Nigeria — warning signs and what to do",
+    "name": "Sepsis Herbs",
+    "slug": "sepsis-herbs",
+    "price": 15000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Warts in Nigeria — what they are, how they spread, and herbal support",
+    "name": "Warts Herbs with Infection Cream",
+    "slug": "warts-herbs-with-infection-cream",
+    "price": 17000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Brain fog and poor memory in Nigeria — what causes poor concentration and what helps",
+    "name": "Brain Booster Herbs (Big)",
+    "slug": "brain-booster-herbs-big",
+    "price": 7000,
+    "category": "herbal-collections"
+  },
+  {
+    "topic": "Infertility worm (ehi afor) in Nigerian women — what it is, how it causes infertility",
+    "name": "Ehi Afor Herbs (Infertility Worm)",
+    "slug": "ehi-afor-herbs-infertility-worm",
+    "price": 15000,
+    "category": "womens-wellness"
+  },
+  {
+    "topic": "How to conceive twins naturally in Nigeria — ovulation, genetics, and hyper-ovulation herbs",
+    "name": "Hyper-Ovulation Booster Herbs for Twins",
+    "slug": "hyper-ovulation-booster-herbs-for-twins",
+    "price": 17000,
+    "category": "womens-wellness"
+  }
+]

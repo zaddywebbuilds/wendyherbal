@@ -1,0 +1,65 @@
+name: Daily Blog Post
+
+on:
+  schedule:
+    # 6:00 AM UTC = 7:00 AM Nigeria (WAT) every day
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate blog post
+        id: generate
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          OUTPUT=$(node scripts/generate-blog-post.mjs 2>&1)
+          echo "$OUTPUT"
+          SLUG=$(echo "$OUTPUT" | grep "BLOG_POST_SLUG=" | sed 's/BLOG_POST_SLUG=//')
+          if [ -z "$SLUG" ]; then
+            echo "No slug found — queue may be empty or generation failed"
+            exit 1
+          fi
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "Generated slug: $SLUG"
+
+      - name: Commit and push
+        run: |
+          git config user.name "Wendy Herbals Bot"
+          git config user.email "noreply@wendyherbals.com"
+          git add src/data/blog-posts.ts scripts/product-queue.json
+          git commit -m "feat(blog): daily post — ${{ steps.generate.outputs.slug }}"
+          git push origin main
+
+      - name: Wait for Vercel deploy to complete
+        # Vercel deploys typically finish in 60-90 seconds after the push
+        run: sleep 120
+
+      - name: Submit new post to Google Indexing API
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+        run: |
+          node scripts/index-url.mjs "https://wendyherbals.com/blog/${{ steps.generate.outputs.slug }}"
+
+      - name: Submit blog listing to Google Indexing API
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+        run: |
+          node scripts/index-url.mjs "https://wendyherbals.com/blog"

@@ -1033,4 +1033,5 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // <AUTO_GENERATED_END>
 ];

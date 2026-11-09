@@ -32,6 +32,9 @@ export const metadata: Metadata = {
   ...(SITE_URL ? { metadataBase: new URL(SITE_URL) } : {}),
   title: { default: `${SITE_NAME} — ${SITE_TAGLINE}`, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION ?? "",
+  },
   openGraph: {
     title: `${SITE_NAME} — ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,

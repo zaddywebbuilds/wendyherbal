@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { CATEGORY_LABELS } from "@/lib/products";
 import { getCatalogue } from "@/lib/catalogue";
+import { getAllPosts } from "@/lib/blog";
 
 /** Written pages. Low churn, so they sit at a yearly change frequency. */
 const CONTENT_PAGES = [
@@ -38,6 +39,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${base}/product/${p.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+
+    { url: `${base}/blog`, changeFrequency: "daily" as const, priority: 0.9 },
+
+    ...getAllPosts().map((post) => ({
+      url: `${base}/blog/${post.slug}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
   ];
 }
