@@ -1,12 +1,9 @@
 /**
  * Blog post data for Wendy Herbals.
  *
- * Content targets the specific phrases Nigerians type into search engines
- * ("ewuro", "dongoyaro", "zobo", "atale pupa", etc.) while staying inside
- * the health-claims boundaries described in HANDOFF.md.
- *
- * To add a post, append to BLOG_POSTS and redeploy. For daily auto-posts,
- * a build-time script should insert new entries here and push a commit.
+ * Each post targets a specific health concern Nigerians search for,
+ * walks through the condition clearly, and ends by pointing to the
+ * exact Wendy Herbals product that addresses it.
  *
  * Section types:
  *   p       — paragraph
@@ -52,1040 +49,987 @@ export const BLOG_CATEGORIES = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    slug: "bitter-leaf-ewuro-health-benefits-nigeria",
-    title: "Bitter Leaf (Ewuro): Health Benefits and How Nigerians Use It",
+    slug: "yeast-infection-symptoms-treatment-nigeria",
+    title: "Yeast Infection: Symptoms, Causes and What Nigerian Women Use for Relief",
     excerpt:
-      "Bitter leaf — called ewuro in Yoruba, onugbu in Igbo, and shakwa shiwa in Hausa — is one of the most widely used medicinal plants in Nigeria. Here is what research says about how it works.",
-    category: "Herb Guide",
+      "Vaginal yeast infection is one of the most common complaints among Nigerian women — but many suffer in silence because they do not recognise the symptoms or know where to get help. Here is what you need to know.",
+    category: "Women's Wellness",
     publishedAt: "2026-11-09",
-    coverSrc: "/media/brand/dried-herbs-and-hibiscus-bowls.jpg",
-    coverAlt: "Dried botanicals and hibiscus in steel bowls on a work surface",
-    keywords: [
-      "bitter leaf health benefits Nigeria",
-      "ewuro uses",
-      "bitter leaf for diabetes Nigeria",
-      "onugbu benefits",
-      "vernonia amygdalina Nigeria",
-      "bitter leaf for malaria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Walk through any Nigerian market and you will find fresh bitter leaf bundled beside the tomatoes and peppers. Called ewuro in Yoruba, onugbu in Igbo, and shakwa shiwa in Hausa, Vernonia amygdalina is a small shrub whose leaves carry a distinctive sharp taste that softens when washed or squeezed. It goes into egusi soup, bitter leaf soup, and ofe onugbu, but Nigerians have used it medicinally for generations.",
-      },
-      {
-        type: "h2",
-        content: "What bitter leaf contains",
-      },
-      {
-        type: "p",
-        content:
-          "Laboratory analyses show that bitter leaf leaves contain flavonoids, alkaloids, terpenes, and saponins. These are the same classes of compounds found in many plant-based medicines. The bitterness comes primarily from sesquiterpene lactones, which also appear to carry much of the plant's biological activity.",
-      },
-      {
-        type: "h2",
-        content: "How Nigerians use it traditionally",
-      },
-      {
-        type: "list",
-        items: [
-          "Pressed juice: fresh leaves are washed, squeezed, and the dark-green juice is drunk directly or diluted with water.",
-          "In soups: leaves are washed repeatedly to reduce bitterness, then cooked. The bitter compounds survive cooking in lower concentrations.",
-          "As a tonic: dried leaves are steeped in water or local gin (ogogoro) overnight and drunk in small quantities.",
-          "Topical: squeezed leaf paste is applied to skin to soothe rashes and wounds.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "What research suggests",
-      },
-      {
-        type: "p",
-        content:
-          "Several peer-reviewed studies, many conducted in Nigerian universities, have explored bitter leaf in cell cultures and animal models. Research has looked at its effect on blood glucose regulation, its antimicrobial activity against common pathogens, and its antioxidant capacity. Results are promising but most work has not yet progressed to large-scale human clinical trials, so conclusions should be treated as preliminary.",
-      },
-      {
-        type: "p",
-        content:
-          "Some studies have specifically examined bitter leaf's traditional use in managing symptoms associated with malaria and diabetes, two of the most prevalent health concerns in Nigeria. The activity observed in laboratory settings provides a scientific basis for why the plant has remained in use, though it does not confirm clinical effectiveness at the doses people typically consume.",
-      },
-      {
-        type: "h2",
-        content: "Bitter leaf and digestion",
-      },
-      {
-        type: "p",
-        content:
-          "The bitter compounds in ewuro stimulate digestive secretions, which is part of why bitter leaf soup is considered good after a heavy meal. Many Nigerians use fresh bitter leaf juice to ease bloating, stomach cramps, and sluggish digestion. This use is consistent with the broader pharmacological class of bitters, which have a long history in both African and European herbal medicine.",
-      },
-      {
-        type: "h2",
-        content: "Fertility and reproductive health",
-      },
-      {
-        type: "p",
-        content:
-          "Bitter leaf is widely associated with reproductive health in Nigeria. Women use it to encourage regular menstruation and ease discomfort around the cycle. The plant contains compounds that have shown uterine activity in animal studies, which may explain the traditional use — though this also means it is usually avoided during pregnancy.",
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "Important",
-        content:
-          "Bitter leaf should not be consumed in large medicinal quantities during pregnancy. If you are on medication for diabetes, hypertension, or any chronic condition, speak to a healthcare professional before adding bitter leaf as a supplement, as it may interact with your treatment.",
-      },
-      {
-        type: "h2",
-        content: "How to get the most from bitter leaf",
-      },
-      {
-        type: "list",
-        items: [
-          "Fresh juice: wash leaves thoroughly, squeeze firmly into a cup, dilute with water to taste. Many people drink a small glass before breakfast.",
-          "In cooking: wash the leaves several times before adding to soup — the washing removes excess bitterness and some of the more concentrated compounds.",
-          "Dried powder: easier to store than fresh leaf. Used in smaller amounts since the flavour and potency are more concentrated.",
-          "Combination: bitter leaf is often combined with scent leaf (efirin) in Nigerian tonic preparations.",
-        ],
-      },
-      {
-        type: "cta",
-        title: "Browse our Herbal Collections",
-        content:
-          "Wendy Herbals carries botanical preparations for everyday Nigerian wellness, made in small batches.",
-        href: "/shop?category=herbal-collections",
-        ctaLabel: "Shop Herbal Collections",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This article is for general information only. It describes traditional use and published research; it is not medical advice and does not recommend any product as a treatment for any condition.",
-      },
-    ],
-  },
-
-  {
-    slug: "moringa-benefits-nigeria-what-research-says",
-    title: "Moringa: What Research Actually Says About Nigeria's Miracle Tree",
-    excerpt:
-      "Moringa oleifera — called the miracle tree, drumstick tree, or ewe ile in Yoruba — is one of the most studied plants in Africa. Here is what the science shows, and where it falls short.",
-    category: "Herb Guide",
-    publishedAt: "2026-11-08",
-    coverSrc: "/media/brand/scent-leaf-plant.jpg",
-    coverAlt: "Scent leaf, known as efirin in Nigeria, growing in full green leaf",
-    keywords: [
-      "moringa benefits Nigeria",
-      "moringa oleifera Nigeria",
-      "moringa for diabetes",
-      "moringa for fertility",
-      "ewe ile uses",
-      "moringa leaves benefits",
-      "miracle tree Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Moringa oleifera has been used in Nigeria and across sub-Saharan Africa for centuries. The leaves, seeds, bark, and roots all have traditional medicinal uses, and the nutritional profile of the leaves — high in vitamins A, C, and B6, plus calcium, iron, and protein — is remarkably dense for a leafy plant. That nutritional density is probably where the nickname 'miracle tree' began.",
-      },
-      {
-        type: "h2",
-        content: "What moringa leaves contain",
-      },
-      {
-        type: "p",
-        content:
-          "Fresh moringa leaves are rich in antioxidants including quercetin, chlorogenic acid, and beta-carotene. Dried moringa powder concentrates these nutrients, making it a popular supplement. The plant also contains isothiocyanates, which are sulphur-containing compounds also found in broccoli and are under investigation for anti-inflammatory effects.",
-      },
-      {
-        type: "h2",
-        content: "What Nigerian researchers have studied",
-      },
-      {
-        type: "list",
-        items: [
-          "Blood sugar management: several small studies in Nigeria and other countries have found that moringa leaf powder may reduce fasting blood glucose in people with type 2 diabetes, possibly by slowing carbohydrate digestion.",
-          "Inflammation: laboratory work shows that moringa extracts inhibit inflammatory markers. Human studies are still limited.",
-          "Liver health: animal studies show protective effects against liver damage caused by certain toxins.",
-          "Breast milk production: moringa is widely used by nursing mothers in Nigeria to support milk supply. Some small clinical trials support this traditional use.",
-          "Cholesterol: early evidence suggests moringa may lower LDL cholesterol, though large trials are needed.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "Moringa and fertility",
-      },
-      {
-        type: "p",
-        content:
-          "Moringa is frequently mentioned in Nigerian discussions about fertility support, for both men and women. For men, some studies have looked at moringa seed oil's effect on sperm quality. For women, the high folate content in moringa leaves makes it nutritionally relevant during pre-conception and early pregnancy. However, moringa root and bark are traditionally associated with uterine stimulation and are advised against during pregnancy itself.",
-      },
-      {
-        type: "h2",
-        content: "How Nigerians use moringa",
-      },
-      {
-        type: "list",
-        items: [
-          "Fresh leaves in soup: added like spinach at the end of cooking to preserve nutrients.",
-          "Moringa powder: a teaspoon stirred into pap (akamu), smoothies, or water.",
-          "Moringa tea: dried leaves steeped in hot water for 5–10 minutes.",
-          "In egusi and vegetable soups: leaves added for nutritional value and flavour.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "What to watch for",
-      },
-      {
-        type: "p",
-        content:
-          "Moringa leaves and powder are generally considered safe in food quantities. Concerns arise with high-dose supplements and with the root and bark, which have different — and stronger — biological activity than the leaves. Pregnant women are advised to avoid medicinal doses of moringa bark and root. People on diabetes or blood pressure medication should monitor carefully and inform their doctor, since moringa may add to the effect of those medicines.",
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "During pregnancy",
-        content:
-          "Moringa leaf in food amounts is generally considered safe, but medicinal-dose moringa supplements and moringa root or bark should be avoided during pregnancy. Always consult a healthcare professional.",
-      },
-      {
-        type: "cta",
-        title: "Natural wellness at Wendy Herbals",
-        content:
-          "Browse our botanical preparations, crafted in small batches using traditional Nigerian formulations.",
-        href: "/shop?category=herbal-collections",
-        ctaLabel: "Shop Herbal Collections",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is general educational information, not medical advice. It does not recommend any product as a treatment for any medical condition.",
-      },
-    ],
-  },
-
-  {
-    slug: "zobo-hibiscus-blood-pressure-nigeria",
-    title: "Zobo for Blood Pressure: What Nigerian Research Shows",
-    excerpt:
-      "Zobo — made from dried hibiscus calyces — is one of the most popular drinks in Nigeria. Research suggests it may support healthy blood pressure. Here is what the studies show and how to use it.",
-    category: "General Wellness",
-    publishedAt: "2026-11-07",
-    coverSrc: "/media/brand/dried-herbs-and-hibiscus-bowls.jpg",
-    coverAlt: "Dried hibiscus calyces in a steel bowl alongside other dried herbs",
-    keywords: [
-      "zobo for blood pressure",
-      "zobo drink health benefits",
-      "hibiscus tea blood pressure Nigeria",
-      "zobo for hypertension Nigeria",
-      "hibiscus for high blood pressure",
-      "how to make zobo for blood pressure",
-      "zobo benefits and side effects Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Zobo is made by steeping dried Hibiscus sabdariffa calyces in hot or cold water, then sweetening with sugar and spicing with ginger, pineapple, or cloves. It is tart, deep red, and common at Nigerian celebrations, roadside stalls, and in homes. What many people do not know is that of all the traditional Nigerian drinks, zobo has the most robust clinical evidence behind it — particularly for blood pressure.",
-      },
-      {
-        type: "h2",
-        content: "What is in zobo that affects blood pressure?",
-      },
-      {
-        type: "p",
-        content:
-          "The red colour of zobo comes from anthocyanins, a class of polyphenol antioxidants. Hibiscus calyces are also rich in organic acids including citric, malic, and hibiscus acid. Research suggests these compounds may inhibit an enzyme called ACE (angiotensin-converting enzyme) — the same enzyme that many blood pressure drugs target. This is likely how hibiscus achieves its observed antihypertensive effect.",
-      },
-      {
-        type: "h2",
-        content: "What the clinical research shows",
-      },
-      {
-        type: "p",
-        content:
-          "Several randomised controlled trials — the strongest type of human study — have found that drinking hibiscus tea daily lowers systolic blood pressure in people with mild to moderate hypertension. A 2010 study published in the Journal of Nutrition found a significant reduction in systolic blood pressure after six weeks. A Cochrane review of hibiscus tea and blood pressure concluded that the evidence is promising but that larger, more rigorous trials are still needed.",
-      },
-      {
-        type: "p",
-        content:
-          "Nigerian studies conducted at teaching hospitals have also investigated zobo's antihypertensive effects in local populations, with generally consistent results. The effect appears modest compared to pharmaceutical antihypertensives and is not a substitute for prescribed medication.",
-      },
-      {
-        type: "h2",
-        content: "How to make zobo for blood pressure support",
-      },
-      {
-        type: "list",
-        items: [
-          "Use dried hibiscus calyces, not the artificial zobo powder sachets sold in markets — the powder often contains very little actual hibiscus.",
-          "Add a large handful (about 50g) of dried calyces to 1 litre of water.",
-          "Bring to the boil, then simmer for 10 minutes.",
-          "Allow to cool before straining.",
-          "Sweeten lightly — excess sugar works against the cardiovascular benefit.",
-          "Fresh ginger (a thumb-sized piece, sliced) adds flavour and additional anti-inflammatory compounds.",
-          "Studies typically used about 2 cups (500ml) per day.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "Other health associations with zobo",
-      },
-      {
-        type: "list",
-        items: [
-          "Cholesterol: some studies suggest zobo may lower LDL and total cholesterol.",
-          "Antioxidant protection: the anthocyanins in hibiscus are potent free-radical scavengers.",
-          "Liver health: animal research suggests hepatoprotective effects, though human evidence is limited.",
-          "Weight management: zobo is low in calories and may help with fluid balance.",
-        ],
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "Important interactions",
-        content:
-          "Hibiscus can interact with hydrochlorothiazide and other diuretics, as well as some diabetes medications. If you are on blood pressure or diabetes treatment, do not use zobo as a supplement without telling your doctor. It is not a substitute for prescribed antihypertensives.",
-      },
-      {
-        type: "h2",
-        content: "What to avoid when buying hibiscus",
-      },
-      {
-        type: "p",
-        content:
-          "Dried hibiscus calyces sold in Nigerian markets vary enormously in quality. Look for a deep burgundy-red colour and a sharp, tart smell. Very dark brown or faded-pink calyces have usually been poorly stored. The artificial zobo drink powders sold in sachets typically contain food colouring, artificial flavour, and very little actual hibiscus — they will not give the same effect.",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is general educational information, not medical advice. It does not replace professional medical assessment or treatment.",
-      },
-    ],
-  },
-
-  {
-    slug: "dongoyaro-neem-traditional-uses-nigeria",
-    title: "Dongoyaro (Neem): Traditional Uses in Nigerian Homes",
-    excerpt:
-      "Dongoyaro is so common across Nigeria that many people have one growing in their compound without knowing its full range of traditional uses. Here is how it has been used and what science has found.",
-    category: "Herb Guide",
-    publishedAt: "2026-11-06",
-    coverSrc: "/media/brand/ground-herb-powders.jpg",
-    coverAlt: "Ground herb powders in red, turmeric yellow and green in a steel bowl",
-    keywords: [
-      "dongoyaro uses Nigeria",
-      "neem tree benefits Nigeria",
-      "dongoyaro for malaria",
-      "neem leaf tea benefits Nigeria",
-      "azadirachta indica Nigeria",
-      "dongoyaro for skin",
-      "neem for infections Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Azadirachta indica — called dongoyaro in Hausa and Yoruba, and known globally as neem — is one of the most recognisable trees in Nigeria. Its branches are sold in markets as chewing sticks for oral health, its leaves are boiled into tea, and its oil is pressed for skin and hair use. The tree is so prevalent and so well-regarded that it is often planted at the entrance of compounds as a protective and medicinal presence.",
-      },
-      {
-        type: "h2",
-        content: "What makes neem medicinally active",
-      },
-      {
-        type: "p",
-        content:
-          "Neem contains more than 150 biologically active compounds, including azadirachtin, nimbin, nimbidin, and gedunin. These compounds show antibacterial, antifungal, antiviral, anti-inflammatory, and anthelmintic activity in laboratory studies. Neem is one of the few medicinal plants where the evidence spans from traditional use through laboratory research to some clinical investigation.",
-      },
-      {
-        type: "h2",
-        content: "How Nigerians use dongoyaro traditionally",
-      },
-      {
-        type: "list",
-        items: [
-          "Malaria tea: fresh or dried leaves are boiled and the tea drunk for fever and malaria symptoms. This is one of the most widespread uses across all parts of Nigeria.",
-          "Chewing stick: neem twigs are used to brush teeth. The antibacterial activity of neem is well-documented and is the basis for several commercial toothpastes.",
-          "Skin conditions: leaf paste or neem oil applied to acne, ringworm, eczema, and scabies. Neem's antifungal and antibacterial properties support these uses.",
-          "Internal parasites: dongoyaro leaf tea is used as an antiparasitic, particularly for intestinal worms.",
-          "Wound healing: crushed leaves applied to cuts and bruises to prevent infection.",
-          "Insect repellent: dried leaves stored with clothes and grains, or burned as a mosquito deterrent.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "Neem and malaria",
-      },
-      {
-        type: "p",
-        content:
-          "The use of neem for malaria is so widespread in Nigeria that it has been studied extensively. Neem leaf compounds show activity against Plasmodium falciparum in laboratory settings, particularly gedunin and limonoids. However, neem tea is significantly less potent than artemisinin-based combination therapies (ACTs), which are the current standard of care for malaria. It is important not to delay proven treatment while trying herbal remedies for a confirmed or suspected malaria infection.",
-      },
-      {
-        type: "h2",
-        content: "Neem for skin problems",
-      },
-      {
-        type: "p",
-        content:
-          "This is probably where neem's clinical evidence is strongest. Its antifungal activity against Candida species and its antibacterial action against Staphylococcus aureus and Streptococcus — two of the most common causes of skin infections — have been confirmed in multiple studies. Neem oil is a recognized component in several medically licensed dermatology preparations. For common skin conditions like pimples, dandruff, athlete's foot, and ringworm, the evidence is reasonably solid.",
-      },
-      {
-        type: "h2",
-        content: "How to prepare neem leaf tea",
-      },
-      {
-        type: "list",
-        items: [
-          "Gather a handful of fresh neem leaves (about 20-25 leaves) or use dried leaves.",
-          "Rinse well under running water.",
-          "Add to 500ml of water and bring to a boil.",
-          "Reduce heat and simmer for 10 minutes.",
-          "Allow to cool, then strain.",
-          "The tea is very bitter — this is normal. Honey can be added to taste.",
-          "Traditional dosage is one small cup (about 100–150ml) once or twice daily during illness.",
-        ],
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "Important cautions",
-        content:
-          "Neem should not be given to infants or young children — high doses have caused serious complications in small children. It should be avoided during pregnancy. Neem oil should not be taken internally. Do not use neem leaf tea as an alternative to malaria treatment — seek confirmed diagnosis and proper medication.",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is general educational information about traditional use, not medical advice or a treatment recommendation.",
-      },
-    ],
-  },
-
-  {
-    slug: "herbs-for-female-fertility-nigeria",
-    title: "Natural Herbs for Female Fertility: What Nigerians Use and What Research Shows",
-    excerpt:
-      "Many Nigerian women use herbal preparations alongside conventional care when trying to conceive. This guide covers the herbs most commonly used for female fertility support in Nigeria and what the evidence shows.",
-    category: "Women's Wellness",
-    publishedAt: "2026-11-05",
-    coverSrc: "/media/brand/measuring-herbal-preparation.jpg",
-    coverAlt: "Wendy measuring herbal preparation at her desk",
-    keywords: [
-      "herbs for female fertility Nigeria",
-      "how to boost fertility naturally Nigeria",
-      "herbal remedy for fertility Nigeria",
-      "natural fertility herbs Nigeria",
-      "herbs to get pregnant Nigeria",
-      "herbal treatment for infertility Nigeria",
-      "women fertility herbs Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Fertility is one of the most emotionally significant health concerns for many Nigerian women and families. The pressure is real, and it is not surprising that many women explore every available option, including traditional herbal preparations that have been used in Nigerian communities for generations. This article covers the herbs most commonly associated with female fertility support in Nigeria, what they contain, and what research has found about how they work.",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "Before you start",
-        content:
-          "Infertility has many causes. For the best outcome, speak to a gynaecologist to understand the specific cause in your case before choosing any herbal approach. Many conditions that affect fertility (blocked tubes, fibroids, hormonal imbalances, PCOS) respond differently to different interventions.",
-      },
-      {
-        type: "h2",
-        content: "Bitter leaf (Ewuro)",
-      },
-      {
-        type: "p",
-        content:
-          "Bitter leaf is the herb most commonly recommended in Nigerian herbal practice for female fertility. The traditional use centres on regulating the menstrual cycle and supporting hormonal balance. Some animal studies have found that Vernonia amygdalina extracts influence estrogen activity and uterine function. The leaves contain phytoestrogens — plant compounds with mild estrogen-like activity — which may explain why the plant is so widely associated with reproductive health.",
-      },
-      {
-        type: "h2",
-        content: "Moringa (Ewe ile)",
-      },
-      {
-        type: "p",
-        content:
-          "Moringa's relevance to fertility is primarily nutritional. Its exceptionally high folate content is relevant for women trying to conceive — folate is well-established as essential for preventing neural tube defects in early pregnancy. Moringa also contains zinc and iron, both important for reproductive health. Some practitioners recommend moringa as a nutritional foundation rather than a direct fertility stimulant.",
-      },
-      {
-        type: "h2",
-        content: "Ashwagandha (Indian ginseng)",
-      },
-      {
-        type: "p",
-        content:
-          "Ashwagandha has become increasingly available in Nigerian herbal markets. It is an adaptogen — a herb that may help the body manage stress — and is associated with balancing cortisol, the stress hormone. Elevated cortisol can disrupt ovulation and menstruation. Small clinical studies have found that ashwagandha supplementation improves hormonal balance and sexual function in women, though more research is needed specifically for fertility.",
-      },
-      {
-        type: "h2",
-        content: "Vitex (Chaste tree berry)",
-      },
-      {
-        type: "p",
-        content:
-          "Vitex agnus-castus is not traditionally Nigerian, but it has become widely used in Nigerian herbal practice over the last decade. It works on the pituitary gland to increase progesterone activity relative to estrogen, making it most relevant for women with luteal phase defects or irregular cycles. Several small clinical trials show improved cycle regularity and pregnancy rates in women with irregular cycles. It typically needs to be used for at least three months to show effect.",
-      },
-      {
-        type: "h2",
-        content: "Egungun-ogun (Costus afer)",
-      },
-      {
-        type: "p",
-        content:
-          "Costus afer — called egungun-ogun or monkey sugar cane in some parts of Nigeria — is used in Yoruba herbal medicine for reproductive health. Research has found anti-inflammatory compounds in the plant that may support uterine health. It is often combined with other herbs in traditional tonic preparations.",
-      },
-      {
-        type: "h2",
-        content: "What actually works: managing expectations",
-      },
-      {
-        type: "p",
-        content:
-          "The evidence for herbal fertility treatments in humans is generally preliminary — most studies are small, short-term, and do not meet the standards required for pharmaceutical approval. This does not mean the herbs do not work; it means the research has not yet proved that they do at the level required by modern medicine. Many women in Nigeria use herbal preparations alongside standard fertility treatment, not instead of it. If you are working with a gynaecologist or fertility specialist, tell them what you are taking.",
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "During early pregnancy",
-        content:
-          "Several herbs used to stimulate menstruation or regulate the cycle — including bitter leaf, moringa bark and root, and ginger in large amounts — should be used with caution or avoided once pregnancy is confirmed. When in doubt, stop any herbal supplement and consult a doctor.",
-      },
-      {
-        type: "cta",
-        title: "Women's Wellness at Wendy Herbals",
-        content:
-          "Browse our herbal preparations for women's health, formulated using traditional Nigerian botanicals.",
-        href: "/shop?category=womens-wellness",
-        ctaLabel: "Shop Women's Wellness",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is general educational information, not medical advice. It does not recommend any product as a treatment for infertility or any medical condition.",
-      },
-    ],
-  },
-
-  {
-    slug: "herbs-for-male-fertility-low-sperm-count-nigeria",
-    title: "Low Sperm Count: Nigerian Herbs for Male Fertility Support",
-    excerpt:
-      "Male fertility challenges affect more Nigerian men than many realise. This guide covers the herbs traditionally used in Nigeria for sperm count and male reproductive health, and what current research suggests about them.",
-    category: "Men's Wellness",
-    publishedAt: "2026-11-04",
-    coverSrc: "/media/brand/ground-herb-powders.jpg",
-    coverAlt: "Ground herb powders in a steel bowl",
-    keywords: [
-      "herbal remedy for low sperm count Nigeria",
-      "how to increase sperm count naturally Nigeria",
-      "male fertility herbs Nigeria",
-      "herbs for sperm count Nigeria",
-      "natural remedy for male infertility Nigeria",
-      "herbal treatment for sperm count Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Male factor infertility is estimated to contribute to about half of all infertility cases globally, and Nigeria is no exception. Low sperm count (oligospermia), poor sperm motility, and abnormal morphology are the most common male fertility issues. Many Nigerian men prefer to explore herbal options first, partly for privacy and partly because traditional medicine has a long history in managing this concern.",
-      },
-      {
-        type: "h2",
-        content: "Moringa (Ewe ile)",
-      },
-      {
-        type: "p",
-        content:
-          "Moringa is probably the herb most studied for male fertility in the Nigerian context. Animal studies conducted in Nigerian universities have found that moringa seed oil and leaf extracts improve sperm count, motility, and morphology in animals given the supplement. The proposed mechanism involves the plant's high antioxidant content protecting sperm from oxidative damage — sperm cells are particularly vulnerable to free-radical attack. Human clinical data is limited but the mechanistic case is strong.",
-      },
-      {
-        type: "h2",
-        content: "Ashwagandha",
-      },
-      {
-        type: "p",
-        content:
-          "Ashwagandha is one of the few herbal supplements with actual published clinical trial data for male fertility. A 2010 randomised controlled trial published in the journal Fertility and Sterility found that ashwagandha root supplementation significantly improved sperm count, motility, and serum testosterone in infertile men compared to placebo. A 2015 study found similar results. The effect appears to involve reducing oxidative stress in semen and modulating hormones including LH and FSH.",
-      },
-      {
-        type: "h2",
-        content: "Tribulus terrestris",
-      },
-      {
-        type: "p",
-        content:
-          "Known as puncture vine, Tribulus is sold in many Nigerian herbal shops for male vitality. It has traditionally been associated with testosterone support. While some studies show improvements in sexual desire and function, its effect on actual sperm parameters and testosterone levels in humans is inconsistent across trials — some show improvement, others show no significant effect. It appears safer than many alternatives, but the evidence is mixed.",
-      },
-      {
-        type: "h2",
-        content: "Ginseng",
-      },
-      {
-        type: "p",
-        content:
-          "Both Asian (Panax) and West African (Mondia whitei, sometimes called African ginseng or white ginger) ginseng are used in Nigerian herbal practice for male reproductive health. Mondia whitei is native to West and Central Africa and has been shown in several studies to stimulate testosterone production and improve sperm parameters in animal models. It is sometimes sold under its local names in Nigerian markets.",
-      },
-      {
-        type: "h2",
-        content: "Zinc and selenium-rich plants",
-      },
-      {
-        type: "p",
-        content:
-          "Some of the effect attributed to various herbs for male fertility may partly be explained by their mineral content. Zinc is essential for testosterone production and sperm formation — moringa leaves, pumpkin seeds, and sesame (which is used in Nigerian cooking) are all reasonable sources. Selenium is important for sperm motility. A deficiency in either mineral can impair fertility, and correcting a deficiency through diet or supplementation has clear evidence of benefit.",
-      },
-      {
-        type: "h2",
-        content: "Lifestyle factors matter as much as herbs",
-      },
-      {
-        type: "list",
-        items: [
-          "Heat: keeping the testes cool is important. Tight clothing, long hot baths, and laptops on the lap all raise scrotal temperature and can reduce sperm count temporarily.",
-          "Alcohol: heavy alcohol consumption reduces testosterone and impairs sperm production.",
-          "Smoking: significantly damages sperm DNA and reduces sperm count and motility.",
-          "Stress: elevated cortisol suppresses testosterone.",
-          "Weight: both obesity and being significantly underweight affect sperm quality.",
-        ],
-      },
-      {
-        type: "cta",
-        title: "Men's Wellness at Wendy Herbals",
-        content:
-          "Browse our herbal preparations for men's health and vitality, made using traditional Nigerian botanical formulations.",
-        href: "/shop?category=mens-wellness",
-        ctaLabel: "Shop Men's Wellness",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is general educational information and does not replace a clinical evaluation. Persistent concerns about fertility should be assessed by a urologist or fertility specialist.",
-      },
-    ],
-  },
-
-  {
-    slug: "ginger-garlic-high-blood-pressure-nigeria",
-    title: "Ginger and Garlic for High Blood Pressure: A Nigerian Practical Guide",
-    excerpt:
-      "Hypertension affects millions of Nigerians, many of whom do not know they have it. Ginger and garlic are two of the most evidence-backed herbal options for blood pressure support — here is what the research shows and how to use them.",
-    category: "General Wellness",
-    publishedAt: "2026-11-03",
-    coverSrc: "/media/brand/spiced-noodle-dish.jpg",
-    coverAlt: "A plated dish cooked with Wendy Herbals spices including ginger and garlic",
-    keywords: [
-      "ginger garlic blood pressure Nigeria",
-      "natural remedy for hypertension Nigeria",
-      "herbal treatment for high blood pressure Nigeria",
-      "how to lower blood pressure naturally Nigeria",
-      "ginger for hypertension Nigeria",
-      "garlic for blood pressure Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Hypertension (high blood pressure) is estimated to affect about 30% of Nigerian adults, and a significant proportion are undiagnosed. It is one of the leading risk factors for stroke and heart attack — both of which are increasingly common in Nigeria. While medication remains the most reliable way to control established hypertension, ginger and garlic are two spices with real evidence behind them for blood pressure support and are already central to Nigerian cooking.",
-      },
-      {
-        type: "h2",
-        content: "Garlic and blood pressure",
-      },
-      {
-        type: "p",
-        content:
-          "Garlic contains allicin, a sulphur compound produced when garlic is crushed or chopped. Allicin has been the subject of hundreds of research papers. For blood pressure specifically, a 2016 meta-analysis of 20 randomised controlled trials — the highest quality evidence — found that garlic supplementation reduced systolic blood pressure by an average of 8.3 mmHg and diastolic by 5.5 mmHg in people with hypertension. That is a clinically meaningful reduction.",
-      },
-      {
-        type: "p",
-        content:
-          "The mechanism involves allicin stimulating the production of hydrogen sulphide, which relaxes blood vessel walls. Garlic also inhibits platelet aggregation (clumping), which reduces the risk of blood clots. These effects appear strongest with aged garlic extract, but raw garlic and cooked garlic also contribute.",
-      },
-      {
-        type: "h2",
-        content: "Ginger and blood pressure",
-      },
-      {
-        type: "p",
-        content:
-          "Ginger (Zingiber officinale) contains gingerols and shogaols, which act as natural calcium channel blockers and ACE inhibitors — mechanisms similar to two major classes of antihypertensive drugs. A 2019 meta-analysis found that ginger supplementation significantly reduced both systolic and diastolic blood pressure. The effect is strongest with doses of 2–3g of ginger daily over at least eight weeks.",
-      },
-      {
-        type: "h2",
-        content: "How to use ginger and garlic for blood pressure",
-      },
-      {
-        type: "list",
-        items: [
-          "Fresh garlic: 2–4 raw cloves daily, crushed or chopped and allowed to stand for 10 minutes before eating — this gives allicin time to form. It can be added to food or swallowed like a tablet.",
-          "Garlic tea: crush 2–3 cloves, steep in hot water for 5 minutes, strain, add honey to taste.",
-          "Ginger tea: grate or thinly slice a thumb of fresh ginger, steep in boiling water for 10 minutes, strain. Drink 2–3 cups daily.",
-          "Combined tonic: crush garlic and ginger together, steep in hot water, cool, add lemon juice and a little honey. This is a popular morning drink in many Nigerian homes.",
-          "In cooking: both spices are most effective when used generously and regularly in everyday cooking.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "What these spices cannot do",
-      },
-      {
-        type: "p",
-        content:
-          "Ginger and garlic are not substitutes for antihypertensive medication in people with established hypertension. Their effect, while real, is modest compared to prescription drugs. They are best used as a dietary complement — an additional tool that works alongside a healthy diet (less salt, more vegetables), regular exercise, and prescribed medication if needed. Never stop blood pressure medication without telling your doctor.",
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "Drug interactions",
-        content:
-          "Garlic has blood-thinning effects and can interact with anticoagulant drugs like warfarin. Ginger in high doses can lower blood sugar, which is relevant if you are on diabetes medication. Both can interact with antihypertensive drugs by adding to their effect and causing blood pressure to drop too low.",
-      },
-      {
-        type: "cta",
-        title: "Shop Wendy Herbals Food Spices",
-        content:
-          "Our food spice range includes freshly milled garlic, ginger, and other authentic Nigerian spices for everyday cooking.",
-        href: "/shop?category=food-spices",
-        ctaLabel: "Shop Food Spices",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is general educational information, not medical advice. It does not replace professional assessment or treatment for hypertension.",
-      },
-    ],
-  },
-
-  {
-    slug: "turmeric-atale-pupa-benefits-nigeria",
-    title: "Turmeric (Atale Pupa) in Nigerian Wellness: Traditional Use and Modern Research",
-    excerpt:
-      "Turmeric has been used in Yoruba herbal medicine — where it is called atale pupa or atale nla — for generations. Research on its active compound, curcumin, is now among the most extensive of any plant compound. Here is what it shows.",
-    category: "Kitchen & Spices",
-    publishedAt: "2026-11-02",
-    coverSrc: "/media/brand/ground-herb-powders.jpg",
-    coverAlt: "Ground herb powders including turmeric yellow in a steel mixing bowl",
-    keywords: [
-      "turmeric benefits Nigeria",
-      "atale pupa uses",
-      "atale nla Yoruba",
-      "turmeric for inflammation Nigeria",
-      "curcumin benefits Nigeria",
-      "how to use turmeric in Nigeria",
-      "turmeric for arthritis Nigeria",
-      "turmeric and black pepper Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Turmeric (Curcuma longa) is called atale pupa or atale nla in Yoruba — literally 'the big or yellow atale'. It is used as a spice in Nigerian pepper soup, as a colourant in rice dishes, and as a traditional medicine for pain, inflammation, stomach complaints, and skin conditions. The bright yellow-orange colour comes from curcuminoids, a group of compounds dominated by curcumin, which is now one of the most studied plant compounds in the world.",
-      },
-      {
-        type: "h2",
-        content: "What curcumin does",
-      },
-      {
-        type: "p",
-        content:
-          "Curcumin is a powerful anti-inflammatory compound that acts on multiple inflammatory pathways simultaneously. This is unusual — most anti-inflammatory drugs (like ibuprofen) work on one or two pathways. Curcumin also acts as an antioxidant, protecting cells from oxidative damage. These properties have made it a focus of research into conditions ranging from arthritis to Alzheimer's disease to cancer.",
-      },
-      {
-        type: "h2",
-        content: "What the research shows for specific conditions",
-      },
-      {
-        type: "list",
-        items: [
-          "Arthritis: several well-designed trials show turmeric extract reduces joint pain and stiffness in osteoarthritis with similar effectiveness to some anti-inflammatory drugs, with fewer gastrointestinal side effects.",
-          "Inflammation: curcumin lowers levels of C-reactive protein (CRP), a standard marker of inflammation, in multiple clinical studies.",
-          "Digestion: turmeric stimulates bile production, which aids fat digestion. It is used traditionally for indigestion and bloating.",
-          "Liver health: animal studies show curcumin protects the liver. Human trials for liver conditions are ongoing.",
-          "Diabetes: some evidence that curcumin improves insulin sensitivity and lowers blood sugar, but human trials are still limited.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "The absorption problem — and how to solve it",
-      },
-      {
-        type: "p",
-        content:
-          "Curcumin from food turmeric is poorly absorbed by the body. This is the main limitation of using cooking turmeric as a supplement — most of it passes through without being absorbed. The well-known remedy is to combine turmeric with black pepper: piperine in black pepper enhances curcumin absorption by up to 2,000%. Adding fat (oil, coconut milk, or ghee) also improves absorption since curcumin is fat-soluble.",
-      },
-      {
-        type: "h2",
-        content: "How to use turmeric in Nigerian cooking and as a wellness habit",
-      },
-      {
-        type: "list",
-        items: [
-          "Golden milk: half a teaspoon of turmeric powder in warm full-cream milk with a pinch of black pepper, a little honey, and a small amount of coconut oil or butter.",
-          "In pepper soup: a generous pinch of turmeric added to pepper soup enhances the colour and adds curcumin to an already anti-inflammatory dish.",
-          "With eggs: scrambled eggs with turmeric and black pepper are an easy daily habit.",
-          "In rice: a teaspoon of turmeric added to rice while cooking colours it golden and adds flavour.",
-          "Fresh turmeric root: available in many Nigerian markets. Slice or grate and add to soups and stews. The fresh root has a more complex flavour than the dried powder.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "How much turmeric to use",
-      },
-      {
-        type: "p",
-        content:
-          "Most research on turmeric uses standardised curcumin extracts at doses much higher than you would get from food alone. For general wellness, regular daily use of turmeric as a culinary spice — combined with black pepper and fat — is a reasonable approach. For therapeutic purposes (joint pain, significant inflammation), standardised supplements with higher curcumin content and enhanced bioavailability are more likely to reach effective concentrations.",
-      },
-      {
-        type: "callout",
-        tone: "caution",
-        title: "Before taking high-dose turmeric supplements",
-        content:
-          "High-dose curcumin supplements can interact with blood thinners, chemotherapy drugs, and some diabetes medications. People with gallstones should use turmeric with caution — it stimulates gallbladder contraction. At food amounts, turmeric is very safe.",
-      },
-      {
-        type: "cta",
-        title: "Food Spices at Wendy Herbals",
-        content:
-          "Our food spice range includes turmeric and other authentic Nigerian kitchen spices, freshly prepared.",
-        href: "/shop?category=food-spices",
-        ctaLabel: "Shop Food Spices",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This article is for general educational purposes and does not constitute medical advice.",
-      },
-    ],
-  },
-
-  {
-    slug: "moringa-for-weight-loss-nigeria",
-    title: "Moringa for Weight Loss: What You Should Know Before Starting",
-    excerpt:
-      "Moringa is frequently promoted for weight loss in Nigeria. Here is an honest look at what the evidence shows, what moringa actually does, and how to use it realistically.",
-    category: "General Wellness",
-    publishedAt: "2026-11-01",
-    coverSrc: "/media/brand/scent-leaf-plant.jpg",
-    coverAlt: "Green leaves of a herb plant growing outdoors",
-    keywords: [
-      "moringa for weight loss Nigeria",
-      "moringa powder for weight loss",
-      "herbs for weight loss Nigeria",
-      "natural weight loss Nigeria",
-      "how to use moringa for weight loss",
-      "moringa weight loss evidence",
-      "ewe ile for weight loss Nigeria",
-    ],
-    sections: [
-      {
-        type: "p",
-        content:
-          "Walk through any Nigerian market or social media feed and you will encounter moringa being sold with strong weight-loss claims. Some of these claims are exaggerated. But moringa is genuinely nutritionally dense, and there are legitimate mechanisms by which it might support weight management. Here is a clear-eyed look at the evidence.",
-      },
-      {
-        type: "h2",
-        content: "What moringa actually does that is relevant to weight",
-      },
-      {
-        type: "list",
-        items: [
-          "Blood sugar regulation: moringa may slow carbohydrate absorption, reducing blood sugar spikes after meals. This may reduce hunger and cravings triggered by rapid blood sugar swings.",
-          "Nutrient density: moringa is very rich in vitamins and minerals per calorie. Adding it to a diet may help address nutritional deficiencies that contribute to fatigue and low activity levels.",
-          "Anti-inflammatory: chronic low-grade inflammation is associated with obesity and metabolic syndrome. Moringa's anti-inflammatory compounds may support metabolic health.",
-          "Thyroid function: some compounds in moringa may support thyroid function, which regulates metabolism, though research on this is very early.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "What the research actually shows",
-      },
-      {
-        type: "p",
-        content:
-          "The honest answer is that direct human trials of moringa for weight loss are extremely limited. Most evidence comes from animal studies and from mechanistic research that explains how moringa might help. There is no published, well-designed human clinical trial showing that moringa supplements alone cause meaningful weight loss. This does not mean moringa has no role — it means it has not yet been properly studied for this specific outcome.",
-      },
-      {
-        type: "h2",
-        content: "How moringa fits into a weight management approach",
-      },
-      {
-        type: "p",
-        content:
-          "Moringa is best used as a nutritional complement to genuine lifestyle change — not as a shortcut. When combined with a reduced-calorie diet and increased physical activity, moringa may support blood sugar stability and energy levels, making the lifestyle changes easier to sustain. Using it as an add-on to good nutrition and activity is a reasonable approach. Using it instead of diet and exercise is not.",
-      },
-      {
-        type: "h2",
-        content: "How to use moringa for weight management",
-      },
-      {
-        type: "list",
-        items: [
-          "Moringa powder in the morning: a teaspoon stirred into warm water or pap before breakfast may help stabilise blood sugar through the morning.",
-          "Replace high-calorie drinks: moringa tea (dried leaves steeped in water) with no sugar is a very low-calorie, nutrient-dense drink to substitute for sugary beverages.",
-          "Add to soups: a handful of fresh moringa leaves or a tablespoon of powder added to vegetable soup replaces starchy thickeners with nutrition.",
-          "Moringa and lemon: a popular Nigerian preparation — moringa powder, lemon juice, and warm water first thing in the morning.",
-        ],
-      },
-      {
-        type: "h2",
-        content: "Red flags when buying moringa products",
-      },
-      {
-        type: "list",
-        items: [
-          "Any product that promises specific numbers ('lose 10kg in 30 days') is making claims that are not supported by evidence.",
-          "Unlabelled moringa powder sold loose in markets may be adulterated or mislabelled.",
-          "Moringa capsules with 'proprietary blends' that do not state the moringa dose are hard to evaluate.",
-          "Look for products that list actual moringa leaf powder or moringa oleifera with a declared amount.",
-        ],
-      },
-      {
-        type: "cta",
-        title: "Natural products from Wendy Herbals",
-        content:
-          "Browse our botanical and wellness range, formulated using traditional Nigerian herbs.",
-        href: "/shop?category=herbal-collections",
-        ctaLabel: "Shop Herbal Collections",
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "About this article",
-        content:
-          "This is educational information only. It does not recommend any product as a treatment for obesity or any medical condition.",
-      },
-    ],
-  },
-
-  {
-    slug: "fibroid-herbs-what-nigerian-women-should-know",
-    title: "Fibroid and Herbs: What Nigerian Women Are Using and What the Evidence Shows",
-    excerpt:
-      "Uterine fibroids affect a disproportionately high number of Nigerian women. Many turn to herbal preparations as an alternative or complement to medical treatment. This guide looks honestly at what is used and what the evidence says.",
-    category: "Women's Wellness",
-    publishedAt: "2026-10-31",
     coverSrc: "/media/brand/measuring-herbal-preparation.jpg",
     coverAlt: "Wendy measuring a herbal preparation at her desk",
     keywords: [
-      "herbal remedy for fibroid Nigeria",
-      "herbs for fibroid shrinkage Nigeria",
-      "fibroid treatment herbs Nigeria",
-      "natural remedy for fibroid Nigeria",
-      "how to shrink fibroid naturally Nigeria",
-      "bitter leaf for fibroid",
-      "fibroid herbs Nigeria women",
+      "yeast infection treatment Nigeria",
+      "symptoms of yeast infection in Nigeria",
+      "how to treat yeast infection naturally Nigeria",
+      "vaginal yeast infection Nigeria",
+      "candida infection Nigeria women",
+      "yeast infection herbal remedy Nigeria",
     ],
     sections: [
       {
         type: "p",
         content:
-          "Uterine fibroids (non-cancerous growths in the uterus) are significantly more common in women of African descent than in any other population. Studies suggest that by age 50, up to 80% of Nigerian women will have fibroids, though many are small and cause no symptoms. For women who do experience symptoms — heavy menstrual bleeding, pelvic pressure, frequent urination, or difficulty conceiving — the question of treatment is a major one.",
-      },
-      {
-        type: "p",
-        content:
-          "Medical options include medication, minimally invasive procedures like uterine fibroid embolisation (UFE), and surgery. Many Nigerian women also explore herbal options, either because medical options are expensive, because they want to preserve fertility, or because they prefer a less invasive approach. Here is an honest look at the herbs most commonly used.",
+          "Vaginal yeast infection — also called vaginal candidiasis — affects most women at least once in their lives, and many Nigerian women experience recurring episodes. It is caused by an overgrowth of Candida, a fungus that lives naturally in the vagina in small amounts. When the natural balance shifts, Candida multiplies rapidly and symptoms begin.",
       },
       {
         type: "h2",
-        content: "Understanding fibroids before choosing a treatment",
+        content: "Common symptoms",
       },
       {
-        type: "p",
-        content:
-          "Fibroids grow in response to estrogen, which is why they are more common in women of reproductive age and typically shrink after menopause. Any approach to managing fibroids — herbal or medical — needs to work with this hormonal reality. Herbs that lower estrogen activity or support hormonal balance are the ones most commonly used in this context.",
-      },
-      {
-        type: "h2",
-        content: "Herbs most commonly used for fibroid in Nigeria",
-      },
-      {
-        type: "h3",
-        content: "Bitter leaf (Ewuro)",
-      },
-      {
-        type: "p",
-        content:
-          "Bitter leaf is the herb most frequently mentioned alongside fibroid in Nigerian herbal discussions. The traditional use involves drinking the pressed juice regularly. The rationale offered is that bitter leaf compounds balance estrogen activity. Some phytoestrogens in bitter leaf can have anti-estrogenic effects in an estrogen-dominant environment. However, there are no clinical trials examining bitter leaf specifically for fibroid.",
-      },
-      {
-        type: "h3",
-        content: "Vitex (Chaste tree berry)",
-      },
-      {
-        type: "p",
-        content:
-          "Vitex acts on the pituitary to increase progesterone relative to estrogen. Since fibroids tend to grow in a high-estrogen environment, correcting an estrogen-progesterone imbalance may theoretically slow their growth. Small studies in European herbalism have explored this for fibroid-related heavy bleeding with mixed results. Vitex needs to be taken consistently for at least three to six months.",
-      },
-      {
-        type: "h3",
-        content: "Green tea and serrapeptase",
-      },
-      {
-        type: "p",
-        content:
-          "Green tea contains epigallocatechin-3-gallate (EGCG), which showed significant reduction in fibroid size and bleeding in a randomised trial — a genuinely positive clinical study for a natural compound. Serrapeptase is an enzyme from silkworms used in some Nigerian herbal markets; theoretical anti-fibrotic properties have been proposed but clinical evidence for fibroid specifically is very limited.",
+        type: "list",
+        items: [
+          "Intense itching and irritation inside and around the vagina",
+          "Thick, white, cottage-cheese-like discharge (odourless or mild)",
+          "Burning sensation during urination or sex",
+          "Redness and swelling of the vaginal area",
+          "Soreness and rash on surrounding skin",
+        ],
       },
       {
         type: "h2",
-        content: "What herbal approaches cannot do",
+        content: "Why it keeps coming back for many Nigerian women",
       },
       {
         type: "p",
         content:
-          "There is no herbal preparation with proven ability to significantly shrink established fibroids, based on published clinical trial evidence. Medical procedures — particularly UFE, myomectomy, and hysterectomy — remain the most reliable options for large or symptomatic fibroids. This matters because delaying effective treatment of large fibroids can lead to anaemia, kidney problems from urinary tract compression, and reduced fertility.",
+          "Recurrent yeast infection is extremely common in Nigeria, and there are several reasons. High-sugar diets feed Candida and allow it to thrive. Tight synthetic underwear and heat create a warm, moist environment where the fungus multiplies. Frequent antibiotic use — a reality in Nigeria where antibiotics are widely self-prescribed — kills the protective bacteria that keep Candida in check. Some women also have an underlying immune or hormonal condition that makes them more susceptible.",
+      },
+      {
+        type: "h2",
+        content: "What Nigerian women traditionally use",
+      },
+      {
+        type: "p",
+        content:
+          "Traditional herbal approaches to yeast infection in Nigeria focus on restoring balance rather than simply suppressing symptoms. Herbs with antifungal, antibacterial, and immune-supporting properties are combined into oral preparations and sometimes used alongside external hygiene products. The Feminine Herbal Wash is used externally to soothe symptoms; the internal preparation is taken by mouth to address the underlying overgrowth.",
+      },
+      {
+        type: "h2",
+        content: "How to prevent recurrence",
+      },
+      {
+        type: "list",
+        items: [
+          "Wear breathable cotton underwear — avoid tight nylon or synthetic fabrics",
+          "Reduce sugar intake, particularly refined sugar and sweetened drinks",
+          "Avoid unnecessary antibiotics — take them only when prescribed and always complete the course",
+          "Use an unscented, pH-balanced feminine wash — regular soap is too alkaline for the vaginal environment",
+          "Change out of wet swimwear or gym clothes immediately",
+          "Avoid douching — it destroys protective bacteria",
+        ],
       },
       {
         type: "callout",
         tone: "caution",
         title: "When to see a doctor",
         content:
-          "Heavy menstrual bleeding (soaking through pads every hour), severe pelvic pain, difficulty urinating or having a bowel movement, or a noticeably distended abdomen all warrant medical assessment. These symptoms can indicate fibroids that need active management beyond herbal support.",
-      },
-      {
-        type: "h2",
-        content: "Diet and fibroids",
-      },
-      {
-        type: "p",
-        content:
-          "Diet changes are the area where the strongest evidence exists for a natural influence on fibroid growth. Research consistently shows that a diet high in red meat and processed food increases fibroid risk and may accelerate growth, while a diet high in green vegetables, fruits, and fibre has a protective association. Reducing iron-depleting habits (such as excess alcohol) while maintaining iron intake is also important for women with heavy fibroid-related bleeding.",
+          "If you have unusual or foul-smelling discharge, pelvic pain, fever, or sores, see a healthcare professional before using any herbal preparation — these symptoms suggest a bacterial infection (BV) or STI rather than a simple yeast infection, and they need different treatment.",
       },
       {
         type: "cta",
-        title: "Women's Wellness at Wendy Herbals",
+        title: "Wendy Herbals Yeast Infection Herbs",
         content:
-          "Browse our herbal preparations for women's health, made using traditional Nigerian botanical formulations.",
-        href: "/shop?category=womens-wellness",
-        ctaLabel: "Shop Women's Wellness",
+          "A traditional botanical preparation used for vaginal yeast infection — available in the Women's Wellness collection. Ships anywhere in Nigeria.",
+        href: "/product/yeast-infection-herbs",
+        ctaLabel: "View Yeast Infection Herbs — ₦15,000",
       },
       {
         type: "callout",
         tone: "note",
         title: "About this article",
         content:
-          "This is general educational information and does not constitute medical advice. It does not recommend any product as a treatment for fibroids or any medical condition.",
+          "This article is for general educational purposes and does not constitute medical advice. Product names describe traditional associations, not claims of diagnosis or treatment.",
+      },
+    ],
+  },
+
+  {
+    slug: "fibroid-symptoms-treatment-nigeria",
+    title: "Fibroid in Nigeria: Symptoms, Why It's So Common, and What Women Use",
+    excerpt:
+      "Nigeria has one of the highest rates of uterine fibroid in the world. Many women carry fibroids for years without knowing. This guide covers the signs to watch for, why Nigerian women are more affected, and what herbal support is available.",
+    category: "Women's Wellness",
+    publishedAt: "2026-11-08",
+    coverSrc: "/media/brand/filling-herbal-preparation.jpg",
+    coverAlt: "Wendy pouring herbal preparation from a jerrycan into a measuring cup",
+    keywords: [
+      "fibroid symptoms Nigeria",
+      "fibroid treatment Nigeria",
+      "herbal remedy for fibroid Nigeria",
+      "how to shrink fibroid naturally Nigeria",
+      "uterine fibroid Nigeria women",
+      "fibroid herbs Nigeria",
+      "signs of fibroid in Nigerian women",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "Uterine fibroid — non-cancerous growths in or on the wall of the womb — affects a disproportionately high number of Nigerian women. Studies suggest that women of African descent develop fibroids earlier, in greater numbers, and of larger size than women of other backgrounds. Many Nigerian women are carrying fibroids right now and do not know it, because small fibroids often cause no symptoms at all.",
+      },
+      {
+        type: "h2",
+        content: "Symptoms that suggest fibroid",
+      },
+      {
+        type: "list",
+        items: [
+          "Very heavy menstrual bleeding — soaking pads quickly, passing clots, or bleeding lasting longer than 7 days",
+          "Periods that are noticeably more painful than before",
+          "A feeling of pressure or fullness in the lower abdomen",
+          "Frequent urination or difficulty emptying the bladder",
+          "Constipation or a sense of pressure in the back passage",
+          "Pain during sex",
+          "Difficulty conceiving — fibroids near the opening of the fallopian tubes can obstruct eggs",
+          "A visibly enlarged abdomen without weight gain",
+        ],
+      },
+      {
+        type: "h2",
+        content: "Why fibroid is so common in Nigerian women",
+      },
+      {
+        type: "p",
+        content:
+          "The exact reason fibroid is more common in women of African descent is not fully understood, but several factors are linked. Estrogen drives fibroid growth — higher estrogen exposure across a woman's lifetime increases risk. Diet high in red meat and processed food has been associated with higher fibroid risk in studies. Vitamin D deficiency, more common in equatorial climates where women spend less time outdoors, is strongly linked to fibroid growth. Genetic factors also play a significant role.",
+      },
+      {
+        type: "h2",
+        content: "What herbal support aims to do",
+      },
+      {
+        type: "p",
+        content:
+          "Herbal preparations used for fibroid in Nigeria traditionally target two things: reducing the estrogen dominance that drives fibroid growth, and supporting the body's natural processes to shrink or contain the fibroids. These preparations are typically taken alongside dietary changes — reducing red meat, increasing green vegetables, and cutting refined sugar — which also reduce estrogen load. The Fibroid Herbs with Balm from Wendy Herbals is a traditional formulation for this concern, combining an oral herbal preparation with an external balm.",
+      },
+      {
+        type: "h2",
+        content: "Diet changes that matter alongside herbal support",
+      },
+      {
+        type: "list",
+        items: [
+          "Reduce red meat — research consistently links red meat consumption to higher fibroid risk",
+          "Increase green vegetables: ugwu (pumpkin leaf), bitter leaf, broccoli all contain compounds that support estrogen metabolism",
+          "Cut sugary drinks and refined carbohydrates — they raise insulin, which stimulates fibroid growth",
+          "Get more vitamin D — spend time in direct morning sunlight or supplement",
+          "Eat more fibre — it helps the body clear excess estrogen through the gut",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "When to see a gynaecologist",
+        content:
+          "Very heavy periods with anaemia, significant pain interfering with daily life, or a rapidly growing abdomen all need medical assessment before herbal treatment. Some fibroids require surgical or procedural intervention that herbs cannot replace.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Fibroid Herbs with Balm",
+        content:
+          "A traditional botanical preparation for uterine fibroid, supplied with its matching external balm. Part of the Women's Wellness collection.",
+        href: "/product/fibroid-herbs-with-balm",
+        ctaLabel: "View Fibroid Herbs with Balm — ₦17,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice or a treatment recommendation for any medical condition.",
+      },
+    ],
+  },
+
+  {
+    slug: "low-sperm-count-causes-treatment-nigeria",
+    title: "Low Sperm Count in Nigerian Men: Causes, Signs and How to Address It",
+    excerpt:
+      "Male infertility is behind half of all conception difficulties, yet it is rarely discussed openly in Nigeria. Low sperm count is the most common finding. Here is what causes it, how to know if it is an issue, and what Nigerian men are using.",
+    category: "Men's Wellness",
+    publishedAt: "2026-11-07",
+    coverSrc: "/media/brand/ground-herb-powders.jpg",
+    coverAlt: "Ground herb powders in a steel mixing bowl",
+    keywords: [
+      "low sperm count treatment Nigeria",
+      "how to increase sperm count Nigeria",
+      "sperm booster herbs Nigeria",
+      "oligospermia treatment Nigeria",
+      "male infertility Nigeria",
+      "how to treat low sperm count naturally Nigeria",
+      "sperm count remedy Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "When a couple is unable to conceive, attention in Nigerian families often falls on the woman first. But studies consistently show that male factors are involved in about half of all infertility cases. Low sperm count — called oligospermia in clinical terms — is the single most common finding in men assessed for infertility. A normal sperm count is above 15 million sperm per millilitre. Anything below that is classified as oligospermia.",
+      },
+      {
+        type: "h2",
+        content: "What causes low sperm count",
+      },
+      {
+        type: "list",
+        items: [
+          "Varicocele — enlarged veins in the scrotum raise temperature and reduce sperm production. This is the most common reversible cause.",
+          "Infections — gonorrhoea, chlamydia, mumps orchitis, and other infections can scar the tubes that carry sperm.",
+          "Hormonal imbalances — low testosterone, high prolactin, or low FSH/LH all reduce sperm production.",
+          "Heat exposure — laptops on the lap, tight underwear, prolonged hot baths, and physically hot work environments damage sperm.",
+          "Heavy alcohol use — directly reduces testosterone and sperm production.",
+          "Smoking — damages sperm DNA and reduces count and motility.",
+          "Stress — elevated cortisol suppresses the hormones that drive sperm production.",
+          "Poor nutrition — zinc, selenium, vitamin D and folate are all essential for healthy sperm.",
+        ],
+      },
+      {
+        type: "h2",
+        content: "Signs that may suggest low sperm count",
+      },
+      {
+        type: "p",
+        content:
+          "Low sperm count itself has no obvious symptoms — the only way to confirm it is a semen analysis. But it is often associated with low sex drive, difficulty maintaining erection, reduced facial and body hair, or a small, firm testicle. These are signs of hormonal issues that can also lower sperm count. If a couple has been trying for 12 months without conceiving (or 6 months if the woman is over 35), both partners should be assessed.",
+      },
+      {
+        type: "h2",
+        content: "What Nigerian men use for sperm count support",
+      },
+      {
+        type: "p",
+        content:
+          "Traditional herbal approaches to male fertility in Nigeria focus on nutritional support, reducing oxidative stress that damages sperm, and supporting hormonal balance. Sperm cells are particularly vulnerable to free radicals — antioxidant-rich botanical preparations are used to protect the sperm-forming environment. Sperm Booster Herbs from Wendy Herbals is a traditional preparation used for this concern.",
+      },
+      {
+        type: "h2",
+        content: "Practical steps that actually make a difference",
+      },
+      {
+        type: "list",
+        items: [
+          "Switch to loose-fitting, breathable cotton underwear — this alone can improve scrotal temperature",
+          "Stop smoking — sperm DNA fragmentation from smoking improves measurably within 3 months of stopping",
+          "Reduce alcohol — especially spirits and beer in large quantities",
+          "Eat zinc-rich foods daily: ugwu leaves, pumpkin seeds, sesame, seafood, red meat in moderate amounts",
+          "Take a walk or do light exercise — sitting for long hours without movement worsens scrotal heat",
+          "Get assessed — a semen analysis at any private laboratory in Nigeria costs between ₦3,000–₦8,000 and gives you an actual count to work from",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "Medical causes need medical assessment",
+        content:
+          "Varicocele, blockages, and hormonal disorders causing low sperm count need proper diagnosis — a urologist or andrologist can identify these quickly. Herbal support works best alongside proper investigation, not instead of it.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Sperm Booster Herbs",
+        content:
+          "A traditional botanical preparation for sperm count support, from the Men's Wellness collection. Ships anywhere in Nigeria.",
+        href: "/product/sperm-booster-herbs",
+        ctaLabel: "View Sperm Booster Herbs — ₦15,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. It does not recommend any product as a treatment for a medical condition.",
+      },
+    ],
+  },
+
+  {
+    slug: "pcos-symptoms-treatment-nigeria",
+    title: "PCOS in Nigerian Women: Symptoms, Causes and What Helps",
+    excerpt:
+      "Polycystic ovary syndrome is widely underdiagnosed in Nigeria. Many women are told they are 'fine' after years of irregular periods, difficulty conceiving, and unexplained weight gain. This guide explains PCOS in plain terms and what support is available.",
+    category: "Women's Wellness",
+    publishedAt: "2026-11-06",
+    coverSrc: "/media/brand/dried-herbs-and-hibiscus-bowls.jpg",
+    coverAlt: "Dried botanicals and hibiscus in steel bowls on a work surface",
+    keywords: [
+      "PCOS symptoms Nigeria",
+      "polycystic ovary syndrome Nigeria",
+      "PCOS treatment Nigeria",
+      "how to treat PCOS naturally Nigeria",
+      "PCOS and infertility Nigeria",
+      "irregular periods Nigeria PCOS",
+      "PCOS herbs Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "Polycystic ovary syndrome (PCOS) is one of the most common hormonal conditions in women of reproductive age worldwide, and Nigeria is no exception — but it is significantly underdiagnosed here. Many women spend years dealing with irregular periods, unexplained weight gain, excessive hair on the face or body, and difficulty conceiving, without anyone connecting the dots to PCOS.",
+      },
+      {
+        type: "h2",
+        content: "What PCOS actually is",
+      },
+      {
+        type: "p",
+        content:
+          "PCOS is a hormonal disorder in which the ovaries produce excess androgen (male hormones), leading to small cysts on the ovaries and disrupted ovulation. The name can be misleading — not all women with PCOS have visible cysts on ultrasound, and not all women with ovarian cysts have PCOS. The condition is diagnosed using a combination of symptoms, blood hormone levels, and ultrasound findings.",
+      },
+      {
+        type: "h2",
+        content: "Common symptoms of PCOS in Nigerian women",
+      },
+      {
+        type: "list",
+        items: [
+          "Irregular or absent periods — cycles longer than 35 days, or fewer than 8 cycles per year",
+          "Difficulty getting pregnant, or multiple early miscarriages",
+          "Weight gain, particularly around the belly, without obvious cause",
+          "Excessive hair on the face, chest, or back (hirsutism)",
+          "Thinning hair or hair loss from the scalp",
+          "Persistent acne that does not clear up with normal skin care",
+          "Dark patches of skin in skin folds (neck, armpits, groin) — a sign of insulin resistance",
+          "Mood changes, fatigue, low libido",
+        ],
+      },
+      {
+        type: "h2",
+        content: "The insulin connection — why diet matters so much",
+      },
+      {
+        type: "p",
+        content:
+          "Most women with PCOS have some degree of insulin resistance, meaning their cells do not respond well to insulin. The body produces more insulin to compensate, and high insulin drives the ovaries to produce more androgen — which disrupts ovulation further. This creates a feedback loop. For this reason, diet changes — reducing refined carbohydrates and sugar, increasing fibre and protein — are the most evidence-backed intervention for PCOS alongside medical management.",
+      },
+      {
+        type: "h2",
+        content: "PCOS and fertility",
+      },
+      {
+        type: "p",
+        content:
+          "PCOS is the most common cause of ovulation-related infertility. The good news is that most women with PCOS can conceive with proper management. Regulating the cycle and inducing ovulation — through lifestyle changes, medication like metformin or clomiphene, or herbal support — is the main route. Some Nigerian women use herbal preparations alongside conventional management, particularly when fertility drugs alone are not working or are not accessible.",
+      },
+      {
+        type: "h2",
+        content: "Diet and lifestyle changes with the best evidence",
+      },
+      {
+        type: "list",
+        items: [
+          "Reduce refined carbohydrates: white rice, white bread, sweet drinks — these spike insulin rapidly",
+          "Increase fibre: beans, oats, vegetables — they slow glucose absorption",
+          "Exercise regularly: even 30 minutes of brisk walking 5 days a week improves insulin sensitivity measurably",
+          "Manage weight: even a 5% reduction in body weight in overweight women with PCOS can restore ovulation",
+          "Reduce processed foods and seed oils that promote inflammation",
+          "Spearmint tea: small clinical trials show it lowers androgens in women with PCOS",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "Get a proper diagnosis first",
+        content:
+          "PCOS symptoms overlap with thyroid disorders, hyperprolactinaemia, and other hormonal conditions. A proper blood test panel (LH, FSH, testosterone, prolactin, thyroid) done at a teaching hospital or private lab will give you a clear picture before choosing any treatment path.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals PCOS Herbs",
+        content:
+          "A traditional botanical preparation for PCOS, from the Women's Wellness collection. Ships anywhere in Nigeria.",
+        href: "/product/pcos-herbs",
+        ctaLabel: "View PCOS Herbs — ₦15,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. It does not recommend any product as a treatment for PCOS or any medical condition.",
+      },
+    ],
+  },
+
+  {
+    slug: "uti-symptoms-treatment-nigeria",
+    title: "UTI (Urinary Tract Infection): Why Nigerian Women Keep Getting It and What Helps",
+    excerpt:
+      "UTI is one of the most common infections in Nigerian women — and many get it over and over again. This guide explains why it recurs, the warning signs, and what herbal support is available.",
+    category: "Women's Wellness",
+    publishedAt: "2026-11-05",
+    coverSrc: "/media/brand/measuring-herbal-preparation.jpg",
+    coverAlt: "Wendy measuring herbal preparation at her desk",
+    keywords: [
+      "UTI symptoms Nigeria",
+      "urinary tract infection Nigeria women",
+      "how to treat UTI naturally Nigeria",
+      "UTI treatment Nigeria",
+      "burning urination Nigeria women",
+      "UTI herbal remedy Nigeria",
+      "recurrent UTI Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "Urinary tract infection (UTI) is one of the most common bacterial infections in Nigerian women, and recurrent UTI — where the infection keeps coming back every few weeks or months — affects a significant number of them. The burning sensation when passing urine, the frequent urge to go, and the lower abdominal discomfort are recognisable to many Nigerian women, often because they have experienced it before.",
+      },
+      {
+        type: "h2",
+        content: "Common symptoms of UTI",
+      },
+      {
+        type: "list",
+        items: [
+          "Burning or stinging sensation when urinating",
+          "Frequent urge to urinate, with little coming out",
+          "Cloudy, strong-smelling, or pink-coloured urine",
+          "Pain or pressure in the lower abdomen or pelvic area",
+          "Feeling of incomplete bladder emptying",
+          "Fever, chills, or back/side pain (signs the infection has reached the kidneys — needs urgent treatment)",
+        ],
+      },
+      {
+        type: "h2",
+        content: "Why Nigerian women get UTI so often",
+      },
+      {
+        type: "p",
+        content:
+          "Women are more susceptible to UTI than men because the urethra is shorter, making it easier for bacteria to reach the bladder. In Nigeria, specific factors make recurrence more common: limited access to clean water for adequate hydration, sharing toilet facilities with poor hygiene, insufficient post-sex hygiene, and the widespread use of broad-spectrum antibiotics that disrupts the urogenital flora. Dehydration is a significant factor — in hot weather, many Nigerian women do not drink enough water, and concentrated urine is a better environment for bacteria.",
+      },
+      {
+        type: "h2",
+        content: "The antibiotic problem",
+      },
+      {
+        type: "p",
+        content:
+          "Many Nigerian women treat UTI by buying antibiotics from a pharmacy without a prescription or urine culture. While antibiotics are the right treatment for a confirmed UTI, repeatedly taking the wrong antibiotic — or not completing the full course — creates antibiotic resistance. The infection keeps coming back because the bacteria have learned to survive the drug. This is why a urine culture (MCS) before treatment, though often skipped, is valuable for recurrent UTI.",
+      },
+      {
+        type: "h2",
+        content: "What helps prevent UTI from recurring",
+      },
+      {
+        type: "list",
+        items: [
+          "Drink at least 2 litres of water daily — staying well hydrated flushes bacteria from the urinary tract",
+          "Urinate immediately after sex — does not prevent all UTIs but reduces bacterial migration",
+          "Wipe front to back — prevents E. coli from the bowel reaching the urethra",
+          "Avoid holding urine for long periods",
+          "Avoid harsh soaps and douches in the vaginal area — they destroy protective bacteria",
+          "Change underwear daily and use breathable cotton",
+          "Cranberry — either as unsweetened juice or supplement — has modest evidence for prevention in women with recurrent UTI",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "Kidney infection needs hospital care",
+        content:
+          "If you have fever, chills, nausea, vomiting, or severe back pain alongside UTI symptoms, the infection may have reached your kidneys. This needs antibiotic treatment — go to a hospital, do not attempt to treat it with herbs alone.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals UTI Infection Herbs",
+        content:
+          "A traditional botanical preparation used for urinary tract infection, from the Herbal Collections range. Ships anywhere in Nigeria.",
+        href: "/product/uti-infection-herbs",
+        ctaLabel: "View UTI Infection Herbs — ₦15,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information, not medical advice. For confirmed or severe UTI, seek professional medical treatment.",
+      },
+    ],
+  },
+
+  {
+    slug: "weak-erection-causes-treatment-nigeria",
+    title: "Weak Erection: Causes, What Nigerian Men Do About It, and When to Seek Help",
+    excerpt:
+      "Erectile dysfunction affects far more Nigerian men than the silence around it suggests. Many cases are reversible. This guide covers the real causes, what helps, and when herbal support is a reasonable option.",
+    category: "Men's Wellness",
+    publishedAt: "2026-11-04",
+    coverSrc: "/media/brand/production-drums.jpg",
+    coverAlt: "Large production drums at the Wendy Herbals factory",
+    keywords: [
+      "weak erection treatment Nigeria",
+      "how to treat weak erection naturally Nigeria",
+      "erectile dysfunction Nigeria",
+      "weak erection herbs Nigeria",
+      "how to improve erection Nigeria",
+      "manpower herbs Nigeria",
+      "natural remedy for weak erection Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "Weak erection — the inability to achieve or maintain an erection firm enough for satisfying sex — is called erectile dysfunction (ED) in clinical terms. It is one of the most common health concerns among Nigerian men, particularly those above 40, though it also affects younger men, often due to psychological or lifestyle factors. Many men deal with it privately without seeking any help, partly because of shame and partly because they do not know that most causes are treatable.",
+      },
+      {
+        type: "h2",
+        content: "Common causes of weak erection",
+      },
+      {
+        type: "list",
+        items: [
+          "High blood pressure — hypertension damages the blood vessels needed for erection",
+          "Diabetes — high blood sugar damages nerves and blood vessels in the penis",
+          "Low testosterone — reduces sexual drive and can directly impair erection quality",
+          "Stress, anxiety, and depression — psychological causes are very common, especially in younger men",
+          "Heavy alcohol use — a major cause in Nigeria; alcohol suppresses the nervous system needed for erection",
+          "Smoking — restricts blood flow throughout the body including the penis",
+          "Obesity — excess weight is associated with low testosterone and poor circulation",
+          "Medication side effects — beta-blockers, antidepressants, and some blood pressure drugs can cause ED",
+          "Poor sleep — testosterone is produced mainly during deep sleep",
+        ],
+      },
+      {
+        type: "h2",
+        content: "The difference between physical and psychological causes",
+      },
+      {
+        type: "p",
+        content:
+          "A simple self-test: if you have morning erections regularly (which most men have on waking), the physical machinery is working and the cause is more likely psychological — stress, performance anxiety, relationship issues. If morning erections are absent or consistently weak, the cause is more likely physical: cardiovascular, hormonal, or neurological. This distinction matters because the most effective treatment differs significantly between the two.",
+      },
+      {
+        type: "h2",
+        content: "What Nigerian men use for erection support",
+      },
+      {
+        type: "p",
+        content:
+          "Traditional herbal preparations for male virility and erection strength are a long-standing part of Nigerian herbal medicine. Roots and bark with reputation for increasing blood flow, boosting testosterone, and supporting stamina are combined in preparations drunk as tonic or taken as directed. Weak Erection Herbs from Wendy Herbals is a traditional formulation for this concern.",
+      },
+      {
+        type: "h2",
+        content: "Practical steps with real impact",
+      },
+      {
+        type: "list",
+        items: [
+          "Cut alcohol significantly — this alone improves erection quality in many men within weeks",
+          "Exercise daily: cardiovascular exercise improves penile blood flow measurably",
+          "Sleep 7–8 hours: testosterone production depends on it",
+          "Check your blood pressure — hypertension is a leading hidden cause of ED in Nigeria",
+          "Reduce stress: seek conversation with a trusted person or counsellor — performance anxiety responds well to psychological support",
+          "Lose excess weight if applicable — even 10% weight loss improves testosterone significantly in overweight men",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "Check for diabetes and blood pressure",
+        content:
+          "Persistent ED in a man over 40, especially with no obvious psychological cause, can be an early sign of cardiovascular disease or undiagnosed diabetes. Get your blood pressure and blood glucose checked — it may reveal a treatable underlying condition.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Weak Erection Herbs",
+        content:
+          "A traditional botanical preparation for erection strength and male virility, from the Men's Wellness collection. Ships anywhere in Nigeria.",
+        href: "/product/weak-erection-herbs",
+        ctaLabel: "View Weak Erection Herbs — ₦15,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. Persistent ED warrants professional assessment.",
+      },
+    ],
+  },
+
+  {
+    slug: "ovarian-cyst-symptoms-treatment-nigeria",
+    title: "Ovarian Cyst: Signs Nigerian Women Miss, and What Helps",
+    excerpt:
+      "Most ovarian cysts are harmless and resolve on their own. But some cause real symptoms and need attention. Many Nigerian women are living with ovarian cysts without knowing it. Here is what you need to know.",
+    category: "Women's Wellness",
+    publishedAt: "2026-11-03",
+    coverSrc: "/media/brand/filling-herbal-preparation.jpg",
+    coverAlt: "Wendy pouring herbal preparation from a jerrycan into a measuring cup",
+    keywords: [
+      "ovarian cyst symptoms Nigeria",
+      "ovarian cyst treatment Nigeria",
+      "herbal remedy for ovarian cyst Nigeria",
+      "signs of ovarian cyst Nigeria",
+      "ovarian cyst pain Nigeria",
+      "how to treat ovarian cyst naturally Nigeria",
+      "ovarian cyst herbs Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "An ovarian cyst is a fluid-filled sac that forms on or inside an ovary. Most functional cysts — the kind that form during the normal menstrual cycle — disappear on their own within two or three menstrual cycles. But some cysts persist, grow larger, or are linked to conditions like PCOS or endometriosis, and these can cause real symptoms and affect fertility.",
+      },
+      {
+        type: "h2",
+        content: "Symptoms that suggest an ovarian cyst",
+      },
+      {
+        type: "list",
+        items: [
+          "Dull aching pain or pressure on one side of the lower abdomen",
+          "Sharp sudden pain — particularly if the cyst has ruptured or twisted",
+          "Bloating or a feeling of fullness in the lower abdomen",
+          "Pain during or after sex",
+          "Irregular, painful, or unusually heavy periods",
+          "Difficulty conceiving",
+          "Frequent urination if the cyst is pressing on the bladder",
+          "Nausea and vomiting alongside pelvic pain",
+        ],
+      },
+      {
+        type: "h2",
+        content: "Types of ovarian cysts and why it matters",
+      },
+      {
+        type: "p",
+        content:
+          "Functional cysts (follicular and corpus luteum cysts) form as a normal part of the monthly cycle and usually resolve without treatment. Polycystic ovaries (from PCOS) are clusters of small undeveloped follicles rather than a single large cyst. Endometriomas form when endometriosis affects the ovary. Dermoid cysts and cystadenomas are non-cancerous but may grow large. Knowing the type matters because treatment approaches differ — an endometrioma or large dermoid cyst needs different management from a simple functional cyst.",
+      },
+      {
+        type: "h2",
+        content: "When herbal support is used",
+      },
+      {
+        type: "p",
+        content:
+          "For functional and PCOS-related cysts, traditional herbal preparations in Nigeria aim to support hormone balance, reduce the estrogen dominance that promotes cyst formation, and reduce inflammation. The Ovarian Cyst Herbs with Balm from Wendy Herbals is a traditional formulation for this concern, combining an oral herbal preparation with an external balm for abdominal application.",
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "Sudden severe pain needs emergency care",
+        content:
+          "Sudden severe one-sided pelvic pain, particularly if accompanied by fever, vomiting, or feeling faint, may indicate a ruptured or twisted cyst. This is a medical emergency — go to a hospital immediately. Do not attempt home treatment.",
+      },
+      {
+        type: "h2",
+        content: "Questions to ask at an ultrasound",
+      },
+      {
+        type: "list",
+        items: [
+          "What is the size of the cyst?",
+          "Is it simple (fluid only) or complex (solid parts, irregular walls)?",
+          "Is it on one ovary or both?",
+          "Does it look like it needs monitoring, further investigation, or intervention?",
+          "Could it be related to PCOS or endometriosis?",
+        ],
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Ovarian Cyst Herbs with Balm",
+        content:
+          "A traditional botanical preparation for ovarian cyst, supplied with its matching external balm. Part of the Women's Wellness collection.",
+        href: "/product/ovarian-cyst-herbs-with-balm",
+        ctaLabel: "View Ovarian Cyst Herbs with Balm — ₦17,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. Any suspected ovarian cyst should be investigated by ultrasound.",
+      },
+    ],
+  },
+
+  {
+    slug: "staphylococcus-infection-symptoms-nigeria",
+    title: "Staphylococcus Infection in Nigeria: What It Is, Why It Spreads, and What Helps",
+    excerpt:
+      "Staphylococcus is one of the most diagnosed infections in Nigerian private labs, though many cases are genuinely complex to treat. This guide explains what staphylococcus infection really means, why the diagnosis is so common, and what herbal support is available.",
+    category: "General Wellness",
+    publishedAt: "2026-11-02",
+    coverSrc: "/media/brand/ground-herb-powders.jpg",
+    coverAlt: "Ground herb powders in a steel mixing bowl",
+    keywords: [
+      "staphylococcus infection symptoms Nigeria",
+      "staph infection treatment Nigeria",
+      "how to treat staphylococcus naturally Nigeria",
+      "staph infection herbs Nigeria",
+      "staphylococcus aureus Nigeria",
+      "signs of staphylococcus infection Nigeria",
+      "staphylococcus herbal remedy Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "\"Staphylococcus\" has become one of the most common diagnoses given to patients in Nigerian private clinics and laboratories. Many Nigerians have been told they have staph, been treated, and found the problem returning — sometimes because the original diagnosis was correct and the treatment incomplete, and sometimes because the laboratory result was not interpreted properly in context.",
+      },
+      {
+        type: "h2",
+        content: "What staphylococcus infection actually is",
+      },
+      {
+        type: "p",
+        content:
+          "Staphylococcus aureus is a bacterium that lives on the skin and in the nose of about a third of healthy people without causing any harm. It becomes an infection when it enters the body through a wound, the urogenital tract, or a compromised immune system. Genuine staph infection can cause skin infections (boils, carbuncles, impetigo), wound infections, blood poisoning (septicaemia), and urinary tract infections, among others.",
+      },
+      {
+        type: "h2",
+        content: "Why the diagnosis is so common in Nigeria",
+      },
+      {
+        type: "p",
+        content:
+          "In many Nigerian laboratories, staph is found in urine or swab cultures because it was present on the skin around the sample collection area, not because it is actually causing infection in the body. A positive culture result does not automatically mean active infection — context, symptoms, and bacterial count all matter. Unfortunately, many patients are treated aggressively for a diagnosis of uncertain clinical significance, leading to cycles of antibiotics and recurring positive results.",
+      },
+      {
+        type: "h2",
+        content: "Symptoms of genuine staphylococcus infection",
+      },
+      {
+        type: "list",
+        items: [
+          "Skin boils, abscesses, or carbuncles that are painful, red, and filled with pus",
+          "Persistent skin infections that keep coming back",
+          "Wound infections that do not heal or keep weeping",
+          "Urinary symptoms alongside a confirmed high-count culture",
+          "Fever, chills, body aches — signs of a spreading infection",
+          "In men: discharge, painful urination, or genital discomfort alongside positive culture",
+        ],
+      },
+      {
+        type: "h2",
+        content: "What herbal preparations for staph aim to do",
+      },
+      {
+        type: "p",
+        content:
+          "Traditional herbal preparations for staphylococcus infection in Nigeria combine herbs with known antimicrobial properties — plants whose extracts have shown activity against Staphylococcus aureus in laboratory studies — with immune-supporting botanicals. The goal is to support the body's ability to clear the infection and reduce the risk of recurrence. Staphylococcus Infection Herbs from Wendy Herbals is a traditional preparation for this concern.",
+      },
+      {
+        type: "h2",
+        content: "Personal hygiene that reduces risk",
+      },
+      {
+        type: "list",
+        items: [
+          "Wash hands thoroughly with soap — especially before meals and after using the toilet",
+          "Do not share towels, razors, or personal items — staph spreads through close contact",
+          "Keep wounds and cuts clean and covered until healed",
+          "Shower daily and change into clean clothes — staph thrives in warm, moist skin environments",
+          "Get any recurring skin boils or infections properly cultured and sensitivity-tested before treatment",
+        ],
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Staphylococcus Infection Herbs",
+        content:
+          "A traditional botanical preparation for staphylococcus infection, from the Herbal Collections range. Ships anywhere in Nigeria.",
+        href: "/product/staphylococcus-infection-herbs",
+        ctaLabel: "View Staphylococcus Infection Herbs — ₦15,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. Severe or spreading infections need professional medical treatment.",
+      },
+    ],
+  },
+
+  {
+    slug: "prostate-enlargement-symptoms-treatment-nigeria",
+    title: "Prostate Enlargement: What Nigerian Men Need to Know",
+    excerpt:
+      "Prostate enlargement affects most Nigerian men over 50 — but many do not recognise the symptoms and delay help for years. This guide explains the signs, what causes it, and what herbal support is available alongside medical care.",
+    category: "Men's Wellness",
+    publishedAt: "2026-11-01",
+    coverSrc: "/media/brand/production-drums.jpg",
+    coverAlt: "Production drums at the Wendy Herbals factory",
+    keywords: [
+      "prostate enlargement symptoms Nigeria",
+      "prostate treatment Nigeria",
+      "prostate herbs Nigeria",
+      "how to treat prostate naturally Nigeria",
+      "BPH treatment Nigeria",
+      "prostate problems Nigeria men",
+      "prostate herbal remedy Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "The prostate is a small gland, about the size of a walnut, that sits just below the bladder in men and wraps around the urethra. It produces fluid that nourishes sperm. After age 40, the prostate typically begins to grow — a process called benign prostatic hyperplasia (BPH). By age 60, more than half of Nigerian men have some degree of prostate enlargement, and by 80 the majority do. It is not cancer, but it causes real urinary problems that significantly affect quality of life.",
+      },
+      {
+        type: "h2",
+        content: "Symptoms of prostate enlargement",
+      },
+      {
+        type: "list",
+        items: [
+          "Frequent urination, especially at night — waking two or more times to urinate",
+          "A weak or slow urine stream",
+          "Difficulty starting urination — having to wait at the toilet",
+          "A feeling that the bladder has not fully emptied",
+          "Dribbling of urine at the end",
+          "Urgency — sudden strong urge to urinate that is difficult to hold",
+          "In severe cases, complete inability to urinate (urinary retention) — this is a medical emergency",
+        ],
+      },
+      {
+        type: "h2",
+        content: "The cancer question",
+      },
+      {
+        type: "p",
+        content:
+          "Prostate enlargement (BPH) and prostate cancer are different conditions and have different treatments. BPH is not cancer and does not lead to cancer. However, both can cause similar urinary symptoms, and prostate cancer is one of the most common cancers in Nigerian men. Any man over 50 — or over 40 with a family history — should discuss a PSA (prostate-specific antigen) blood test with a doctor. This is a simple test that helps distinguish benign enlargement from more serious disease.",
+      },
+      {
+        type: "h2",
+        content: "What Nigerian men use for prostate support",
+      },
+      {
+        type: "p",
+        content:
+          "Several plants used in Nigerian herbal medicine have been studied for prostate health. Pygeum africanum (African cherry) — found in West African forests — has the best clinical evidence for BPH symptoms; extracts of its bark are used in several European pharmaceutical preparations. Saw palmetto, though not native to Nigeria, is widely used in Nigerian herbal markets. Prostate Enlargement Herbs from Wendy Herbals is a traditional formulation targeting this concern.",
+      },
+      {
+        type: "h2",
+        content: "Diet and lifestyle for prostate health",
+      },
+      {
+        type: "list",
+        items: [
+          "Reduce caffeine and alcohol — both irritate the bladder and worsen urinary frequency",
+          "Avoid drinking large amounts of fluid in the evening",
+          "Eat tomatoes regularly — lycopene, which is concentrated in cooked tomatoes, is associated with prostate health",
+          "Maintain a healthy weight — excess belly fat converts testosterone to estrogen, which stimulates prostate growth",
+          "Stay active — a sedentary lifestyle worsens urinary symptoms",
+          "Do not delay urination — trying to hold it for long periods irritates the bladder",
+        ],
+      },
+      {
+        type: "callout",
+        tone: "caution",
+        title: "Cannot urinate? Go to hospital immediately",
+        content:
+          "Complete urinary retention — being completely unable to pass urine despite urgency — is a medical emergency that needs catheterisation at a hospital. Do not attempt to treat this at home.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Prostate Enlargement Herbs",
+        content:
+          "A traditional botanical preparation for prostate enlargement and urinary symptoms in men. From the Men's Wellness collection. Ships anywhere in Nigeria.",
+        href: "/product/prostate-enlargement-herbs",
+        ctaLabel: "View Prostate Enlargement Herbs — ₦17,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. Men with urinary symptoms should be evaluated by a urologist.",
+      },
+    ],
+  },
+
+  {
+    slug: "hormonal-imbalance-symptoms-women-nigeria",
+    title: "Hormonal Imbalance in Nigerian Women: Symptoms, Causes and What Helps",
+    excerpt:
+      "Hormonal imbalance is behind many of the health problems Nigerian women experience — from irregular periods and mood swings to weight gain and difficulty conceiving. This guide explains what it means in real terms and what support is available.",
+    category: "Women's Wellness",
+    publishedAt: "2026-10-31",
+    coverSrc: "/media/brand/measuring-herbal-preparation.jpg",
+    coverAlt: "Wendy measuring a herbal preparation at her desk",
+    keywords: [
+      "hormonal imbalance symptoms Nigeria",
+      "hormonal imbalance treatment Nigeria",
+      "signs of hormonal imbalance Nigerian women",
+      "hormones herbs Nigeria",
+      "how to balance hormones naturally Nigeria",
+      "irregular hormones Nigeria women",
+      "hormonal imbalance herbs Nigeria",
+    ],
+    sections: [
+      {
+        type: "p",
+        content:
+          "\"Hormonal imbalance\" is a phrase many Nigerian women have heard — from doctors, from herbalists, and on social media — but it is rarely explained clearly. Hormones are chemical messengers produced by glands throughout the body: estrogen, progesterone, testosterone, cortisol, thyroid hormones, insulin, and others. When these are out of balance, the effects show up across the entire body.",
+      },
+      {
+        type: "h2",
+        content: "Common signs of hormonal imbalance in women",
+      },
+      {
+        type: "list",
+        items: [
+          "Irregular, missed, or very heavy periods",
+          "Severe premenstrual symptoms (PMS): mood swings, bloating, breast tenderness, headaches",
+          "Difficulty conceiving or recurrent early miscarriage",
+          "Unexplained weight gain, especially around the belly",
+          "Persistent fatigue that does not improve with rest",
+          "Acne that is worse around the time of the period",
+          "Hair thinning or increased hair on the face",
+          "Low libido",
+          "Mood changes: anxiety, irritability, depression",
+          "Hot flashes or night sweats (in perimenopause)",
+        ],
+      },
+      {
+        type: "h2",
+        content: "The key hormones involved",
+      },
+      {
+        type: "p",
+        content:
+          "Estrogen and progesterone work together to regulate the menstrual cycle. When estrogen is too high relative to progesterone — a state called estrogen dominance — heavy periods, fibroids, breast tenderness, and mood swings result. When progesterone is too low, maintaining a pregnancy in early stages becomes difficult. Thyroid imbalance mimics many of these symptoms and is significantly underdiagnosed in Nigerian women. Insulin resistance drives PCOS. Each imbalance has a different cause and may need different support.",
+      },
+      {
+        type: "h2",
+        content: "What drives hormonal imbalance in Nigerian women",
+      },
+      {
+        type: "list",
+        items: [
+          "High-stress life — chronic stress elevates cortisol, which suppresses progesterone and disrupts the entire hormonal axis",
+          "Diet high in processed food, seed oils, and refined sugar — promotes inflammation and insulin resistance",
+          "Environmental chemicals — plastics (BPA), certain pesticides, and chemical-laden cosmetics can mimic estrogen in the body",
+          "Poor sleep — most hormone production happens during deep sleep",
+          "Excess body fat — fat tissue converts androgens to estrogen, creating excess estrogen",
+          "Undernutrition — insufficient fat intake is a common cause of hormonal disruption, particularly in young women",
+        ],
+      },
+      {
+        type: "h2",
+        content: "Getting the right tests",
+      },
+      {
+        type: "p",
+        content:
+          "Before taking any hormonal herbs, it is worth getting a proper hormone panel done. A good starting panel includes: FSH, LH, prolactin, estradiol (E2), progesterone (day 21 of the cycle), total testosterone, TSH (thyroid), and fasting insulin. These are available at most private labs in Nigeria. The results tell you which hormone is actually out of balance — estrogen dominant, low progesterone, high prolactin, thyroid issue — which informs whether herbs, medical treatment, or lifestyle change is most relevant.",
+      },
+      {
+        type: "cta",
+        title: "Wendy Herbals Hormonal Imbalance Herbs",
+        content:
+          "A traditional botanical preparation for hormonal balance in women, from the Women's Wellness collection. Ships anywhere in Nigeria.",
+        href: "/product/hormonal-imbalance-herbs",
+        ctaLabel: "View Hormonal Imbalance Herbs — ₦15,000",
+      },
+      {
+        type: "callout",
+        tone: "note",
+        title: "About this article",
+        content:
+          "This is general educational information and does not constitute medical advice. Suspected hormonal disorders should be assessed with appropriate blood tests.",
       },
     ],
   },

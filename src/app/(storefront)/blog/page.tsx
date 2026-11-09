@@ -7,13 +7,13 @@ import { BLOG_CATEGORIES } from "@/data/blog-posts";
 import { PageHero } from "@/components/content/ContentPage";
 
 export const metadata: Metadata = {
-  title: "Herb & Wellness Blog",
+  title: "Natural Wellness Blog — Wendy Herbals",
   description:
-    "Evidence-based guides on Nigerian herbs, traditional medicine, and natural wellness — bitter leaf, moringa, zobo, dongoyaro and more.",
+    "Practical guides on common health conditions in Nigeria — yeast infection, fibroid, low sperm count, PCOS, UTI, prostate and more. What causes them, what symptoms to watch for, and what herbal support is available.",
   openGraph: {
-    title: "Wendy Herbals Blog — Nigerian Herb Guides & Wellness Tips",
+    title: "Wendy Herbals Blog — Health Guides for Nigerians",
     description:
-      "Learn about bitter leaf, moringa, zobo, neem and other Nigerian herbs. Guides written for Nigerians, backed by research.",
+      "Guides on yeast infection, fibroid, PCOS, UTI, low sperm count, prostate enlargement and more — written for Nigerians, with herbal support options.",
   },
   alternates: { canonical: "/blog" },
 };
@@ -28,9 +28,9 @@ export default function BlogListingPage() {
   return (
     <>
       <PageHero
-        eyebrow="Herb & Wellness Guide"
-        title="Learn About Nigerian Herbs"
-        intro="Practical guides on the herbs, spices and natural remedies Nigerians use every day — written with both traditional knowledge and current research in mind."
+        eyebrow="Health & Wellness Guide"
+        title="Common Health Concerns, Explained for Nigerians"
+        intro="Practical guides on conditions Nigerians search for — what causes them, the symptoms to know, and what herbal support is available from Wendy Herbals."
       />
 
       <div className="bg-white">
